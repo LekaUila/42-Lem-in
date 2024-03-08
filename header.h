@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:38:51 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:13:54 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,28 @@
 
 # include "./libft/libft.h"
 
-typedef struct s_data;
+
+typedef struct s_room
+{
+    char				*room;
+	int					x;
+	int					y;
+    long long int		ants;
+    char				isStart;
+    char				isEnd;
+    struct s_room		 **pathway;
+}    	t_room;
+
+typedef struct s_data
 {
 	int total_ants;
 	t_room	*start;
 	t_room	*end;
+	t_room	**roomList;
 }    	t_data;
 
 
-typedef struct s_room;
-{
-    char	*room;
-    int		ants;
-    boolean	start;
-    boolean	end;
-    struct s_room **pathway;
-}    	t_room;
+void	parse(t_data *data);
+void	fatal_error(char *line, t_data *data, char *str);
 
 #endif

@@ -6,14 +6,14 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 13:27:36 by lflandri          #+#    #+#             */
-/*   Updated: 2022/10/26 10:43:27 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:51:20 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 1000
 # endif
 # include "libft.h"
 
