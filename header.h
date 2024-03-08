@@ -15,5 +15,21 @@
 
 # include "./libft/libft.h"
 
+typedef struct s_data;
+{
+	int total_ants;
+	t_room	*start;
+	t_room	*end;
+}    	t_data;
+
+
+typedef struct s_room;
+{
+    char	*room;
+    int		ants;
+    boolean	start;
+    boolean	end;
+    struct s_room **pathway;
+}    	t_room;
 
 #endif
