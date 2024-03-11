@@ -1,4 +1,4 @@
 *.o
 */*.o
 lem-in
-./libft/libft.a
+libft/libft.a

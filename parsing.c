@@ -6,16 +6,49 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/08 16:45:52 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:45:01 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
+void    printRoom(t_room *room)
+{
+    int j = 0;
+    ft_printf("room Name : %s\n", room->room);
+    ft_printf("x : %d\n", room->x);
+    ft_printf("y : %d\n", room->y);
+    ft_printf("nomber of ants in room is : %d\n", room->ants);
+    if (room->isStart == 1)
+        ft_printf("%s is the starting room\n", room->room);
+    else if (room->isEnd == 1)
+        ft_printf("%s is the finishing room\n", room->room);
+    while (room->pathway && room->pathway[j])
+    {
+        ft_printf("%s is link to room : %s\n", room->room, room->pathway[j]->room);
+        j++;
+    }
+}
+
+void    printRooms(t_data *data)
+{
+    int i = 0;
+
+	ft_printf("\n-------------------------------------------------------------\n");
+    while (data->roomList[i] != NULL)
+    {
+		printRoom(data->roomList[i]);
+        i++;
+        ft_printf("\n-------------------------------------------------------------\n\n");
+    }
+}
+
+
 void	fatal_error(char *line, t_data *data, char *str)
 {
 	if(line)
 		free(line);
+	(void) data;
 	ft_putendl_fd("ERROR", 2);
 	ft_error(str);
 }
@@ -56,7 +89,7 @@ int		isAllNum(char *maybeNbr)
 	i = 0;
 	if (!maybeNbr)
 		return (-1);
-	while(maybeNbr[i])
+	while(maybeNbr[i] && maybeNbr[i] != '\n')
 	{
 		if (!ft_isdigit(maybeNbr[i]))
 			return (-1);
@@ -89,7 +122,7 @@ static int checkTypeLine(char *line)
 return 1 if the line is a start command
 return 2 if the line is a end command
 */
-static int checkCommandLine(line)
+static int checkCommandLine(char *line)
 {
 	if (!ft_strncmp("##start", line, ft_strlen("##start")))
 		return (1);
@@ -110,12 +143,12 @@ char *purifyLineByGod(char *str)
 	while (str[i] == ' ')
 		i++;
 	k = i;
-	while (str[k] != ' ' || str[k] == '\0')
+	while (str[k] != ' ' && str[k] != '\0')
 		k++;
 	newStr = ft_calloc(k + 1 , sizeof(char));
 	if (!newStr)
 		return (NULL);
-	while (str[i] != ' ' || str[i] == '\0')
+	while (str[i] != ' ' && str[i] != '\0')
 	{
 		newStr[j] = str[i];
 		i++;
@@ -128,8 +161,7 @@ char *purifyLineByGod(char *str)
 int addPathway(char *line, char ***pathways, int nextIS)
 {
 	char	*separator;
-	char	**newPatways;
-	
+	char	**newPatways = NULL;
 	if (nextIS)
 		return (-2);
 	if (ft_strlen(line) < 3)
@@ -138,7 +170,7 @@ int addPathway(char *line, char ***pathways, int nextIS)
 	if (separator != line && ft_isalnum(*(separator - 1))
 		&& ft_isalnum(*(separator + 1)))
 	{
-		if (!(*pathways))
+		if (!pathways || !(*pathways))
 		{
 			*pathways = ft_calloc(2,  sizeof(char *));
 			if (!(*pathways))
@@ -151,12 +183,14 @@ int addPathway(char *line, char ***pathways, int nextIS)
 		else
 		{
 			newPatways = ft_calloc(ft_len_strtab(*pathways) + 2, sizeof(char *));
-			if (!(*newPatways))
+			if (!newPatways)
 				return (-666);
-			for (size_t i = 0; i < ft_len_strtab(*pathways); i++)
+			for (int i = 0; i < ft_len_strtab(*pathways); i++)
+			{
 				newPatways[i] = (*pathways)[i];
+			}
 			newPatways[ft_len_strtab(*pathways)] = purifyLineByGod(line);
-			if (!(*pathways)[ft_len_strtab(*pathways)])
+			if (!newPatways[ft_len_strtab(*pathways)])
 				return (-666);
 			newPatways[ft_len_strtab(*pathways) + 1] = NULL;
 			free(*pathways);
@@ -181,23 +215,27 @@ char	*purifyLineByDevil(char *line)
 		return (NULL);
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' || line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0')
 	{
 		newLine[j] = line[i];
 		i++;
 		j++;
 	}
+	newLine[j] = ' ';
+	j++;
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' || line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0')
 	{
 		newLine[j] = line[i];
 		i++;
 		j++;
 	}
+	newLine[j] = ' ';
+	j++;
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' || line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0')
 	{
 		newLine[j] = line[i];
 		i++;
@@ -250,7 +288,7 @@ int		addRoom(char *line, t_data *data, int NextIs)
 	}
 	i++;
 	y = ft_atoi(&(line[i]));
-	while(line[i] != ' ' || line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\n')
 	{
 		if (ft_isdigit(line[i]) == 0)
 			return (-5);
@@ -276,7 +314,7 @@ int		addRoom(char *line, t_data *data, int NextIs)
 	else
 	{
 		t_room **newRoomList;
-		newRoomList = ft_calloc(lotsOfRoom(data->roomList), sizeof(t_room *));
+		newRoomList = ft_calloc(lotsOfRoom(data->roomList) + 2, sizeof(t_room *));
 		if (!newRoomList)
 			return (-666);
 		i = 0;
@@ -285,14 +323,17 @@ int		addRoom(char *line, t_data *data, int NextIs)
 			newRoomList[i] = data->roomList[i];
 			i++;
 		}
-		data->roomList[i + 1] = NULL;
-		data->roomList[i]->x = x;
-		data->roomList[i]->y = y;
-		data->roomList[i]->room = title;
+		newRoomList[i + 1] = NULL;
+		newRoomList[i] = ft_calloc(1, sizeof(t_room));
+		if (!newRoomList[i])
+			return (-666);
+		newRoomList[i]->x = x;
+		newRoomList[i]->y = y;
+		newRoomList[i]->room = title;
 		if (NextIs == 1)
-			data->roomList[i]->isStart = 1;
+			newRoomList[i]->isStart = 1;
 		else if (NextIs == 2)
-			data->roomList[i]->isEnd = 1;
+			newRoomList[i]->isEnd = 1;
 		free(data->roomList);
 		data->roomList = newRoomList;
 	}
@@ -300,11 +341,113 @@ int		addRoom(char *line, t_data *data, int NextIs)
 	return (0);
 }
 
+char *isInPatways(char *nameRoom, char *pathway)
+{
+	char *sepPos = ft_strchr(pathway, '-');
+	char *backend = ft_strchr(pathway, '\n');
+	if (backend)
+		*backend = 0;
+
+	if (!sepPos)
+		return (NULL); 
+	*sepPos = 0;
+	//ft_printf("room name : %s\n",nameRoom );
+	//ft_printf("possiblity : room %s and room %s\n", pathway, sepPos + 1);
+	if (ft_strncmp(nameRoom, sepPos + 1, ft_strlen(sepPos + 1) + 1) && ft_strncmp(nameRoom, pathway, ft_strlen(pathway) + 1))
+	{
+		*sepPos = '-';
+		//ft_printf("not good name\n");
+		return (NULL);
+	}
+	if (!ft_strncmp(nameRoom, sepPos + 1, ft_strlen(sepPos + 1) + 1))
+		return (pathway);
+	if (!ft_strncmp(nameRoom, pathway, ft_strlen(pathway) + 1))
+		return (sepPos + 1);
+	return (NULL);
+}
+
+t_room *findRoom(char *name, t_room **roomList)
+{
+	int i = 0;
+	if (roomList == NULL)
+		return (NULL);
+	while (roomList[i])
+	{
+		if (!ft_strncmp(name, roomList[i]->room, ft_strlen(roomList[i]->room) + 1))
+			return (roomList[i]);
+		i++;	
+	}
+	return(NULL);
+}
+
+int addRoomToRoomPathways(t_room *actual, t_room *toAdd)
+{
+	int i = 0;
+	//printRoom(actual);
+	//printRoom(toAdd);
+	if (!actual->pathway)
+	{
+		actual->pathway = ft_calloc(2, sizeof(t_room *));
+		if (!actual->pathway)
+			return (-666);
+		actual->pathway[1] = NULL;
+		actual->pathway[0] = toAdd;
+	}
+	else
+	{
+		t_room **newRoomList;
+		newRoomList = ft_calloc(lotsOfRoom(actual->pathway) + 2, sizeof(t_room *));
+		if (!newRoomList)
+			return (-666);
+		i = 0;
+		while (actual->pathway[i] != NULL)
+		{
+			newRoomList[i] = actual->pathway[i];
+			i++;
+		}
+		newRoomList[i + 1] = NULL;
+		newRoomList[i] = toAdd;
+		free(actual->pathway);
+		actual->pathway = newRoomList;
+	}
+	return (0);
+}
+
+void addPathToRoom(t_data *data, char **pathways)
+{
+	int i = 0;
+	int j = 0;
+	char *roomTolink = NULL;
+	t_room *newroom = NULL;
+
+	while(data->roomList[i] != NULL)
+	{
+		j = 0;
+		while(pathways[j])
+		{
+			roomTolink = NULL;
+			roomTolink = isInPatways(data->roomList[i]->room, pathways[j]);
+			if (roomTolink && !findRoom(roomTolink, data->roomList[i]->pathway))
+			{	
+				//ft_printf("room %s want to link to room %s \n",data->roomList[i]->room , roomTolink);
+				newroom = findRoom(roomTolink, data->roomList);
+				if (addRoomToRoomPathways(data->roomList[i], newroom))
+					launch_fatal_error(NULL, data, -666);
+				if (addRoomToRoomPathways(newroom, data->roomList[i]))
+					launch_fatal_error(NULL, data, -666);					
+			}
+			j++;
+		}
+		i++;
+	}
+
+}
+
 void	parse(t_data *data)
 {
 	char	*line;
 	int		nextIS;
-	char	***pathways;
+	char	**pathways = NULL;
 
 	line = get_next_line(0);
 	nextIS = 0;
@@ -312,18 +455,26 @@ void	parse(t_data *data)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
 	else
 		data->total_ants = ft_atoi(line);
-	free(line);
 	while (ft_strlen(line))
 	{
+		free(line);
 		line = get_next_line(0);
+		if (!line)
+			break;
 		if (checkTypeLine(line) == 1)
 			nextIS = checkCommandLine(line);
 		else if (checkTypeLine(line) == 3)
-			nextIS = addPathway(line, pathways, nextIS);
+			nextIS = addPathway(line, &pathways, nextIS);
 		else if (checkTypeLine(line) == 4)
 			nextIS = addRoom(line, data, nextIS);
 		if (nextIS < 0)
 			launch_fatal_error(line, data, nextIS);
-		free(line);
 	}
+	free(line);
+	addPathToRoom(data, pathways);
+	for (size_t i = 0; pathways[i]; i++)
+	{
+		free(pathways[i]);
+	}
+	free(pathways);
 }

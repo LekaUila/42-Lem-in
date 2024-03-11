@@ -1,7 +1,8 @@
 
 
 
-SRC		= main.c 
+SRC		= main.c \
+		  parsing.c
 
 
 SRCBONUS 	= 
@@ -43,7 +44,7 @@ ${NAMEL}:
 
 ${NAME}: ${NAMEL} ${SRC}
 			@echo "${BLACKPURPLE}=============== CRÉATION CLIENT ==============${WHITE}" 
-			gcc  -Wall -Wextra -Werror  -o ${NAME} ${SRC} 
+			gcc -g -Wall -Wextra -Werror  -o ${NAME} ${SRC} ${NAMEL}
 			@echo "${BLACKPURPLE}============= FIN CRÉATION CLIENT ============${NEUTRE}" 
 
 

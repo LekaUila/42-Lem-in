@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/08 15:13:54 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/11 14:00:00 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ typedef struct s_data
 
 void	parse(t_data *data);
 void	fatal_error(char *line, t_data *data, char *str);
+void    printRooms(t_data *data);
 
 #endif
