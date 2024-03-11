@@ -6,11 +6,23 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/11 15:45:01 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/11 16:34:09 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+void freePathways(char **pathways)
+{
+	if (pathways)
+	{
+		for (size_t i = 0; pathways[i]; i++)
+		{
+			free(pathways[i]);
+		}	
+	}
+	free(pathways);
+}
 
 void    printRoom(t_room *room)
 {
@@ -48,7 +60,7 @@ void	fatal_error(char *line, t_data *data, char *str)
 {
 	if(line)
 		free(line);
-	(void) data;
+	freeForAll(data);
 	ft_putendl_fd("ERROR", 2);
 	ft_error(str);
 }
@@ -71,6 +83,12 @@ void launch_fatal_error(char *line, t_data *data, int error)
 		break;
 	case -5:
 		fatal_error(line, data, "ROOM COORDONATE IS NOT A NUMBER");
+		break;
+	case -6:
+		fatal_error(line, data, "PATHWAYS LEAD TO A UNKNOW ROOM");
+		break;
+	case -7:
+		fatal_error(line, data, "ROOM COORDONATE IS WRONG");
 		break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
@@ -177,7 +195,7 @@ int addPathway(char *line, char ***pathways, int nextIS)
 				return (-666);
 			(*pathways)[0] = purifyLineByGod(line);
 			(*pathways)[1] = NULL;
-			if (!(*pathways)[0])
+			if (!(*pathways)[0])	
 				return (-666);
 		}
 		else
@@ -191,7 +209,10 @@ int addPathway(char *line, char ***pathways, int nextIS)
 			}
 			newPatways[ft_len_strtab(*pathways)] = purifyLineByGod(line);
 			if (!newPatways[ft_len_strtab(*pathways)])
+			{	
+				free(newPatways);
 				return (-666);
+			}
 			newPatways[ft_len_strtab(*pathways) + 1] = NULL;
 			free(*pathways);
 			*pathways = newPatways;
@@ -215,7 +236,7 @@ char	*purifyLineByDevil(char *line)
 		return (NULL);
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' && line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0' && line[i] != '\n')
 	{
 		newLine[j] = line[i];
 		i++;
@@ -225,7 +246,7 @@ char	*purifyLineByDevil(char *line)
 	j++;
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' && line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0' && line[i] != '\n')
 	{
 		newLine[j] = line[i];
 		i++;
@@ -235,7 +256,7 @@ char	*purifyLineByDevil(char *line)
 	j++;
 	while (line[i] == ' ')
 		i++;
-	while(line[i] != ' ' && line[i] != '\0')
+	while(line[i] != ' ' && line[i] != '\0' && line[i] != '\n')
 	{
 		newLine[j] = line[i];
 		i++;
@@ -265,13 +286,24 @@ int		addRoom(char *line, t_data *data, int NextIs)
 	{
 		if (line[i] == ' ')
 			j++;
+		if (line[i] == ' ' && !ft_isdigit(line[i + 1]))
+		{
+			free(line);
+			return (-7);
+		}
 		i++;
 	}
 	if (j != 2)
+	{
+		free(line);
 		return (-4);
+	}
 	title = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 	if(!title)
+	{
+		free(line);
 		return (-666);
+	}
 	i = 0;
 	while(line[i] != ' ')
 	{
@@ -283,25 +315,41 @@ int		addRoom(char *line, t_data *data, int NextIs)
 	while(line[i] != ' ')
 	{
 		if (ft_isdigit(line[i]) == 0)
+		{
+			free(title);
+			free(line);
 			return (-5);
+		}
 		i++;
 	}
 	i++;
 	y = ft_atoi(&(line[i]));
-	while(line[i] != ' ' && line[i] != '\n')
+	while(line[i] != ' ' && line[i] != '\n' && line[i] != '\0')
 	{
 		if (ft_isdigit(line[i]) == 0)
+		{
+			free(title);
+			free(line);
 			return (-5);
+		}
 		i++;
 	}
 	if (!data->roomList)
 	{
 		data->roomList = ft_calloc(2, sizeof(t_room *));
 		if (!data->roomList)
+		{
+			free(title);
+			free(line);
 			return (-666);
+		}
 		data->roomList[0] = ft_calloc(1, sizeof(t_room));
 		if (!data->roomList[0])
+		{
+			free(title);
+			free(line);
 			return (-666);
+		}
 		data->roomList[1] = NULL;
 		data->roomList[0]->x = x;
 		data->roomList[0]->y = y;
@@ -316,7 +364,11 @@ int		addRoom(char *line, t_data *data, int NextIs)
 		t_room **newRoomList;
 		newRoomList = ft_calloc(lotsOfRoom(data->roomList) + 2, sizeof(t_room *));
 		if (!newRoomList)
+		{
+			free(title);
+			free(line);
 			return (-666);
+		}
 		i = 0;
 		while (data->roomList[i] != NULL)
 		{
@@ -326,7 +378,12 @@ int		addRoom(char *line, t_data *data, int NextIs)
 		newRoomList[i + 1] = NULL;
 		newRoomList[i] = ft_calloc(1, sizeof(t_room));
 		if (!newRoomList[i])
+		{
+			free(title);
+			free(line);
+			free(newRoomList);
 			return (-666);
+		}
 		newRoomList[i]->x = x;
 		newRoomList[i]->y = y;
 		newRoomList[i]->room = title;
@@ -431,10 +488,21 @@ void addPathToRoom(t_data *data, char **pathways)
 			{	
 				//ft_printf("room %s want to link to room %s \n",data->roomList[i]->room , roomTolink);
 				newroom = findRoom(roomTolink, data->roomList);
+				if (!newroom)
+				{
+					freePathways(pathways);
+					launch_fatal_error(NULL, data, -6);
+				}
 				if (addRoomToRoomPathways(data->roomList[i], newroom))
+				{
+					freePathways(pathways);
 					launch_fatal_error(NULL, data, -666);
+				}
 				if (addRoomToRoomPathways(newroom, data->roomList[i]))
-					launch_fatal_error(NULL, data, -666);					
+				{
+					freePathways(pathways);
+					launch_fatal_error(NULL, data, -666);
+				}					
 			}
 			j++;
 		}
@@ -468,13 +536,12 @@ void	parse(t_data *data)
 		else if (checkTypeLine(line) == 4)
 			nextIS = addRoom(line, data, nextIS);
 		if (nextIS < 0)
+		{
+			freePathways(pathways);
 			launch_fatal_error(line, data, nextIS);
+		}
 	}
 	free(line);
 	addPathToRoom(data, pathways);
-	for (size_t i = 0; pathways[i]; i++)
-	{
-		free(pathways[i]);
-	}
-	free(pathways);
+	freePathways(pathways);
 }

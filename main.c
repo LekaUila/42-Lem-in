@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/11 15:40:29 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/11 15:55:31 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	freeForAll(t_data *data)
 {
 	int	i = 0;
 
-	while (data->roomList[i] != NULL)
+	while (data->roomList && data->roomList[i] != NULL)
 	{
 		free(data->roomList[i]->room);
 		free(data->roomList[i]->pathway);

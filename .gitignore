@@ -2,3 +2,4 @@
 */*.o
 lem-in
 libft/libft.a
+generator_linux
