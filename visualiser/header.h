@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 20:04:30 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/13 00:47:41 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@
 # include <time.h>
 # include "../minilibx-linux/mlx.h"
 # include "../minilibx-linux/mlx_int.h"
+
+//VIZU UTILS DEFINE
 # define WIDTH_W 900
 # define HEIGHT_W 600
 # define BORDER 3
-# define LEN_OBJECT  10
+# define LEN_OBJECT  20
+# define CAMERA_SPEED  3
 
 //COLOR
 # define RED 0xd80000
@@ -29,6 +32,12 @@
 # define GREEN 0x009a00
 # define GREY 0xa7a7a7
 # define YELLOW 0xffd500
+
+//VISUALIZER COLOR ASSIGNATION
+# define PATH_COLOR_COLOR BLACK
+# define START_ROOM_COLOR GREEN
+# define EXIT_ROOM_COLOR RED
+# define ROOM_COLOR BLACK
 
 
 typedef struct s_room
@@ -73,9 +82,7 @@ void    printRooms(t_data *data);
 void	exitVisu(t_data *data, int er);
 
 //DRAWING
-void	draw_background(t_data *data);
-int		draw_room(t_data *data, int x, int y);
-void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y);
+void	draw_ants_colony(t_data *data);
 
 //KEYBORD
 int		ft_key_hook(int keycode, void *param);

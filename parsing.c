@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 16:04:11 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/13 00:39:54 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	fatal_error(char *line, t_data *data, char *str)
 	if(line)
 		free(line);
 	freeForAll(data);
-	ft_putendl_fd("ERROR", 2);
+	write(1, "ERROR\n", ft_strlen("ERROR\n"));
 	ft_error(str);
 }
 
@@ -523,7 +523,7 @@ void	parse(t_data *data)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
 	else
 		data->total_ants = ft_atoi(line);
-	ft_printf(line);
+	write(1, line, ft_strlen(line));
 	while (ft_strlen(line))
 	{
 		free(line);
@@ -541,10 +541,10 @@ void	parse(t_data *data)
 			freePathways(pathways);
 			launch_fatal_error(line, data, nextIS);
 		}
-		ft_printf(line);
+		write(1, line, ft_strlen(line));
 	}
 	free(line);
 	addPathToRoom(data, pathways);
 	freePathways(pathways);
-	ft_printf("##PARSING END\n");
+	write(1, "##PARSING END\n", ft_strlen("##PARSING END\n"));
 }

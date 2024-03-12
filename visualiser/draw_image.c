@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 20:38:47 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/13 00:45:39 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ static void	draw_line_bis(int *line, int *start_x, int *start_y)
 
 //line[6] from 0 to 6 is : difference_x difference_y sign_x sign_y
 // check_next_pixel_pos check_next_pixel_pos 2
-void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y)
+static void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y)
 {
+	// ft_printf("ENTER DRAW LINE");
 	int	save_y;
 	int	save_x;
 	int	line[6];
@@ -74,10 +75,11 @@ void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y)
 		line[4] = -line[1] / 2;
 	while (save_y != end_y || save_x != end_x)
 	{
-		if (save_x < WIDTH_W && save_y < HEIGHT_W)
-			img_pix_put(data->img, save_x, save_y, RED);
+		if (save_x < WIDTH_W && save_y < HEIGHT_W  && save_x >= 0 && save_y >= 0)
+			img_pix_put(data->img, save_x, save_y, PATH_COLOR_COLOR);
 		draw_line_bis(line, &save_x, &save_y);
 	}
+	// ft_printf("EXIT DRAW LINE");
 }
 
 // static int	img_pix_get(void *img_mlx, int x, int y)
@@ -97,10 +99,12 @@ void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y)
 // 	return (0xFF << 24 | r << 16 | g << 8 | b);
 // }
 
-void	draw_background(t_data *data)
+static void	draw_background(t_data *data)
 {
 	int			x;
 	int			y;
+	// ft_printf("ENTER DRAW BACK");
+
 
 	y = 0;
 	while (y < HEIGHT_W)
@@ -113,25 +117,101 @@ void	draw_background(t_data *data)
 		}
 		y++;
 	}
+	// ft_printf("EXIT DRAW BACK");
+
 }
 
-int	draw_room(t_data *data, int x, int y)
+int	draw_room(t_data *data, int x, int y, int color)
 {
-	int			pos_x = x * (LEN_OBJECT + (BORDER * 2)) + BORDER;
-	int			pos_y = y * (LEN_OBJECT + (BORDER * 2)) + BORDER;
-	// ft_printf("room in %d, %d draw in %d, %d\n", x, y, pos_x, pos_y);
+	int			pos_x = x;
+	int			pos_y = y;
+	// ft_printf("ENTER DRAW ROOM");
 
-	while (pos_x < x * (LEN_OBJECT + BORDER * 2) + LEN_OBJECT + BORDER)
+	while (pos_x < x + LEN_OBJECT )
 	{
-		pos_y = y * (LEN_OBJECT + BORDER * 2) + BORDER;
+		pos_y = y;
 
-		while (pos_y < y * (LEN_OBJECT + BORDER * 2) + LEN_OBJECT + BORDER)
+		while (pos_y < y + LEN_OBJECT)
 		{
-			if (pos_x < WIDTH_W && pos_y < HEIGHT_W)
-				img_pix_put(data->img, pos_x, pos_y + 1, BLACK);
+			if (pos_x < WIDTH_W && pos_y < HEIGHT_W && pos_x >= 0 && pos_y >= 0)
+				img_pix_put(data->img, pos_x, pos_y, color);
 			pos_y++;
 		}
 		pos_x++;
 	}
+	// ft_printf("EXIT DRAW ROOM");
 	return (0);
+}
+
+static void	draw_rooms(t_data *data)
+{
+	int		i = 0;
+	t_room	*room;
+	const int mult = (LEN_OBJECT + (BORDER * 2));
+
+	while (data->roomList && data->roomList[i] != NULL)
+	{
+		room = data->roomList[i];
+		if (room->x * mult + BORDER >= data->cam_x - (WIDTH_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->x  * mult + BORDER < data->cam_x + (WIDTH_W / 2) + (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
+		{
+			if (room->isStart)
+				draw_room(data,
+						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
+						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
+						START_ROOM_COLOR);
+			else if (room->isEnd)
+				draw_room(data,
+						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
+						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
+						EXIT_ROOM_COLOR);
+			else
+				draw_room(data,
+						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
+						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
+						ROOM_COLOR);
+		}
+		i++;
+	}
+}
+
+static void	draw_paths(t_data *data)
+{
+	int		i = 0;
+	int		j = 0;
+	t_room	*room;
+	const int mult = (LEN_OBJECT + (BORDER * 2));
+	const int add = (BORDER + (LEN_OBJECT / 2));
+
+	while (data->roomList && data->roomList[i] != NULL)
+	{
+		room = data->roomList[i];
+		if (room->x * mult + BORDER >= data->cam_x - (WIDTH_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->x  * mult + BORDER < data->cam_x + (WIDTH_W / 2) + (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
+		{
+			j = 0;
+			while (room->pathway && room->pathway[j])
+			{
+				draw_line(data, room->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
+								room->y * mult + add - (data->cam_y - (HEIGHT_W / 2)),
+								room->pathway[j]->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
+								room->pathway[j]->y * mult + add - (data->cam_y - (HEIGHT_W / 2)));
+				j++;
+			}
+		}
+		i++;
+	}
+}
+
+void	draw_ants_colony(t_data *data)
+{
+
+	draw_background(data);
+	draw_paths(data);
+	draw_rooms(data);
+
 }

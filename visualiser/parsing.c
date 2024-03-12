@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 16:03:36 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/13 00:36:18 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ static int checkTypeLine(char *line)
     if (line[0] == '\n')
         return (5);
     if (ft_strlen(line) == 0)
-        return (5);
+		return (5);
     return(4);
 }
 
@@ -547,6 +547,7 @@ void	parse(t_data *data)
 		line = get_next_line(0);
 		if (!line)
 			break;
+		ft_putendl_fd(line, 1);
 		if (checkTypeLine(line) == 6)
 		{
 		    freePathways(pathways);

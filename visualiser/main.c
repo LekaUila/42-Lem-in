@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 20:15:17 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/12 21:42:50 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	main(void)
 	data.roomList = NULL;
 	data.start = NULL;
 	data.total_ants = 0;
-	data.cam_x = 0;
-	data.cam_y = 0;
+	data.cam_x = WIDTH_W / 2;
+	data.cam_y = HEIGHT_W / 2;
 	parse(&data);
 	printRooms(&data);
 	
