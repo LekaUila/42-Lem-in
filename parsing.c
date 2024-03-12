@@ -30,6 +30,7 @@ void    printRoom(t_room *room)
     ft_printf("room Name : %s\n", room->room);
     ft_printf("x : %d\n", room->x);
     ft_printf("y : %d\n", room->y);
+	ft_printf("checkPath : %d\n", room->checkPath);
     ft_printf("nomber of ants in room is : %d\n", room->ants);
     if (room->isStart == 1)
         ft_printf("%s is the starting room\n", room->room);
@@ -101,6 +102,9 @@ void launch_fatal_error(char *line, t_data *data, int error)
 		break;
 	case -11:
 		fatal_error(line, data, "ANTS NUMBER CAN BE LESS THAN 1");
+		break;
+	case -12:
+		fatal_error(line, data, "ANTS HAVE NO WAY OUT !");
 		break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
@@ -371,7 +375,10 @@ int		addRoom(char *line, t_data *data, int NextIs)
 		data->roomList[1] = NULL;
 		data->roomList[0]->x = x;
 		data->roomList[0]->y = y;
+		data->roomList[0]->checkPath = 0;
 		data->roomList[0]->room = title;
+		data->roomList[0]->isStart = 0;
+		data->roomList[0]->isEnd = 0;
 		if (NextIs == 1)
 			data->roomList[0]->isStart = 1;
 		else if (NextIs == 2)

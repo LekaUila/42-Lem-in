@@ -21,6 +21,7 @@ typedef struct s_room
     char				*room;
 	int					x;
 	int					y;
+	int					checkPath;
     long long int		ants;
     char				isStart;
     char				isEnd;
@@ -38,8 +39,9 @@ typedef struct s_data
 void	freeForAll(t_data *data);
 void	parse(t_data *data);
 void	fatal_error(char *line, t_data *data, char *str);
+void	launch_fatal_error(char *line, t_data *data, int error);
 void    printRooms(t_data *data);
 void	startAlgo(t_data *data);
-void    checkPath(t_data *data);
+void	checkPath(t_data *data);
 
 #endif

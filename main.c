@@ -39,7 +39,7 @@ int	main(void)
 	parse(&data);
 	printRooms(&data);
 	checkPath(&data);
-
+	printRooms(&data);
 
 	freeForAll(&data);
 	exit(0);
