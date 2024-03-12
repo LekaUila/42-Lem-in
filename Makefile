@@ -9,7 +9,7 @@ SRCBONUS = main.c \
 
 
 NAME 		= lem-in
-NAMEV 		= visualiser-lem-in
+NAMEV 		= visu-hex
 NAMEL		= ./libft/libft.a
 NAMEMLX		= ./minilibx-linux/libmlx_Linux.a
 
