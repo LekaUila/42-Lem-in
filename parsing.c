@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/11 16:34:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:04:11 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -523,6 +523,7 @@ void	parse(t_data *data)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
 	else
 		data->total_ants = ft_atoi(line);
+	ft_printf(line);
 	while (ft_strlen(line))
 	{
 		free(line);
@@ -540,8 +541,10 @@ void	parse(t_data *data)
 			freePathways(pathways);
 			launch_fatal_error(line, data, nextIS);
 		}
+		ft_printf(line);
 	}
 	free(line);
 	addPathToRoom(data, pathways);
 	freePathways(pathways);
+	ft_printf("##PARSING END\n");
 }

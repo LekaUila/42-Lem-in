@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/11 16:34:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:03:36 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,12 @@ void launch_fatal_error(char *line, t_data *data, int error)
 	case -7:
 		fatal_error(line, data, "ROOM COORDONATE IS WRONG");
 		break;
+	case -8:
+		fatal_error(line, data, "ERROR OF MAIN PROGRAM");
+		break;
+	case -13:
+        fatal_error(line, data, "NO DATA");
+        break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
 		break;
@@ -122,18 +128,26 @@ return 1 if the line is a command
 return 2 if the line is a commentaire
 return 3 if the line is pathway
 return 4 if the line is a room
+return 5 if the line is a emptyline
+return 6 if the line is a emptyline
 */
 static int checkTypeLine(char *line)
 {
-	if (line[0] == '#')
-	{
-		if (line[1] == '#')
-			return (1);
-		return (2);
-	}
-	if (ft_strchr(line, '-'))
-		return (3);
-	return(4);
+    if (line[0] == '#')
+    {
+        if (line[1] == '#')
+            return (1);
+        return (2);
+    }
+    if (!ft_strncmp(line, "error\n", ft_strlen("error\n")))
+        return (6);
+    if (ft_strchr(line, '-'))
+        return (3);
+    if (line[0] == '\n')
+        return (5);
+    if (ft_strlen(line) == 0)
+        return (5);
+    return(4);
 }
 
 /*
@@ -146,6 +160,8 @@ static int checkCommandLine(char *line)
 		return (1);
 	else if (!ft_strncmp("##end", line, ft_strlen("##end")))
 		return (2);
+	else if (!ft_strncmp("##PARSING END", line, ft_strlen("##PARSING END")))
+		return (42);
 	return (-1);
 }
 
@@ -518,6 +534,8 @@ void	parse(t_data *data)
 	char	**pathways = NULL;
 
 	line = get_next_line(0);
+	if (!ft_strncmp(line, "error\n", ft_strlen("error\n")))
+        fatal_error(line, NULL, "ERROR OF MAIN PROGRAM");
 	nextIS = 0;
 	if (isAllNum(line) == -1)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
@@ -529,19 +547,28 @@ void	parse(t_data *data)
 		line = get_next_line(0);
 		if (!line)
 			break;
-		if (checkTypeLine(line) == 1)
-			nextIS = checkCommandLine(line);
-		else if (checkTypeLine(line) == 3)
-			nextIS = addPathway(line, &pathways, nextIS);
-		else if (checkTypeLine(line) == 4)
-			nextIS = addRoom(line, data, nextIS);
-		if (nextIS < 0)
+		if (checkTypeLine(line) == 6)
 		{
-			freePathways(pathways);
-			launch_fatal_error(line, data, nextIS);
+		    freePathways(pathways);
+            launch_fatal_error(line, data, -13);	
 		}
-	}
-	free(line);
-	addPathToRoom(data, pathways);
-	freePathways(pathways);
+        if (checkTypeLine(line) == 1)
+            nextIS = checkCommandLine(line);
+        else if (checkTypeLine(line) == 3)
+            nextIS = addPathway(line, &pathways, nextIS);
+        else if (checkTypeLine(line) == 4)
+            nextIS = addRoom(line, data, nextIS);
+        else if (checkTypeLine(line) == 5)
+            break;
+        if (nextIS < 0)
+        {
+            freePathways(pathways);
+            launch_fatal_error(line, data, nextIS);
+        }
+		else if (nextIS == 42)
+			break;
+    }
+    free(line);
+    addPathToRoom(data, pathways);
+    freePathways(pathways);
 }

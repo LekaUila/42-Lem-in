@@ -4,8 +4,12 @@
 SRC		= main.c \
 		  parsing.c
 
-SRCBONUS = main.c \
-		   parsing.c
+SRCBONUS = visualiser/main.c \
+		   visualiser/parsing.c \
+		   visualiser/hook_file.c \
+		   visualiser/draw_image.c
+
+
 
 
 NAME 		= lem-in
@@ -83,5 +87,7 @@ bonus : 	${NAMEV}
 re :		fclean all
 
 rebonus : fclean bonus
+
+reall : fclean all bonus
 
 .PHONY : all clean fclean re bonus
