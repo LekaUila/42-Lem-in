@@ -90,6 +90,18 @@ void launch_fatal_error(char *line, t_data *data, int error)
 	case -7:
 		fatal_error(line, data, "ROOM COORDONATE IS WRONG");
 		break;
+	case -8:
+		fatal_error(line, data, "WRONG NUMBER OF START");
+		break;
+	case -9:
+		fatal_error(line, data, "WRONG NUMBER OF END");
+		break;
+	case -10:
+		fatal_error(line, data, "NO DATA");
+		break;
+	case -11:
+		fatal_error(line, data, "ANTS NUMBER CAN BE LESS THAN 1");
+		break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
 		break;
@@ -107,6 +119,8 @@ int		isAllNum(char *maybeNbr)
 	i = 0;
 	if (!maybeNbr)
 		return (-1);
+	if (maybeNbr[0] == '-')
+		i++;
 	while(maybeNbr[i] && maybeNbr[i] != '\n')
 	{
 		if (!ft_isdigit(maybeNbr[i]))
@@ -133,6 +147,10 @@ static int checkTypeLine(char *line)
 	}
 	if (ft_strchr(line, '-'))
 		return (3);
+	if (line[0] == '\n')
+		return (5);
+	if (ft_strlen(line) == 0)
+		return (5);
 	return(4);
 }
 
@@ -511,6 +529,35 @@ void addPathToRoom(t_data *data, char **pathways)
 
 }
 
+void	checkStartEnd(t_data *data)
+{
+	int	cptStart = 0;
+	int cptEnd = 0;
+	int i = 0;
+	t_room	*start;
+	t_room	*end;
+	while(data->roomList[i] != NULL)
+	{
+		if (data->roomList[i]->isStart == 1)
+		{
+			cptStart++;
+			start = data->roomList[i];
+		}
+		else if (data->roomList[i]->isEnd == 1)
+		{
+			cptEnd++;
+			end = data->roomList[i];
+		}
+		i++;
+	}
+	if (cptStart != 1)
+		launch_fatal_error(NULL, data, -8);
+	if (cptEnd != 1)
+		launch_fatal_error(NULL, data, -9);
+	data->start = start;
+	data->end = end;
+}
+
 void	parse(t_data *data)
 {
 	char	*line;
@@ -522,7 +569,11 @@ void	parse(t_data *data)
 	if (isAllNum(line) == -1)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
 	else
+	{
+		if (ft_atoi(line) < 1)
+			launch_fatal_error(line, data, -11);
 		data->total_ants = ft_atoi(line);
+	}
 	while (ft_strlen(line))
 	{
 		free(line);
@@ -535,6 +586,8 @@ void	parse(t_data *data)
 			nextIS = addPathway(line, &pathways, nextIS);
 		else if (checkTypeLine(line) == 4)
 			nextIS = addRoom(line, data, nextIS);
+		else if (checkTypeLine(line) == 5)
+			break;
 		if (nextIS < 0)
 		{
 			freePathways(pathways);
@@ -544,4 +597,5 @@ void	parse(t_data *data)
 	free(line);
 	addPathToRoom(data, pathways);
 	freePathways(pathways);
+	checkStartEnd(data);
 }

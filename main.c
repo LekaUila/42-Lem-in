@@ -16,14 +16,17 @@ void	freeForAll(t_data *data)
 {
 	int	i = 0;
 
-	while (data->roomList && data->roomList[i] != NULL)
+	if (data)
 	{
-		free(data->roomList[i]->room);
-		free(data->roomList[i]->pathway);
-		free(data->roomList[i]);
-		i++;
+		while (data->roomList && data->roomList[i] != NULL)
+		{
+			free(data->roomList[i]->room);
+			free(data->roomList[i]->pathway);
+			free(data->roomList[i]);
+			i++;
+		}
+		free(data->roomList);
 	}
-	free(data->roomList);
 }
 
 int	main(void)
@@ -35,7 +38,7 @@ int	main(void)
 	data.total_ants = 0;
 	parse(&data);
 	printRooms(&data);
-	
+	checkPath(&data);
 
 
 	freeForAll(&data);

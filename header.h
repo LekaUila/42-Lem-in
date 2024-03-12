@@ -39,5 +39,7 @@ void	freeForAll(t_data *data);
 void	parse(t_data *data);
 void	fatal_error(char *line, t_data *data, char *str);
 void    printRooms(t_data *data);
+void	startAlgo(t_data *data);
+void    checkPath(t_data *data);
 
 #endif
