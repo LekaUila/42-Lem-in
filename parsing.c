@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/11 16:34:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 16:42:05 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	fatal_error(char *line, t_data *data, char *str)
 	if(line)
 		free(line);
 	freeForAll(data);
-	ft_putendl_fd("ERROR", 2);
+	write(1, "ERROR\n", ft_strlen("ERROR\n"));
 	ft_error(str);
 }
 
@@ -105,6 +105,12 @@ void launch_fatal_error(char *line, t_data *data, int error)
 		break;
 	case -12:
 		fatal_error(line, data, "ANTS HAVE NO WAY OUT !");
+		break;
+	case -13:
+        fatal_error(line, data, "NO DATA");
+		break;
+	case -14:
+		fatal_error(line, data, "NO PATHWAYS IN MAP");
 		break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
@@ -501,6 +507,8 @@ void addPathToRoom(t_data *data, char **pathways)
 	int j = 0;
 	char *roomTolink = NULL;
 	t_room *newroom = NULL;
+	if (!pathways)
+		launch_fatal_error(NULL, data, -14);
 
 	while(data->roomList[i] != NULL)
 	{
@@ -581,6 +589,7 @@ void	parse(t_data *data)
 			launch_fatal_error(line, data, -11);
 		data->total_ants = ft_atoi(line);
 	}
+	write(1, line, ft_strlen(line));
 	while (ft_strlen(line))
 	{
 		free(line);
@@ -600,6 +609,7 @@ void	parse(t_data *data)
 			freePathways(pathways);
 			launch_fatal_error(line, data, nextIS);
 		}
+		write(1, line, ft_strlen(line));
 	}
 	free(line);
 	addPathToRoom(data, pathways);

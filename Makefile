@@ -3,12 +3,16 @@
 
 SRC		= main.c \
 		  parsing.c \
-		  checkPath.c
+		  checkPath.c \
+		  hook_file.c \
+		  draw_image.c
 
 
-SRCBONUS 	= 
+
+
 NAME 		= lem-in
 NAMEL		= ./libft/libft.a
+NAMEMLX		= ./minilibx-linux/libmlx_Linux.a
 
 MAKEFLAGS	= --no-print-directory
 
@@ -43,11 +47,21 @@ all :		${NAME}
 ${NAMEL}:
 			@cd libft && make
 
-${NAME}: ${NAMEL} ${SRC}
+${NAME}: ${NAMEL} ${NAMEMLX} ${SRC}
 			@echo "${BLACKPURPLE}=============== CRÉATION CLIENT ==============${WHITE}" 
-			gcc -g -Wall -Wextra -Werror  -o ${NAME} ${SRC} ${NAMEL}
+			gcc -g -Wall -Wextra -Werror ${SRC} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAME}
 			@echo "${BLACKPURPLE}============= FIN CRÉATION CLIENT ============${NEUTRE}" 
 
+${NAMEMLX}:
+			@echo "${BLACKPURPLE}=============== CRÉATION MINILIBX ============${WHITE}" 
+			@cd minilibx-linux && make
+			@echo "${BLACKPURPLE}============= FIN CRÉATION MINILIBX ==========${NEUTRE}" 
+			@echo "${WHITEGREEN}Bibliotheque \"${BLINK}libmlx_Linux.a${RESET}\" PRET À L'EMPLOIE !${NEUTRE}"
+
+# ${NAMEV} :  ${SRCBONUS} ${NAMEMLX} ${NAMEL}
+# 			@echo "${BLACKPURPLE}============== CRÉATION VISUALISER ===========${WHITE}" 
+#			gcc  -Wall -Wextra -Werror -g ${SRCBONUS} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAMEV}
+# 			@echo "${BLACKPURPLE}============ FIN CRÉATION VISUALISER =========${NEUTRE}"
 
 clean :
 			@echo -n "${BLACKRED}"
@@ -56,16 +70,21 @@ clean :
 			@cd libft && make clean
 
 fclean :	clean
+			@cd minilibx-linux && make clean
 			@cd libft && make fclean
 			@echo -n "${BLACKRED}"
 			rm -f ${NAME}
+#			rm -f ${NAMEV}
 			@echo -n "${NEUTRE}"
 
-bonus :
-			@make BONUS=42
+# bonus : 	${NAMEV}
+# 			@echo "${WHITEGREEN}PROGRAMME \"${BLINK}${NAMEV}${RESET}\" PRET POUR EXECUTION !${NEUTRE}"
+
 
 re :		fclean all
 
-rebonus : fclean bonus
+# rebonus : fclean bonus
+
+# reall : fclean all bonus
 
 .PHONY : all clean fclean re bonus
