@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 15:03:50 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:50:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ int	ft_other_hook(void *param)
 				data->stepAdvancement = 0;
 				if (data->isOnlyNext)
 					data->isPaused = 1;
+				if (data->ants_list && data->ants_list[data->stepActual])
+				{
+					data->stepActual++;
+				}
 			}
 		}
 		data->last_time = clock();

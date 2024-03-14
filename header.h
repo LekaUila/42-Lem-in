@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 15:24:08 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:46:10 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ typedef struct s_data
 	int		cam_x;
 	int		cam_y;
 	int		stepAdvancement;
-	t_ant	*ants_list;
+	int		stepActual;
+	t_ant	**ants_list;
 }    	t_data;
 
 //FREE AND EXIT FUNCTION
