@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/13 00:39:54 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 13:44:37 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -546,5 +546,4 @@ void	parse(t_data *data)
 	free(line);
 	addPathToRoom(data, pathways);
 	freePathways(pathways);
-	write(1, "##PARSING END\n", ft_strlen("##PARSING END\n"));
 }

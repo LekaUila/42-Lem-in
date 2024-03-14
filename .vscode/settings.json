@@ -3,6 +3,10 @@
 		"libft.h": "c",
 		"mlx_int.h": "c",
 		"header.h": "c",
-		"mlx.h": "c"
+		"mlx.h": "c",
+		"array": "c",
+		"string": "c",
+		"string_view": "c",
+		"time.h": "c"
 	}
 }

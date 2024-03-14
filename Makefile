@@ -2,18 +2,14 @@
 
 
 SRC		= main.c \
-		  parsing.c
-
-SRCBONUS = visualiser/main.c \
-		   visualiser/parsing.c \
-		   visualiser/hook_file.c \
-		   visualiser/draw_image.c
+		  parsing.c \
+		  hook_file.c \
+		  draw_image.c
 
 
 
 
 NAME 		= lem-in
-NAMEV 		= visu-hex
 NAMEL		= ./libft/libft.a
 NAMEMLX		= ./minilibx-linux/libmlx_Linux.a
 
@@ -50,9 +46,9 @@ all :		${NAME}
 ${NAMEL}:
 			@cd libft && make
 
-${NAME}: ${NAMEL} ${SRC}
+${NAME}: ${NAMEL} ${NAMEMLX} ${SRC}
 			@echo "${BLACKPURPLE}=============== CRÉATION CLIENT ==============${WHITE}" 
-			gcc -g -Wall -Wextra -Werror  -o ${NAME} ${SRC} ${NAMEL}
+			gcc -g -Wall -Wextra -Werror ${SRC} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAME}
 			@echo "${BLACKPURPLE}============= FIN CRÉATION CLIENT ============${NEUTRE}" 
 
 ${NAMEMLX}:
@@ -61,10 +57,10 @@ ${NAMEMLX}:
 			@echo "${BLACKPURPLE}============= FIN CRÉATION MINILIBX ==========${NEUTRE}" 
 			@echo "${WHITEGREEN}Bibliotheque \"${BLINK}libmlx_Linux.a${RESET}\" PRET À L'EMPLOIE !${NEUTRE}"
 
-${NAMEV} :  ${SRCBONUS} ${NAMEMLX} ${NAMEL}
-			@echo "${BLACKPURPLE}============== CRÉATION VISUALISER ===========${WHITE}" 
-			gcc  -Wall -Wextra -Werror -g ${SRCBONUS} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAMEV}
-			@echo "${BLACKPURPLE}============ FIN CRÉATION VISUALISER =========${NEUTRE}"
+# ${NAMEV} :  ${SRCBONUS} ${NAMEMLX} ${NAMEL}
+# 			@echo "${BLACKPURPLE}============== CRÉATION VISUALISER ===========${WHITE}" 
+#			gcc  -Wall -Wextra -Werror -g ${SRCBONUS} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAMEV}
+# 			@echo "${BLACKPURPLE}============ FIN CRÉATION VISUALISER =========${NEUTRE}"
 
 clean :
 			@echo -n "${BLACKRED}"
@@ -77,17 +73,17 @@ fclean :	clean
 			@cd libft && make fclean
 			@echo -n "${BLACKRED}"
 			rm -f ${NAME}
-			rm -f ${NAMEV}
+#			rm -f ${NAMEV}
 			@echo -n "${NEUTRE}"
 
-bonus : 	${NAMEV}
-			@echo "${WHITEGREEN}PROGRAMME \"${BLINK}${NAMEV}${RESET}\" PRET POUR EXECUTION !${NEUTRE}"
+# bonus : 	${NAMEV}
+# 			@echo "${WHITEGREEN}PROGRAMME \"${BLINK}${NAMEV}${RESET}\" PRET POUR EXECUTION !${NEUTRE}"
 
 
 re :		fclean all
 
-rebonus : fclean bonus
+# rebonus : fclean bonus
 
-reall : fclean all bonus
+# reall : fclean all bonus
 
 .PHONY : all clean fclean re bonus

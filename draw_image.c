@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/13 00:45:39 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 13:03:03 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,9 +209,7 @@ static void	draw_paths(t_data *data)
 
 void	draw_ants_colony(t_data *data)
 {
-
 	draw_background(data);
 	draw_paths(data);
 	draw_rooms(data);
-
 }
