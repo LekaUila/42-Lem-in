@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 13:31:30 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:03:41 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # define BORDER 3
 # define LEN_OBJECT  20
 # define CAMERA_SPEED  3
+# define VIZU_SPEED 3
+# define LEN_ANT  ((LEN_OBJECT / 2) + (LEN_OBJECT % 2))
+
 
 //COLOR
 
@@ -41,6 +44,7 @@
 # define START_ROOM_COLOR GREEN
 # define EXIT_ROOM_COLOR RED
 # define ROOM_COLOR BLACK
+# define ANT_COLOR YELLOW
 
 typedef struct s_room
 {
@@ -62,6 +66,12 @@ typedef struct s_mlx_img
 	int		endian;
 }	t_mlx_img;
 
+typedef struct s_ant
+{
+	t_room	*actual;
+	t_room	*toGo;
+}	t_ant;
+
 typedef struct s_data
 {
 	int total_ants;
@@ -71,9 +81,13 @@ typedef struct s_data
 	void	*id_mlx;
 	void	*window;
 	void	*img;
+	char	isPaused;
+	char	isOnlyNext;
 	clock_t	last_time;
 	int		cam_x;
 	int		cam_y;
+	int		stepAdvancement;
+	t_ant	*ants_list;
 }    	t_data;
 
 //FREE AND EXIT FUNCTION

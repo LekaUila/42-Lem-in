@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 13:03:03 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:02:58 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,17 +121,17 @@ static void	draw_background(t_data *data)
 
 }
 
-int	draw_room(t_data *data, int x, int y, int color)
+static int	draw_squarre(t_data *data, int x, int y, int color, int len)
 {
 	int			pos_x = x;
 	int			pos_y = y;
 	// ft_printf("ENTER DRAW ROOM");
 
-	while (pos_x < x + LEN_OBJECT )
+	while (pos_x < x + len )
 	{
 		pos_y = y;
 
-		while (pos_y < y + LEN_OBJECT)
+		while (pos_y < y + len)
 		{
 			if (pos_x < WIDTH_W && pos_y < HEIGHT_W && pos_x >= 0 && pos_y >= 0)
 				img_pix_put(data->img, pos_x, pos_y, color);
@@ -158,20 +158,20 @@ static void	draw_rooms(t_data *data)
 			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
 		{
 			if (room->isStart)
-				draw_room(data,
+				draw_squarre(data,
 						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
 						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
-						START_ROOM_COLOR);
+						START_ROOM_COLOR, LEN_OBJECT);
 			else if (room->isEnd)
-				draw_room(data,
+				draw_squarre(data,
 						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
 						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
-						EXIT_ROOM_COLOR);
+						EXIT_ROOM_COLOR, LEN_OBJECT);
 			else
-				draw_room(data,
+				draw_squarre(data,
 						room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
 						room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
-						ROOM_COLOR);
+						ROOM_COLOR, LEN_OBJECT);
 		}
 		i++;
 	}
@@ -207,9 +207,66 @@ static void	draw_paths(t_data *data)
 	}
 }
 
+// static int max(int i, int j)
+// {
+// 	if (i > j )
+// 		return (i);
+// 	return (j);
+// }
+
+// static int min(int i, int j)
+// {
+// 	if (i < j )
+// 		return (i);
+// 	return (j);
+// }
+
+static void	draw_ants(t_data *data)
+{
+	int		i = 0;
+	t_ant	*actuAnt;
+	int		r1x;
+	int		r2x;
+	int		r1y;
+	int		r2y;
+	const int mult = (LEN_OBJECT + (BORDER * 2));
+	const int add = (BORDER + (LEN_OBJECT / 4));
+
+	while (data->ants_list && (data->ants_list[i].actual || data->ants_list[i].toGo))
+	{
+		actuAnt = &data->ants_list[i];
+		if (actuAnt->actual && actuAnt->toGo && data->stepAdvancement)
+		{
+			r1x = actuAnt->actual->x * mult + add - (data->cam_x - (WIDTH_W / 2));
+			r1y = actuAnt->actual->y * mult + add - (data->cam_y - (HEIGHT_W / 2));
+			r2x = actuAnt->toGo->x * mult + add - (data->cam_x - (WIDTH_W / 2));
+			r2y = actuAnt->toGo->y * mult + add - (data->cam_y - (HEIGHT_W / 2));
+			draw_squarre(data,
+						((r2x - r1x) * data->stepAdvancement )/ 100 + r1x,
+						((r2y - r1y) * data->stepAdvancement) / 100 + r1y,
+						ANT_COLOR, LEN_ANT);
+
+						// ((max(r1x, r2x) - min(r1x, r2x)) * 100) / data->stepAdvancement,
+						// ((max(r1y, r2y) - min(r1y, r2y)) * 100) / data->stepAdvancement,
+		}
+		else
+		{
+			if (actuAnt->actual)
+			{
+					draw_squarre(data,
+						actuAnt->actual->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
+						actuAnt->actual->y * mult + add - (data->cam_y - (HEIGHT_W / 2)),
+						ANT_COLOR, LEN_ANT);
+			}
+		}
+		i++;
+	}
+}
+
 void	draw_ants_colony(t_data *data)
 {
 	draw_background(data);
 	draw_paths(data);
 	draw_rooms(data);
+	draw_ants(data);
 }

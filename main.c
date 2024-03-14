@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 13:30:38 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:05:21 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	freeForAll(t_data *data)
 		free(data->roomList[i]);
 		i++;
 	}
+	if (data->ants_list)
+		free(data->ants_list);
 	free(data->roomList);
 }
 
@@ -47,9 +49,17 @@ int	main(void)
 	data.total_ants = 0;
 	data.cam_x = WIDTH_W / 2;
 	data.cam_y = HEIGHT_W / 2;
+	data.isPaused = 1;
+	data.isOnlyNext = 0;
+	data.stepAdvancement = 0;
+	data.ants_list = NULL;
 	parse(&data);
 	printRooms(&data);
-	
+	data.ants_list = ft_calloc(data.total_ants + 1, sizeof(t_ant));
+	if (!data.ants_list)
+		launch_fatal_error(NULL, &data, -666);
+	data.ants_list[0].actual = data.roomList[0];
+	data.ants_list[0].toGo = data.roomList[0]->pathway[1];
 	data.last_time = clock();
 	data.id_mlx = mlx_init();
 	data.window = mlx_new_window(data.id_mlx, WIDTH_W, HEIGHT_W, "Visu Hex");

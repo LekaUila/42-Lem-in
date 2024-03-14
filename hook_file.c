@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/12 23:50:24 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:03:50 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,20 @@ int	ft_key_hook(int keycode, void *param)
 		data->cam_x-= CAMERA_SPEED;
 	else if (keycode == 65363)
 		data->cam_x+= CAMERA_SPEED;
+	else if (keycode == 32)
+	{	
+		data->isPaused = !data->isPaused;
+		data->isOnlyNext = 0;
+	}
+	else if (keycode == 110)
+	{	
+		if (data->isPaused)
+		{
+			data->isPaused = 0;
+			data->isOnlyNext = 1;
+		}
+	}
+	// ft_printf("input : %d\n", keycode);
 	// ft_printf("camera position : [%d, %d]\n", data->cam_x, data->cam_y);
 	// ft_printf("screen coordonate :[%d, %d] to [%d, %d]\n", data->cam_x - (WIDTH_W / 2), data->cam_y - (HEIGHT_W / 2) , data->cam_x + (WIDTH_W / 2), data->cam_y + (HEIGHT_W / 2));
 	return (1);
@@ -40,6 +54,8 @@ top arrow    : 65362
 bottom arrow : 65364
 left arrow   : 65361
 right arrow  : 65363
+space  : 32
+n  : 110
 */
 
 int	ft_other_hook(void *param)
@@ -55,6 +71,16 @@ int	ft_other_hook(void *param)
 	if (duration >= 0.1)
 	{
 		//TODO : drawmap
+		if(!data->isPaused)
+		{
+			data->stepAdvancement += VIZU_SPEED;
+			if (data->stepAdvancement >= 100)
+			{
+				data->stepAdvancement = 0;
+				if (data->isOnlyNext)
+					data->isPaused = 1;
+			}
+		}
 		data->last_time = clock();
 	}
 	draw_ants_colony(data);
