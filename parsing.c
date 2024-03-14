@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 13:44:37 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 16:25:52 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ void launch_fatal_error(char *line, t_data *data, int error)
 		break;
 	case -7:
 		fatal_error(line, data, "ROOM COORDONATE IS WRONG");
+		break;
+	case -13:
+        fatal_error(line, data, "NO DATA");
+		break;
+	case -14:
+		fatal_error(line, data, "NO PATHWAYS IN MAP");
 		break;
 	case -666:
 		fatal_error(line, data, "MALLOC ERROR");
@@ -476,6 +482,8 @@ void addPathToRoom(t_data *data, char **pathways)
 	int j = 0;
 	char *roomTolink = NULL;
 	t_room *newroom = NULL;
+	if (!pathways)
+		launch_fatal_error(NULL, data, -14);
 
 	while(data->roomList[i] != NULL)
 	{
