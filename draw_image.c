@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 15:02:58 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:13:42 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,20 +207,6 @@ static void	draw_paths(t_data *data)
 	}
 }
 
-// static int max(int i, int j)
-// {
-// 	if (i > j )
-// 		return (i);
-// 	return (j);
-// }
-
-// static int min(int i, int j)
-// {
-// 	if (i < j )
-// 		return (i);
-// 	return (j);
-// }
-
 static void	draw_ants(t_data *data)
 {
 	int		i = 0;
@@ -245,9 +231,6 @@ static void	draw_ants(t_data *data)
 						((r2x - r1x) * data->stepAdvancement )/ 100 + r1x,
 						((r2y - r1y) * data->stepAdvancement) / 100 + r1y,
 						ANT_COLOR, LEN_ANT);
-
-						// ((max(r1x, r2x) - min(r1x, r2x)) * 100) / data->stepAdvancement,
-						// ((max(r1y, r2y) - min(r1y, r2y)) * 100) / data->stepAdvancement,
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 15:03:41 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/14 15:24:08 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 //VIZU UTILS DEFINE
 
-# define WIDTH_W 900
-# define HEIGHT_W 600
+# define WIDTH_W 1200
+# define HEIGHT_W 900
 # define BORDER 3
 # define LEN_OBJECT  20
 # define CAMERA_SPEED  3
