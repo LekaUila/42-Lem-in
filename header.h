@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 16:38:18 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:55:05 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define BORDER 0
 # define LEN_OBJECT  10
 # define CAMERA_SPEED  3
-# define VIZU_SPEED 3
+# define VIZU_SPEED 9
 # define LEN_ANT  ((LEN_OBJECT / 2) + (LEN_OBJECT % 2))
 
 
@@ -37,6 +37,7 @@
 # define GREEN 0x009a00
 # define GREY 0xa7a7a7
 # define YELLOW 0xffd500
+# define PURPLE 0xff00ff
 
 //VISU COLOR ASSIGNATION
 
@@ -44,7 +45,7 @@
 # define START_ROOM_COLOR GREEN
 # define EXIT_ROOM_COLOR RED
 # define ROOM_COLOR BLACK
-# define ANT_COLOR YELLOW
+# define ANT_COLOR PURPLE
 
 typedef struct s_room
 {
@@ -89,7 +90,7 @@ typedef struct s_data
 	int		cam_y;
 	int		stepAdvancement;
 	int		stepActual;
-	t_ant	**ants_list;
+	t_ant	**AMIset;
 }    	t_data;
 
 //FREE AND EXIT FUNCTION
@@ -113,5 +114,39 @@ int		ft_other_hook(void *param);
 void    printRooms(t_data *data);
 void	startAlgo(t_data *data);
 void	checkPath(t_data *data);
+
+// AMI
+
+/*
+Return the len of an AMIset
+If the AMIset is NULL, return 0;
+*/
+int AMI_getStepNumber(t_ant **AMIset);
+
+/*
+Add a new step to the AMIset of data.
+The new step is of len data->total_ants + 1.
+
+return -1 if an error occured, 0 else.
+*/
+int AMI_addNewStep(t_data *data);
+
+/*
+Add number ants to the start in the last step of the AMIset of data.
+*/
+void AMI_setNumberOfAntsForStart(t_data *data, int number);
+
+/*
+Add number ants to the end in the last step of the AMIset of data.
+*/
+void AMI_setNumberOfAntsForEnd(t_data *data, int number);
+
+/*
+Add a ants in AMIset of data.
+
+This end will of the t_room *actual to the t_room *toGo.
+*/
+void AMI_addAntsMovement(t_data *data, t_room *actual, t_room *toGo);
+
 
 #endif

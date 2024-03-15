@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 15:48:37 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/15 14:55:04 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,9 +218,9 @@ static void	draw_ants(t_data *data)
 	const int mult = (LEN_OBJECT + (BORDER * 2));
 	const int add = (BORDER + (LEN_OBJECT / 4));
 
-	while (data->ants_list && data->ants_list[data->stepActual] && (data->ants_list[data->stepActual][i].actual || data->ants_list[data->stepActual][i].toGo))
+	while (data->AMIset && data->AMIset[data->stepActual] && (data->AMIset[data->stepActual][i].actual || data->AMIset[data->stepActual][i].toGo))
 	{
-		actuAnt = &data->ants_list[data->stepActual][i];
+		actuAnt = &data->AMIset[data->stepActual][i];
 		if (actuAnt->actual && actuAnt->toGo && data->stepAdvancement)
 		{
 			r1x = actuAnt->actual->x * mult + add - (data->cam_x - (WIDTH_W / 2));

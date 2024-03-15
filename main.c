@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 16:40:27 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:57:08 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,16 @@ void	freeForAll(t_data *data)
 			free(data->roomList[i]);
 			i++;
 		}
-		if (data->ants_list)
-		free(data->ants_list);
+		i = 0;
+		if (data->AMIset)
+		{
+			while (data->AMIset[i])
+			{
+				free(data->AMIset[i]);
+				i++;
+			}
+			free(data->AMIset);
+		}
 	free(data->roomList);
 	}
 }
@@ -55,14 +63,31 @@ int	main(void)
 	data.isPaused = 1;
 	data.isOnlyNext = 0;
 	data.stepAdvancement = 0;
-	data.ants_list = NULL;
+	data.AMIset = NULL;
 	data.stepActual = 0;
 	parse(&data);
 	checkPath(&data);
 	printRooms(&data);
-	// data.ants_list = ft_calloc(data.total_ants + 1, sizeof(t_ant));
-	// if (!data.ants_list)
-	// 	launch_fatal_error(NULL, &data, -666);
+
+	//TEST
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	AMI_addNewStep(&data);
+	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+
+	//ENDTEST
+
+
 	data.last_time = clock();
 	data.id_mlx = mlx_init();
 	data.window = mlx_new_window(data.id_mlx, WIDTH_W, HEIGHT_W, "Visu Hex");

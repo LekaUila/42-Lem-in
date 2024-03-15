@@ -5,6 +5,7 @@ SRC		= main.c \
 		  parsing.c \
 		  checkPath.c \
 		  hook_file.c \
+		  AMI_function.c \
 		  draw_image.c
 
 
