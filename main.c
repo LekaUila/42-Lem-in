@@ -36,10 +36,14 @@ int	main(void)
 	data.roomList = NULL;
 	data.start = NULL;
 	data.total_ants = 0;
+	ft_printf("parsing data\n");
 	parse(&data);
-	printRooms(&data);
+	ft_printf("Checking path\n");
 	checkPath(&data);
-	printRooms(&data);
+	//printRooms(&data);
+	ft_printf("Algo\n");
+	startAlgo(&data);
+	//printRooms(&data);
 
 	freeForAll(&data);
 	exit(0);

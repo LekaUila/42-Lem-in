@@ -31,6 +31,7 @@ typedef struct s_room
 typedef struct s_data
 {
 	int total_ants;
+	int	stopTheCount;
 	t_room	*start;
 	t_room	*end;
 	t_room	**roomList;
@@ -40,8 +41,10 @@ void	freeForAll(t_data *data);
 void	parse(t_data *data);
 void	fatal_error(char *line, t_data *data, char *str);
 void	launch_fatal_error(char *line, t_data *data, int error);
+void    printRoom(t_room *room);
 void    printRooms(t_data *data);
 void	startAlgo(t_data *data);
 void	checkPath(t_data *data);
+void    printPath(t_room **path);
 
 #endif

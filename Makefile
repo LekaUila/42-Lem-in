@@ -3,7 +3,8 @@
 
 SRC		= main.c \
 		  parsing.c \
-		  checkPath.c
+		  checkPath.c \
+		  algo.c
 
 
 SRCBONUS 	= 
