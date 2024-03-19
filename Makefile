@@ -6,8 +6,8 @@ SRC		= main.c \
 		  checkPath.c \
 		  hook_file.c \
 		  AMI_function.c \
-		  draw_image.c
-
+		  draw_image.c \
+		  algo.c
 
 
 

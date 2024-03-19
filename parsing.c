@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
+/*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/14 16:42:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:28:20 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,14 +379,19 @@ int		addRoom(char *line, t_data *data, int NextIs)
 			return (-666);
 		}
 		data->roomList[1] = NULL;
+		data->roomList[0]->room = title;
 		data->roomList[0]->x = x;
 		data->roomList[0]->y = y;
 		data->roomList[0]->checkPath = 0;
-		data->roomList[0]->room = title;
+		data->roomList[0]->ants = 0;
 		data->roomList[0]->isStart = 0;
 		data->roomList[0]->isEnd = 0;
+		data->roomList[0]->pathway = NULL;
 		if (NextIs == 1)
+		{
 			data->roomList[0]->isStart = 1;
+			data->roomList[0]->ants = data->total_ants;
+		}
 		else if (NextIs == 2)
 			data->roomList[0]->isEnd = 1;
 	}
@@ -415,11 +420,19 @@ int		addRoom(char *line, t_data *data, int NextIs)
 			free(newRoomList);
 			return (-666);
 		}
+		newRoomList[i]->room = title;
 		newRoomList[i]->x = x;
 		newRoomList[i]->y = y;
-		newRoomList[i]->room = title;
+		newRoomList[i]->checkPath = 0;
+		newRoomList[i]->ants = 0;
+		newRoomList[i]->isStart = 0;
+		newRoomList[i]->isEnd = 0;
+		newRoomList[i]->pathway = NULL;
 		if (NextIs == 1)
+		{
 			newRoomList[i]->isStart = 1;
+			newRoomList[i]->ants = data->total_ants;
+		}
 		else if (NextIs == 2)
 			newRoomList[i]->isEnd = 1;
 		free(data->roomList);
@@ -557,6 +570,7 @@ void	checkStartEnd(t_data *data)
 		{
 			cptStart++;
 			start = data->roomList[i];
+			ft_printf("start is : %s\n", start->room);
 		}
 		else if (data->roomList[i]->isEnd == 1)
 		{
@@ -588,6 +602,7 @@ void	parse(t_data *data)
 		if (ft_atoi(line) < 1)
 			launch_fatal_error(line, data, -11);
 		data->total_ants = ft_atoi(line);
+		data->stopTheCount = 0;
 	}
 	write(1, line, ft_strlen(line));
 	while (ft_strlen(line))
@@ -609,7 +624,7 @@ void	parse(t_data *data)
 			freePathways(pathways);
 			launch_fatal_error(line, data, nextIS);
 		}
-		write(1, line, ft_strlen(line));
+		
 	}
 	free(line);
 	addPathToRoom(data, pathways);

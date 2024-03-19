@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
+/*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/15 15:55:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:25:21 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ typedef struct s_ant
 typedef struct s_data
 {
 	int total_ants;
+	int	stopTheCount;
 	t_room	*start;
 	t_room	*end;
 	t_room	**roomList;
@@ -97,6 +98,7 @@ typedef struct s_data
 void	freeForAll(t_data *data);
 void	fatal_error(char *line, t_data *data, char *str);
 void	launch_fatal_error(char *line, t_data *data, int error);
+void    printRoom(t_room *room);
 void	exitVisu(t_data *data, int er);
 
 //PARSING
@@ -114,6 +116,7 @@ int		ft_other_hook(void *param);
 void    printRooms(t_data *data);
 void	startAlgo(t_data *data);
 void	checkPath(t_data *data);
+void    printPath(t_room **path);
 
 // AMI
 

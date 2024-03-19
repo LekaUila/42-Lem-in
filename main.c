@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
+/*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/15 15:57:08 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:27:33 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	main(void)
 	data.AMIset = NULL;
 	data.stepActual = 0;
 	parse(&data);
+	ft_printf("Checking path\n");
 	checkPath(&data);
 	printRooms(&data);
 
