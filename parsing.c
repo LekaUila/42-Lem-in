@@ -6,7 +6,7 @@
 /*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 14:14:08 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/19 13:28:20 by hde-min          ###   ########.fr       */
+/*   Updated: 2024/03/19 13:44:52 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -587,6 +587,22 @@ void	checkStartEnd(t_data *data)
 	data->end = end;
 }
 
+void	createAntsPopulation(t_data *data)
+{
+	int i = 0;
+	data->ants = ft_calloc(data->total_ants + 1, sizeof(t_trueAnt));
+	while (i < data->total_ants - 1)
+	{
+		data->ants[i].number = i + 1;
+		data->ants[i].room = NULL;
+		data->ants[i].path = NULL;
+		i++;
+	}
+	data->ants[i].number = -1;
+	data->ants[i].room = NULL;
+	data->ants[i].path = NULL;
+}
+
 void	parse(t_data *data)
 {
 	char	*line;
@@ -602,6 +618,7 @@ void	parse(t_data *data)
 		if (ft_atoi(line) < 1)
 			launch_fatal_error(line, data, -11);
 		data->total_ants = ft_atoi(line);
+		createAntsPopulation(data);
 		data->stopTheCount = 0;
 	}
 	write(1, line, ft_strlen(line));

@@ -11,15 +11,42 @@ void    freeVictory(t_room  ***pathToVictory, int i)
     free(pathToVictory);
 }
 
-int isRoomAlreadyInPath(t_room **pathToVictory, t_room *room)
+int culDeSacDeHobbit(t_room **pathToVictory, t_room *room, t_room *toWent)
 {
+    int i = 0;
+    //ft_printf("towent = %s\nroom = %s\n", toWent->room, room->room);
+    while (pathToVictory[i] != toWent)
+    {
+        if (pathToVictory[i] == room)
+            return (-1);
+        i++;
+    }
+    return (0);
+}
+
+int isRoomAlreadyInPath(t_room **pathToVictory, t_room *room, int tryCulDeSac, t_room *toWent)
+{
+    if (!room || !pathToVictory)
+        return (-1);
     int j = 0;
+    (void) toWent;
+
+    while(pathToVictory[j] != toWent)
+        j++;
+    if (tryCulDeSac && pathToVictory[j + 1] != room && culDeSacDeHobbit(pathToVictory, room, toWent) == 0) //culDeSacDeHobbit(pathToVictory, room, toWent) == -1
+        return (0);
+    j = 0;
     while (pathToVictory[j] != NULL)
     {
+        //ft_printf("pathToVictory[j] = %s\n room = %s\n", pathToVictory[j]->room, room->room);
         if (pathToVictory[j] == room)
+        {
+            //ft_printf("*************************************\n");
             return (-1);
+        }
         j++;
     }
+    //ft_printf("-------------------------------\n");
     return (0);
 }
 
@@ -40,12 +67,13 @@ int toMuch(t_data *data)
     return (i - 1);
 }
 
-int specialCase(t_room    ***pathToVictory, int i, int pathSize)
+int specialCase(t_room    ***pathToVictory, int i)
 {
     int k = 0;
-    while ( pathToVictory[i - 1][pathSize]->pathway[k] != pathToVictory[i - 1][1])
+    while (pathToVictory[i - 1][0]->pathway[k] != pathToVictory[i - 1][1])
         k++;
     k++;
+    //ft_printf("special case : past room = %s\nactualroom : %s\n", pathToVictory[i - 1][1]->room, pathToVictory[i - 1][0]->pathway[k]->room);
     return (k);
 }
 
@@ -63,8 +91,12 @@ int     checkSamePath(t_room **path, t_room** path2, t_room *room)
             return (-1);
         i++;
     }
+    //ft_printf("end bl for room %s and test %s \n", room->room, path2[i]->room);
     if (path2[i] != room)
         return (-1);
+    if (path[i + 1] == path2[i + 1])
+        return (-1);
+    //ft_printf("return 0\n");
     return (0);
 }
 
@@ -84,12 +116,17 @@ int     checkOldPath(t_room ***pathToVictory, t_room *room, int i)
         return (1);
     //besoin de check si le chemin d'avant c'est le meme que celui la
     // j'essayre de faire une nouveau chemin a partir de room c chemin commence pareil que room -1
-    while (l != k)
+    while (i - j >= 0)
     {
+        if (cpt >= k)
+            return (-1);
         if (i - 1 < 0 || i - j < 0)
+        {
+            //ft_printf("j = %d\nk = %d\nl = %d\n", j, k, l);
             return (0);
+        }
         if (checkSamePath(pathToVictory[i - 1], pathToVictory[i - j], room) == 0)       //si i - 1 = i - 2 c'est bon
-            cpt = cpt + 2;
+            cpt = cpt + 1000;           //this got cancer maybe fix it if you have an error 99% chance it's here
         l++;
         j++;
     }
@@ -116,11 +153,24 @@ int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVi
         if (i == 0)
         {
             pathToCreate[0] = start;
+            //ft_printf("actual room : %s\n", actualRoom->room);
             if (actualRoom->pathway && actualRoom->isEnd != 1)
             {
                 k = 0;
-                while (actualRoom->pathway[k] && isRoomAlreadyInPath(pathToCreate, actualRoom->pathway[k]) != 0)
+                while (actualRoom->pathway[k])
+                {
+                    if (actualRoom->pathway[k]->isEnd == 1)
+                    {
+                        break ;
+                    }
                     k++;
+                }
+                if (actualRoom->pathway[k] == NULL)
+                {
+                    k = 0;
+                    while (actualRoom->pathway[k] && isRoomAlreadyInPath(pathToCreate, actualRoom->pathway[k], 0, NULL) != 0)
+                        k++;
+                }
                 if (actualRoom->pathway[k] == NULL)
                 {
                     stop = 1;
@@ -143,12 +193,17 @@ int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVi
             pathSize = pathSizeCalculator(pathToVictory[i - 1]) - 1;            // - qqc a modulés
             while (pathSize > -1)
             {
+                //ft_printf("pathsize = %d\n", pathSize);
                 if (pathToVictory[i - 1][pathSize]->isStart == 1)
                 {
-                    //ft_printf("i am here\n");
                     data->stopTheCount++;
+                    //ft_printf("data = %d\nto much = %d\n", data->stopTheCount, toMuch(data));
                     if (data->stopTheCount > toMuch(data))
+                    {
+                        pathToCreate[0] = 0;
+                        //ft_printf("test", data->stopTheCount, toMuch(data));
                         return (-1);
+                    }
                 }
                 if (checkOldPath(pathToVictory, pathToVictory[i - 1][pathSize], i) == 0)
                 {
@@ -156,11 +211,25 @@ int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVi
                     k = 0;
                     // si le chemin a + de 2 option il faut que je check si ce chemin la on pas déja été crée tous car je regarde que le chemin d'avant ce qui peut etre une erreur
                     //ft_printf("actual room is : %s\n", pathToVictory[i - 1][pathSize]->room, j);
-                    while (pathToVictory[i - 1][pathSize]->isEnd != 1 && pathToVictory[i - 1][pathSize]->pathway && isRoomAlreadyInPath(pathToVictory[i - 1], pathToVictory[i - 1][pathSize]->pathway[k]))
+                    //ft_printf("---------------------------\n");
+                    while (actualRoom->pathway[k])
+                    {
+                        if (actualRoom->pathway[k]->isEnd == 1)
+                        {
+                            break ;
+                        }
                         k++;
-                    if (pathToVictory[i - 1][pathSize]->isStart == 1 && pathToVictory[i - 1][pathSize]->pathway[k] == NULL)
-                        k = specialCase(pathToVictory, i, pathSize);
-                    if ( pathToVictory[i - 1][pathSize]->isEnd != 1 && pathToVictory[i - 1][pathSize]->pathway[k] != NULL)
+                    }
+                    if (actualRoom->pathway[k] == NULL)
+                    {
+                        while (pathToVictory[i - 1][pathSize]->isEnd != 1 && pathToVictory[i - 1][pathSize]->pathway && pathToVictory[i - 1][pathSize]->pathway[k] && isRoomAlreadyInPath(pathToVictory[i - 1], pathToVictory[i - 1][pathSize]->pathway[k], 1, pathToVictory[i - 1][pathSize]))
+                        {
+                            k++;
+                        }
+                    }
+                    if (pathToVictory[i - 1][pathSize]->isStart == 1 )//&& pathToVictory[i - 1][pathSize]->pathway[k] == NULL)
+                        k = specialCase(pathToVictory, i);
+                    if (pathToVictory[i - 1][pathSize]->isEnd != 1 && pathToVictory[i - 1][pathSize]->pathway[k] != NULL)
                     {
                         j = 0;
                         //ft_printf("new path found at room : %s\n", pathToVictory[i - 1][pathSize]->room, j);
@@ -230,6 +299,7 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory)
         printPath(pathToVictory[i]);
         i++;
     }
+    ft_printf("number of path : %d\n", i);
     return (i);
 }
 
@@ -340,7 +410,6 @@ int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
         len1+=pathSize(listPathTest[i]);
         i++;
     }
-    i=0;
     while (listPathSuccess[i])
     {
         len2+=pathSize(listPathSuccess[i]);
@@ -355,7 +424,7 @@ int isCompatible(t_room ***listPathTest)
     int j = 0;
     while (listPathTest[i])
     {
-        j = 0;
+        j = i + 1;
         while (listPathTest[j])
         {
             if (j != i)
@@ -370,20 +439,26 @@ int isCompatible(t_room ***listPathTest)
     return (2);
 }
 
-void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax, int maxlen)
+void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax, int maxlen, int dec)
 {
-    int i = 0;
     int savelen = listPathSize(listPathTest);
+    int i = dec;
     int j = 0;
-
+    
     while (i < maxlen - 1)
     {
+        // for (int i = 0; i < savelen; i++)
+        // {
+        //     write(1, " ", 1);
+        // }
+        // ft_printf("%i\n", i);
+
         if (!culDeSac(pathToVictory[i]))
         {
             listPathTest[savelen] = pathToVictory[i];
-            if (listPathSize(listPathTest) < optimalMax)
+            if (savelen + 1 < optimalMax && isCompatible(listPathTest))
             {
-                findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax, maxlen);
+                findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax, maxlen, dec + 1);
             }
             else
             {
@@ -412,28 +487,37 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
     listPathTest[savelen] = NULL;
 }
 
-/*void    finishAlgo(t_data *data, t_room ***pathToUse)
+void    finishAlgo(t_data *data, t_room ***pathToUse)
 {
-    
-}*/
+    (void)data;
+    (void)pathToUse;
+}
 
 void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 {
     int optimalMax = 0;
     int j = 1;
+    int k = 2;
+    // int maxPathPossible;
     t_room  ***pathToUse;
     t_room  ***pathTest;
 
     optimalMax = findOptimalMAx(data);
-    ft_printf("optimalMax = %d\n", optimalMax);
+    // maxPathPossible = optimalMax;
+    // ft_printf("optimalMax = %d\n", optimalMax);
     pathToUse = ft_calloc(optimalMax + 2, sizeof(t_room ***));
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathToUse[0] = shortestPath(pathToVictory, i);
 
     ft_printf("the shortest path is :\n");
     printPath(pathToUse[0]);
-
-    findShortestAndUnique( pathToVictory, pathTest, pathToUse + 1, optimalMax, i);
+    while (k <= optimalMax)
+    {
+        findShortestAndUnique( pathToVictory, pathTest, pathToUse + 1, k, i, 0);
+        if (!pathToUse[k])
+            break;
+        k++;
+    }
 
     ft_printf("optimal number of path is %d\nPath are :\n", optimalMax);
     while (pathToUse[j])
@@ -441,7 +525,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
         printPath(pathToUse[j]);
         j++;
     }
-    //finishAlgo(data, pathToUse);
+    finishAlgo(data, pathToUse);
     //need to find the shortest nomber of optimalMax of path that do not share the same room
     free(pathTest);
     free(pathToUse);
@@ -455,13 +539,13 @@ void startAlgo(t_data *data)
 
     while (data->roomList[i] != NULL)
         i++;
-    pathToVictory = ft_calloc(i, sizeof(t_room ***));
-    while(j != i)
+    pathToVictory = ft_calloc(i * 100, sizeof(t_room ***));
+    while(j != i * 100)
     {
        pathToVictory[j] = ft_calloc(i + 1, sizeof(t_room **));
        j++;
     }
     j = allPossiblePath(data, pathToVictory);
     chooseYourPath(data, pathToVictory, j);
-    freeVictory(pathToVictory, i);
+    freeVictory(pathToVictory, i * 100);
 }

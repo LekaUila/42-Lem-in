@@ -6,7 +6,7 @@
 /*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/19 13:25:21 by hde-min          ###   ########.fr       */
+/*   Updated: 2024/03/19 14:44:59 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,13 @@ typedef struct s_mlx_img
 	int		endian;
 }	t_mlx_img;
 
+typedef struct s_trueAnt
+{
+	int number;
+	t_room	**path;
+	t_room	*room;
+}	t_trueAnt;
+
 typedef struct s_ant
 {
 	t_room	*actual;
@@ -76,22 +83,23 @@ typedef struct s_ant
 
 typedef struct s_data
 {
-	int total_ants;
-	int	stopTheCount;
-	t_room	*start;
-	t_room	*end;
-	t_room	**roomList;
-	void	*id_mlx;
-	void	*window;
-	void	*img;
-	char	isPaused;
-	char	isOnlyNext;
-	clock_t	last_time;
-	int		cam_x;
-	int		cam_y;
-	int		stepAdvancement;
-	int		stepActual;
-	t_ant	**AMIset;
+	int 		total_ants;
+	int			stopTheCount;
+	t_room		*start;
+	t_room		*end;
+	t_room		**roomList;
+	void		*id_mlx;
+	void		*window;
+	void		*img;
+	char		isPaused;
+	char		isOnlyNext;
+	clock_t		last_time;
+	int			cam_x;
+	int			cam_y;
+	int			stepAdvancement;
+	int			stepActual;
+	t_ant		**AMIset;
+	t_trueAnt	*ants;
 }    	t_data;
 
 //FREE AND EXIT FUNCTION
@@ -118,6 +126,8 @@ void	startAlgo(t_data *data);
 void	checkPath(t_data *data);
 void    printPath(t_room **path);
 
+//ALGO
+int    culDeSac(t_room **pathToVictory);
 // AMI
 
 /*

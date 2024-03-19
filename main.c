@@ -6,7 +6,7 @@
 /*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/19 13:27:33 by hde-min          ###   ########.fr       */
+/*   Updated: 2024/03/19 18:25:40 by hde-min          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	freeForAll(t_data *data)
 			free(data->AMIset);
 		}
 	free(data->roomList);
+	if (data->ants)
+		free(data->ants);
 	}
 }
 
@@ -69,22 +71,22 @@ int	main(void)
 	ft_printf("Checking path\n");
 	checkPath(&data);
 	printRooms(&data);
-
+	startAlgo(&data);
 	//TEST
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	AMI_addNewStep(&data);
-	AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
+	// AMI_addNewStep(&data);
+	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
 
 	//ENDTEST
 
