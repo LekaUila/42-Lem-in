@@ -72,6 +72,7 @@ int	main(void)
 	checkPath(&data);
 	printRooms(&data);
 	startAlgo(&data);
+	freeForAll(&data);
 	//TEST
 	// AMI_addNewStep(&data);
 	// AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
@@ -91,7 +92,7 @@ int	main(void)
 	//ENDTEST
 
 
-	data.last_time = clock();
+	/*data.last_time = clock();
 	data.id_mlx = mlx_init();
 	data.window = mlx_new_window(data.id_mlx, WIDTH_W, HEIGHT_W, "Visu Hex");
 	data.img = mlx_new_image(data.id_mlx, WIDTH_W, HEIGHT_W);
@@ -100,5 +101,5 @@ int	main(void)
 	mlx_loop_hook(data.id_mlx, ft_other_hook, &data);
 	mlx_loop(data.id_mlx);
 	
-	exitVisu(&data, 0);
+	exitVisu(&data, 0);*/
 }
