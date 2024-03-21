@@ -296,7 +296,7 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory)
         start = data->start;
         //ft_printf("i = %d\n", i);
         findAllPAth = addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
-        printPath(pathToVictory[i]);
+        //printPath(pathToVictory[i]);
         i++;
     }
     ft_printf("number of path : %d\n", i);
@@ -418,6 +418,26 @@ int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
     return (len1 < len2);
 }
 
+// void printPathLign(t_room **path)
+// {
+// 	  int i = 0;
+
+//     if (!path)
+// 		return ;
+//     if (path[0] == 0)
+// 		return ;
+// 	ft_printf("| ", path[i]->room);
+//     while (path[i])
+//     {
+// 		if (!(path[i + 1]))
+//         	ft_printf("%s", path[i]->room);
+// 		else
+// 			ft_printf("%s -> ", path[i]->room);
+//         i++;
+//     }
+//     ft_printf(" |\n");
+// }
+
 int isCompatible(t_room ***listPathTest)
 {
     int i = 0;
@@ -444,8 +464,7 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
     int savelen = listPathSize(listPathTest);
     int i = dec;
     int j = 0;
-    
-    while (i < maxlen - 1)
+    while (i < maxlen)
     {
         // for (int i = 0; i < savelen; i++)
         // {
@@ -458,10 +477,18 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
             listPathTest[savelen] = pathToVictory[i];
             if (savelen + 1 < optimalMax && isCompatible(listPathTest))
             {
-                findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax, maxlen, dec + 1);
+                findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax, maxlen, dec + 0);
             }
             else
             {
+				// ft_printf("try with :\n");
+			    // j = 0;
+                // while (listPathTest[j])
+                // {
+                //     printPathLign(listPathTest[j]);
+				// 	j++;
+                // }
+				// ft_printf("____________________________________________________________________________________\n");
                 if (listPathSuccess[0] == NULL && isCompatible(listPathTest))
                 {
                     j = 0;
@@ -513,7 +540,12 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     printPath(pathToUse[0]);
     while (k <= optimalMax)
     {
+		ft_printf("check for %d possibility\n", k);
         findShortestAndUnique( pathToVictory, pathTest, pathToUse + 1, k, i, 0);
+		for (int i = 0; i < optimalMax; i++)
+		{
+			pathTest[i] = NULL;
+		}
         if (!pathToUse[k])
             break;
         k++;

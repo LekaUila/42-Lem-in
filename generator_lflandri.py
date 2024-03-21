@@ -9,8 +9,8 @@ mapstr += "##start\n"
 mapstr += "0 10 10\n"
 
 for i in range(random.randint(10, 25)):
-    listeSalle += [[str(counterroom), 10 + i * 2, 10 + i * 2]]
-    mapstr += str(counterroom) + " " + str(10 + i * 2) + " " + str(10 + i * 2) + "\n"
+    listeSalle += [[str(counterroom), 12 + i * 2, 12 + i * 2]]
+    mapstr += str(counterroom) + " " + str(12 + i * 2) + " " + str(12 + i * 2) + "\n"
     strpath += str(counterroom - 1) + "-" + str(counterroom) + "\n"
     counterroom+=1
 s = counterroom
