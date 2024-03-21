@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/19 14:44:59 by hde-min          ###   ########.fr       */
+/*   Updated: 2024/03/21 14:27:16 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@
 # define START_ROOM_COLOR GREEN
 # define EXIT_ROOM_COLOR RED
 # define ROOM_COLOR BLACK
-# define ANT_COLOR PURPLE
+# define ANT_COLOR YELLOW
+# define ROOM_NAME_COLOR PURPLE
 
 typedef struct s_room
 {

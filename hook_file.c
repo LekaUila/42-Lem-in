@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
+/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/15 14:56:11 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:42:09 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	ft_key_hook(int keycode, void *param)
 			data->isOnlyNext = 1;
 		}
 	}
+	// draw_ants_colony(data);
+	// mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	// ft_printf("input : %d\n", keycode);
 	// ft_printf("camera position : [%d, %d]\n", data->cam_x, data->cam_y);
 	// ft_printf("screen coordonate :[%d, %d] to [%d, %d]\n", data->cam_x - (WIDTH_W / 2), data->cam_y - (HEIGHT_W / 2) , data->cam_x + (WIDTH_W / 2), data->cam_y + (HEIGHT_W / 2));
@@ -86,9 +88,8 @@ int	ft_other_hook(void *param)
 			}
 		}
 		data->last_time = clock();
+		draw_ants_colony(data);
 	}
-	draw_ants_colony(data);
-	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	return (1);
 }
 

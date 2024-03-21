@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_image.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
+/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/15 14:55:04 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/21 14:42:18 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,10 +246,36 @@ static void	draw_ants(t_data *data)
 	}
 }
 
+static void	draw_room_name(t_data *data)
+{
+	int		i = 0;
+	t_room	*room;
+	const int mult = (LEN_OBJECT + (BORDER * 2));
+
+	while (data->roomList && data->roomList[i] != NULL)
+	{
+		room = data->roomList[i];
+		if (room->x * mult + BORDER >= data->cam_x - (WIDTH_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->x  * mult + BORDER < data->cam_x + (WIDTH_W / 2) + (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
+			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
+		{
+			mlx_string_put(data->id_mlx ,data->window,
+					room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
+					room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
+					ROOM_NAME_COLOR,
+					room->room);
+		}
+		i++;
+	}
+}
+
 void	draw_ants_colony(t_data *data)
 {
 	draw_background(data);
 	draw_paths(data);
 	draw_rooms(data);
 	draw_ants(data);
+	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
+	draw_room_name(data);
 }
