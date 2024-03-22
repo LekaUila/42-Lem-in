@@ -532,7 +532,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     printPath(pathToUse[0]);
     while (k <= optimalMax)
     {
-		ft_printf("check for %d possibility\n", k);
+		ft_printf("check for %d different path\n", k);
         findShortestAndUnique( pathToVictory, pathTest, pathUse, k, i, 0);
 		for (size_t i = 0; pathUse[i]; i++)
 		{
@@ -547,6 +547,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 		}
         if (!pathToUse[k])
             break;
+        ft_printf("path list find for %d different path\n", k);
         k++;
     }
 

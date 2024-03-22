@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hde-min <hde-min@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/19 18:25:40 by hde-min          ###   ########.fr       */
+/*   Updated: 2024/03/22 13:19:41 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	freeForAll(t_data *data)
 			}
 			free(data->AMIset);
 		}
-	free(data->roomList);
-	if (data->ants)
-		free(data->ants);
+		free(data->roomList);
+		if (data->ants)
+			free(data->ants);
 	}
 }
 
@@ -67,6 +67,7 @@ int	main(void)
 	data.stepAdvancement = 0;
 	data.AMIset = NULL;
 	data.stepActual = 0;
+	data.ants = NULL;
 	parse(&data);
 	ft_printf("Checking path\n");
 	checkPath(&data);
