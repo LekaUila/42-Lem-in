@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 14:20:35 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:04:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,15 @@
 
 //VISU COLOR ASSIGNATION
 
-# define PATH_COLOR_COLOR BLACK
-# define START_ROOM_COLOR GREEN
-# define EXIT_ROOM_COLOR RED
-# define ROOM_COLOR BLACK
-# define ANT_COLOR YELLOW
-# define ROOM_NAME_COLOR PURPLE
-# define PANNEL_BACKGROUND_COLOR GREY
-# define PANNEL_TEXT_COLOR BLACK
+# define PATH_COLOR					BLACK
+# define START_ROOM_COLOR			GREEN
+# define EXIT_ROOM_COLOR			RED
+# define ROOM_COLOR					BLACK
+# define ANT_COLOR					YELLOW
+# define ROOM_NAME_COLOR			PURPLE
+# define PANNEL_BACKGROUND_COLOR	GREY
+# define PANNEL_BORDER_COLOR		BLACK
+# define PANNEL_TEXT_COLOR			BLACK
 
 typedef struct s_room
 {

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 14:50:36 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:06:05 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	draw_line_bis(int *line, int *start_x, int *start_y)
 
 //line[6] from 0 to 6 is : difference_x difference_y sign_x sign_y
 // check_next_pixel_pos check_next_pixel_pos 2
-static void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y)
+static void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end_y, int color)
 {
 	// ft_printf("ENTER DRAW LINE");
 	int	save_y;
@@ -76,7 +76,7 @@ static void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end
 	while (save_y != end_y || save_x != end_x)
 	{
 		if (save_x < WIDTH_W && save_y < HEIGHT_W  && save_x >= 0 && save_y >= 0)
-			img_pix_put(data->img, save_x, save_y, PATH_COLOR_COLOR);
+			img_pix_put(data->img, save_x, save_y, color);
 		draw_line_bis(line, &save_x, &save_y);
 	}
 	// ft_printf("EXIT DRAW LINE");
@@ -199,7 +199,7 @@ static void	draw_paths(t_data *data)
 				draw_line(data, room->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
 								room->y * mult + add - (data->cam_y - (HEIGHT_W / 2)),
 								room->pathway[j]->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
-								room->pathway[j]->y * mult + add - (data->cam_y - (HEIGHT_W / 2)));
+								room->pathway[j]->y * mult + add - (data->cam_y - (HEIGHT_W / 2)), PATH_COLOR);
 				j++;
 			}
 		}
@@ -314,7 +314,14 @@ void	draw_ants_colony(t_data *data)
 	draw_rooms(data);
 	draw_ants(data);
 	if (data->isPannelOn)
+	{
 		draw_squarre(data, WIDTH_W - 190, HEIGHT_W - 190, PANNEL_BACKGROUND_COLOR, 190);
+		draw_line(data, WIDTH_W - 190, HEIGHT_W - 190, WIDTH_W, HEIGHT_W - 190, PANNEL_BORDER_COLOR);
+		draw_line(data, WIDTH_W - 190, HEIGHT_W - 189, WIDTH_W, HEIGHT_W - 189, PANNEL_BORDER_COLOR);
+		draw_line(data, WIDTH_W - 190, HEIGHT_W - 190, WIDTH_W - 190, HEIGHT_W, PANNEL_BORDER_COLOR);
+		draw_line(data, WIDTH_W - 189, HEIGHT_W - 190, WIDTH_W - 189, HEIGHT_W, PANNEL_BORDER_COLOR);
+
+	}
 	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	if (data->isPannelOn)
 		draw_text_pannel_info(data);
