@@ -138,7 +138,7 @@ int     checkOldPath(t_room ***pathToVictory, t_room *room, int i)
     return (0);
 }
 
-int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVictory, int i, t_data *data)
+/*int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVictory, int i, t_data *data)
 {
     int j = 1;
     int k = 0;
@@ -253,7 +253,7 @@ int    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVi
         j++;
     }
     return (0);
-}
+}*/
 
 void    printPath(t_room **path)
 {
@@ -285,20 +285,103 @@ int    culDeSac(t_room **pathToVictory)
     return (0);
 }
 
+void    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToVictory, int i, t_data *data)
+{
+    int j = 1;
+    int k = 0;
+    t_room *nextRoom = NULL;
+
+    (void)i;
+    (void)pathToVictory;
+    pathToCreate[0] = data->start;
+    pathToCreate[1] = start;
+
+    while (pathToCreate[j]->isEnd != 1)
+    {
+        if (!pathToCreate[j]->pathway)
+            return ;
+        k = 0;
+        while (pathToCreate[j]->pathway[k])
+        {
+            if (nextRoom == NULL || nextRoom->checkPath < pathToCreate[j]->pathway[k]->checkPath)
+                nextRoom = pathToCreate[j]->pathway[k];
+            k++;
+        }
+        j++;
+        pathToCreate[j] = nextRoom;
+        nextRoom = NULL;
+    }
+}
+
+void    addPathToVictoryReverse(t_room *start, t_room **pathToCreate, t_room ***pathToVictory, int i, t_data *data)
+{
+    int j = 1;
+    int k = 0;
+    t_room *nextRoom = NULL;
+
+    (void)i;
+    (void)pathToVictory;
+    pathToCreate[0] = data->end;
+    pathToCreate[1] = start;
+
+    while (pathToCreate[j]->isStart != 1)
+    {
+        if (!pathToCreate[j]->pathway)
+            return ;
+        k = 0;
+        while (pathToCreate[j]->pathway[k])
+        {
+            if (nextRoom == NULL || nextRoom->checkPath > pathToCreate[j]->pathway[k]->checkPath)
+                nextRoom = pathToCreate[j]->pathway[k];
+            k++;
+        }
+        j++;
+        pathToCreate[j] = nextRoom;
+        nextRoom = NULL;
+    }
+}
+
 int    allPossiblePath(t_data *data, t_room ***pathToVictory)
 {
     int i = 0;
-    int findAllPAth = 0;
     t_room *start;
 
-    while (findAllPAth == 0)
+    while (data->start->pathway[i] != NULL)
     {
-        start = data->start;
+        start = data->start->pathway[i];
         //ft_printf("i = %d\n", i);
-        findAllPAth = addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
+        addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
         printPath(pathToVictory[i]);
         i++;
     }
+    i--;
+    /*while (i > -1)
+    {
+        start = data->start->pathway[i];
+        //ft_printf("i = %d\n", i);
+        addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
+        printPath(pathToVictory[i]);
+        i--;
+    }*/
+
+    i = 0;
+    while (data->end->pathway[i] != NULL)
+    {
+        start = data->end->pathway[i];
+        //ft_printf("i = %d\n", i);
+        addPathToVictoryReverse(start, pathToVictory[i], pathToVictory, i, data);
+        printPath(pathToVictory[i]);
+        i++;
+    }
+   /* i--;
+    while (i > -1)
+    {
+        start = data->end->pathway[i];
+        //ft_printf("i = %d\n", i);
+        addPathToVictoryReverse(start, pathToVictory[i], pathToVictory, i, data);
+        printPath(pathToVictory[i]);
+        i--;
+    }*/
     ft_printf("number of path : %d\n", i);
     return (i);
 }
@@ -579,6 +662,6 @@ void startAlgo(t_data *data)
        j++;
     }
     j = allPossiblePath(data, pathToVictory);
-    chooseYourPath(data, pathToVictory, j);
-    freeVictory(pathToVictory, i * 10000);
+    //chooseYourPath(data, pathToVictory, j);
+    freeVictory(pathToVictory, i * 100);
 }

@@ -73,6 +73,7 @@ int	main(void)
 	checkPath(&data);
 	printRooms(&data);
 	startAlgo(&data);
+	//freeForAll(&data);
 	//TEST
 	// AMI_addNewStep(&data);
 	// AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
