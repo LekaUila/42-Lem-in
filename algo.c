@@ -655,8 +655,8 @@ void startAlgo(t_data *data)
 
     while (data->roomList[i] != NULL)
         i++;
-    pathToVictory = ft_calloc(i * 10000, sizeof(t_room ***));
-    while(j != i * 10000)
+    pathToVictory = ft_calloc(i * 100, sizeof(t_room ***));
+    while(j != i * 100)
     {
        pathToVictory[j] = ft_calloc(i + 1, sizeof(t_room **));
        j++;

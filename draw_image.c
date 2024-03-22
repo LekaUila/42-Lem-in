@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_image.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/21 14:42:18 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:50:36 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,14 +260,51 @@ static void	draw_room_name(t_data *data)
 			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
 			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
 		{
-			mlx_string_put(data->id_mlx ,data->window,
+			if (!data->isPannelOn ||
+				(room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - 190 || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) < HEIGHT_W - 190))
+			{
+				mlx_string_put(data->id_mlx ,data->window,
 					room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
 					room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)),
 					ROOM_NAME_COLOR,
 					room->room);
+			}
 		}
 		i++;
 	}
+}
+
+static void draw_text_pannel_info(t_data *data)
+{
+	char	*str = NULL;
+	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 160, PANNEL_TEXT_COLOR, "number of ants for :");
+	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 140, PANNEL_TEXT_COLOR, "- start :");
+	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 120, PANNEL_TEXT_COLOR, "- end   :");
+	str = ft_itoa(data->start->ants);
+	if (str)
+	{
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 140, PANNEL_TEXT_COLOR, str);
+		free(str);
+	}
+	else
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 140, PANNEL_TEXT_COLOR, " ??? ");
+	str = ft_itoa(data->end->ants);
+	if (str)
+	{
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 120, PANNEL_TEXT_COLOR, str);
+		free(str);
+	}
+	else
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 120, PANNEL_TEXT_COLOR, " ??? ");
+	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 80, PANNEL_TEXT_COLOR, "number total of ants :");
+	str = ft_itoa(data->total_ants);
+	if (str)
+	{
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 40, HEIGHT_W - 80, PANNEL_TEXT_COLOR, str);
+		free(str);
+	}
+	else
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 40, HEIGHT_W - 80, PANNEL_TEXT_COLOR, " ??? ");
 }
 
 void	draw_ants_colony(t_data *data)
@@ -276,6 +313,10 @@ void	draw_ants_colony(t_data *data)
 	draw_paths(data);
 	draw_rooms(data);
 	draw_ants(data);
+	if (data->isPannelOn)
+		draw_squarre(data, WIDTH_W - 190, HEIGHT_W - 190, PANNEL_BACKGROUND_COLOR, 190);
 	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
+	if (data->isPannelOn)
+		draw_text_pannel_info(data);
 	draw_room_name(data);
 }

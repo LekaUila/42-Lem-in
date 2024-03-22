@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 13:19:41 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:06:37 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(void)
 	data.cam_y = HEIGHT_W / 2;
 	data.isPaused = 1;
 	data.isOnlyNext = 0;
+	data.isPannelOn = 0;
 	data.stepAdvancement = 0;
 	data.AMIset = NULL;
 	data.stepActual = 0;

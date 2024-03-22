@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hook_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/21 14:42:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 14:18:39 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ int	ft_key_hook(int keycode, void *param)
 			data->isOnlyNext = 1;
 		}
 	}
+	else if (keycode == 105)
+	{	
+		data->isPannelOn = !data->isPannelOn;
+	}
 	// draw_ants_colony(data);
 	// mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	// ft_printf("input : %d\n", keycode);
@@ -58,6 +62,7 @@ left arrow   : 65361
 right arrow  : 65363
 space  : 32
 n  : 110
+i  : 105
 */
 
 int	ft_other_hook(void *param)
