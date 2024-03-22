@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 14:06:37 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:25:25 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	main(void)
 	data.cam_y = HEIGHT_W / 2;
 	data.isPaused = 1;
 	data.isOnlyNext = 0;
-	data.isPannelOn = 0;
 	data.stepAdvancement = 0;
 	data.AMIset = NULL;
 	data.stepActual = 0;
@@ -96,10 +95,11 @@ int	main(void)
 
 	data.last_time = clock();
 	data.id_mlx = mlx_init();
-	data.window = mlx_new_window(data.id_mlx, WIDTH_W, HEIGHT_W, "Visu Hex");
+	data.window = mlx_new_window(data.id_mlx, WIDTH_W, HEIGHT_W, "LEM-IN");
 	data.img = mlx_new_image(data.id_mlx, WIDTH_W, HEIGHT_W);
 	mlx_hook(data.window, 17, 0, ft_hook_window_destroy, &data);
 	mlx_hook(data.window, 2, 1L, ft_key_hook, &data);
+	mlx_mouse_hook(data.window, ft_mouse_hook, &data);
 	mlx_loop_hook(data.id_mlx, ft_other_hook, &data);
 	mlx_loop(data.id_mlx);
 	

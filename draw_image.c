@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 15:06:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:57:05 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,8 +260,7 @@ static void	draw_room_name(t_data *data)
 			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
 			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
 		{
-			if (!data->isPannelOn ||
-				(room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - 190 || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) < HEIGHT_W - 190))
+			if (room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - PANNEL_LEN || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) < HEIGHT_W - PANNEL_LEN)
 			{
 				mlx_string_put(data->id_mlx ,data->window,
 					room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
@@ -277,34 +276,75 @@ static void	draw_room_name(t_data *data)
 static void draw_text_pannel_info(t_data *data)
 {
 	char	*str = NULL;
-	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 160, PANNEL_TEXT_COLOR, "number of ants for :");
-	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 140, PANNEL_TEXT_COLOR, "- start :");
-	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 120, PANNEL_TEXT_COLOR, "- end   :");
+	const int startX = WIDTH_W - PANNEL_LEN;
+	const int startY = HEIGHT_W - PANNEL_LEN;
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 30, PANNEL_TEXT_COLOR, "number of ants for :");
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 50, PANNEL_TEXT_COLOR, "- start :");
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 70, PANNEL_TEXT_COLOR, "- end   :");
 	str = ft_itoa(data->start->ants);
 	if (str)
 	{
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 140, PANNEL_TEXT_COLOR, str);
+		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 50, PANNEL_TEXT_COLOR, str);
 		free(str);
 	}
 	else
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 140, PANNEL_TEXT_COLOR, " ??? ");
+		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 50, PANNEL_TEXT_COLOR, " ??? ");
 	str = ft_itoa(data->end->ants);
 	if (str)
 	{
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 120, PANNEL_TEXT_COLOR, str);
+		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 70, PANNEL_TEXT_COLOR, str);
 		free(str);
 	}
 	else
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 120, HEIGHT_W - 120, PANNEL_TEXT_COLOR, " ??? ");
-	mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 180, HEIGHT_W - 80, PANNEL_TEXT_COLOR, "number total of ants :");
+		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 70, PANNEL_TEXT_COLOR, " ??? ");
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 110, PANNEL_TEXT_COLOR, "number total of ants :");
 	str = ft_itoa(data->total_ants);
 	if (str)
 	{
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 40, HEIGHT_W - 80, PANNEL_TEXT_COLOR, str);
+		mlx_string_put(data->id_mlx ,data->window, startX + 150, startY + 110, PANNEL_TEXT_COLOR, str);
 		free(str);
 	}
 	else
-		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 40, HEIGHT_W - 80, PANNEL_TEXT_COLOR, " ??? ");
+		mlx_string_put(data->id_mlx ,data->window, WIDTH_W - 40, startY + 110, PANNEL_TEXT_COLOR, " ??? ");
+
+	mlx_string_put(data->id_mlx ,data->window, startX + BUTTON_PAUSED_X + 8, startY + BUTTON_PAUSED_Y + (BUTTON_PAUSED_LEN / 2) + 2, BUTTON_PAUSED_TEXT_COLOR, "PAUSED");
+	mlx_string_put(data->id_mlx ,data->window, startX + BUTTON_STEP_X + 12, startY + BUTTON_STEP_Y + (BUTTON_STEP_LEN / 2) - 3, BUTTON_STEP_TEXT_COLOR, "NEXT");
+	mlx_string_put(data->id_mlx ,data->window, startX + BUTTON_STEP_X + 12, startY + BUTTON_STEP_Y + (BUTTON_STEP_LEN / 2) + 13, BUTTON_STEP_TEXT_COLOR, "STEP");
+
+}
+
+void	draw_box_pannel_info(t_data *data)
+{
+		const int startX = WIDTH_W - PANNEL_LEN;
+		const int startY = HEIGHT_W - PANNEL_LEN;
+		//PANNEL
+		draw_squarre(data, startX, startY, PANNEL_BACKGROUND_COLOR, PANNEL_LEN);
+		draw_line(data, startX, startY, WIDTH_W, startY, PANNEL_BORDER_COLOR);
+		draw_line(data, startX, startY + 1, WIDTH_W, startY + 1, PANNEL_BORDER_COLOR);
+		draw_line(data, startX, startY, startX, HEIGHT_W, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + 1, startY, startX + 1, HEIGHT_W, PANNEL_BORDER_COLOR);
+		
+		//paused button
+		if (data->isPaused)
+			draw_squarre(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, BUTTON_PAUSED_COLOR_OFF, BUTTON_PAUSED_LEN);
+		else
+			draw_squarre(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, BUTTON_PAUSED_COLOR_ON, BUTTON_PAUSED_LEN);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		
+		//next step button
+		if (data->isOnlyNext)
+			draw_squarre(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, BUTTON_STEP_COLOR_ON, BUTTON_STEP_LEN);
+		else
+			draw_squarre(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, BUTTON_STEP_COLOR_OFF, BUTTON_STEP_LEN);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+
+
 }
 
 void	draw_ants_colony(t_data *data)
@@ -313,17 +353,8 @@ void	draw_ants_colony(t_data *data)
 	draw_paths(data);
 	draw_rooms(data);
 	draw_ants(data);
-	if (data->isPannelOn)
-	{
-		draw_squarre(data, WIDTH_W - 190, HEIGHT_W - 190, PANNEL_BACKGROUND_COLOR, 190);
-		draw_line(data, WIDTH_W - 190, HEIGHT_W - 190, WIDTH_W, HEIGHT_W - 190, PANNEL_BORDER_COLOR);
-		draw_line(data, WIDTH_W - 190, HEIGHT_W - 189, WIDTH_W, HEIGHT_W - 189, PANNEL_BORDER_COLOR);
-		draw_line(data, WIDTH_W - 190, HEIGHT_W - 190, WIDTH_W - 190, HEIGHT_W, PANNEL_BORDER_COLOR);
-		draw_line(data, WIDTH_W - 189, HEIGHT_W - 190, WIDTH_W - 189, HEIGHT_W, PANNEL_BORDER_COLOR);
-
-	}
+	draw_box_pannel_info(data);
 	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
-	if (data->isPannelOn)
-		draw_text_pannel_info(data);
+	draw_text_pannel_info(data);
 	draw_room_name(data);
 }

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 14:18:39 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 17:04:09 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,15 @@ int	ft_key_hook(int keycode, void *param)
 	else if (keycode == 32)
 	{	
 		data->isPaused = !data->isPaused;
-		data->isOnlyNext = 0;
 	}
 	else if (keycode == 110)
 	{	
-		if (data->isPaused)
-		{
-			data->isPaused = 0;
-			data->isOnlyNext = 1;
-		}
+		data->isOnlyNext = !data->isOnlyNext;
 	}
-	else if (keycode == 105)
-	{	
-		data->isPannelOn = !data->isPannelOn;
-	}
+	// else if (keycode == 105)
+	// {	
+	// 	data->isPannelOn = !data->isPannelOn;
+	// }
 	// draw_ants_colony(data);
 	// mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	// ft_printf("input : %d\n", keycode);
@@ -64,6 +59,36 @@ space  : 32
 n  : 110
 i  : 105
 */
+
+int	ft_mouse_hook(int keycode, int x, int y, void *param)
+{
+	t_data	*data;
+	// int x = 0;
+	// int y = 0;
+	(void) data;
+	data = (t_data *) param;
+
+	if (keycode == 1)
+	{
+		// ft_printf("mouse at %d | %d \n", x, y);
+		// check button paused
+		if (x > WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X &&
+			x < WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN &&
+			y > HEIGHT_W - PANNEL_LEN + BUTTON_PAUSED_Y &&
+			y < HEIGHT_W - PANNEL_LEN + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN)
+		{
+			data->isPaused = !data->isPaused;
+		}
+		else if (x > WIDTH_W - PANNEL_LEN + BUTTON_STEP_X &&
+			x < WIDTH_W - PANNEL_LEN + BUTTON_STEP_X + BUTTON_STEP_LEN &&
+			y > HEIGHT_W - PANNEL_LEN + BUTTON_STEP_Y &&
+			y < HEIGHT_W - PANNEL_LEN + BUTTON_STEP_Y + BUTTON_STEP_LEN)
+		{
+			data->isOnlyNext = !data->isOnlyNext;
+		}
+	}
+	return (1);
+}
 
 int	ft_other_hook(void *param)
 {
@@ -85,7 +110,9 @@ int	ft_other_hook(void *param)
 			{
 				data->stepAdvancement = 0;
 				if (data->isOnlyNext)
+				{
 					data->isPaused = 1;
+				}
 				if (data->AMIset && data->AMIset[data->stepActual])
 				{
 					data->stepActual++;

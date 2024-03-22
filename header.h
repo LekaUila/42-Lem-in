@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 15:04:22 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/22 16:53:38 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,15 @@
 # define BORDER 0
 # define LEN_OBJECT  10
 # define CAMERA_SPEED  3
-# define VIZU_SPEED 9
+# define VIZU_SPEED 1
 # define LEN_ANT  ((LEN_OBJECT / 2) + (LEN_OBJECT % 2))
+# define PANNEL_LEN	190
+# define BUTTON_PAUSED_X 30
+# define BUTTON_PAUSED_Y 120
+# define BUTTON_PAUSED_LEN	50
+# define BUTTON_STEP_X 110
+# define BUTTON_STEP_Y 120
+# define BUTTON_STEP_LEN 50
 
 
 //COLOR
@@ -50,6 +57,16 @@
 # define PANNEL_BACKGROUND_COLOR	GREY
 # define PANNEL_BORDER_COLOR		BLACK
 # define PANNEL_TEXT_COLOR			BLACK
+# define BUTTON_PAUSED_COLOR_OFF	RED
+# define BUTTON_PAUSED_COLOR_ON		GREEN
+# define BUTTON_PAUSED_BORDER_COLOR	BLACK
+# define BUTTON_PAUSED_TEXT_COLOR	BLACK
+# define BUTTON_STEP_COLOR_OFF		RED
+# define BUTTON_STEP_COLOR_ON		GREEN
+# define BUTTON_STEP_BORDER_COLOR	BLACK
+# define BUTTON_STEP_TEXT_COLOR		BLACK
+
+
 
 typedef struct s_room
 {
@@ -97,7 +114,6 @@ typedef struct s_data
 	void		*img;
 	char		isPaused;
 	char		isOnlyNext;
-	char		isPannelOn;
 	clock_t		last_time;
 	int			cam_x;
 	int			cam_y;
@@ -121,6 +137,7 @@ void	parse(t_data *data);
 void	draw_ants_colony(t_data *data);
 
 //KEYBORD
+int		ft_mouse_hook(int keycode, int x, int y, void *param);
 int		ft_key_hook(int keycode, void *param);
 int		ft_hook_window_destroy(void	*param);
 int		ft_other_hook(void *param);
