@@ -54,6 +54,7 @@ typedef struct s_room
 	int					x;
 	int					y;
 	int					checkPath;
+	int					checkPath2;
     long long int		ants;
     char				isStart;
     char				isEnd;

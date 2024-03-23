@@ -26,21 +26,22 @@ void freePathways(char **pathways)
 
 void    printRoom(t_room *room)
 {
-    int j = 0;
+    //int j = 0;
     ft_printf("room Name : %s\n", room->room);
-    ft_printf("x : %d\n", room->x);
-    ft_printf("y : %d\n", room->y);
+    //ft_printf("x : %d\n", room->x);
+    //ft_printf("y : %d\n", room->y);
 	ft_printf("checkPath : %d\n", room->checkPath);
-    ft_printf("nomber of ants in room is : %d\n", room->ants);
+	ft_printf("checkPath2 : %d\n", room->checkPath2);
+    //ft_printf("nomber of ants in room is : %d\n", room->ants);
     if (room->isStart == 1)
         ft_printf("%s is the starting room\n", room->room);
     else if (room->isEnd == 1)
         ft_printf("%s is the finishing room\n", room->room);
-    while (room->pathway && room->pathway[j])
+    /*while (room->pathway && room->pathway[j])
     {
         ft_printf("%s is link to room : %s\n", room->room, room->pathway[j]->room);
         j++;
-    }
+    }*/
 }
 
 void    printRooms(t_data *data)
@@ -424,6 +425,7 @@ int		addRoom(char *line, t_data *data, int NextIs)
 		newRoomList[i]->x = x;
 		newRoomList[i]->y = y;
 		newRoomList[i]->checkPath = 0;
+		newRoomList[i]->checkPath2 = 0;
 		newRoomList[i]->ants = 0;
 		newRoomList[i]->isStart = 0;
 		newRoomList[i]->isEnd = 0;
