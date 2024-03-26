@@ -593,7 +593,7 @@ void	createAntsPopulation(t_data *data)
 {
 	int i = 0;
 	data->ants = ft_calloc(data->total_ants + 1, sizeof(t_trueAnt));
-	while (i < data->total_ants - 1)
+	while (i < data->total_ants)
 	{
 		//data->ants[i] = malloc(sizeof(t_trueAnt));
 		data->ants[i].number = i + 1;
