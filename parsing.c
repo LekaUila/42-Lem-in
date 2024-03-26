@@ -572,7 +572,7 @@ void	checkStartEnd(t_data *data)
 		{
 			cptStart++;
 			start = data->roomList[i];
-			ft_printf("start is : %s\n", start->room);
+			//ft_printf("start is : %s\n", start->room);
 		}
 		else if (data->roomList[i]->isEnd == 1)
 		{
@@ -595,13 +595,14 @@ void	createAntsPopulation(t_data *data)
 	data->ants = ft_calloc(data->total_ants + 1, sizeof(t_trueAnt));
 	while (i < data->total_ants - 1)
 	{
+		//data->ants[i] = malloc(sizeof(t_trueAnt));
 		data->ants[i].number = i + 1;
-		data->ants[i].room = NULL;
+		data->ants[i].room = 0;
 		data->ants[i].path = NULL;
 		i++;
 	}
 	data->ants[i].number = -1;
-	data->ants[i].room = NULL;
+	data->ants[i].room = 0;
 	data->ants[i].path = NULL;
 }
 
@@ -623,7 +624,7 @@ void	parse(t_data *data)
 		createAntsPopulation(data);
 		data->stopTheCount = 0;
 	}
-	write(1, line, ft_strlen(line));
+	//write(1, line, ft_strlen(line));
 	while (ft_strlen(line))
 	{
 		free(line);

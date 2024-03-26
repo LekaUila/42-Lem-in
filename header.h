@@ -74,7 +74,7 @@ typedef struct s_trueAnt
 {
 	int number;
 	t_room	**path;
-	t_room	*room;
+	int		room;
 }	t_trueAnt;
 
 typedef struct s_ant

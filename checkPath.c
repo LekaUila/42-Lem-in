@@ -79,6 +79,6 @@ void    checkPath(t_data *data)
     //data->start->checkPath = 1;
     if (data->end->checkPath == 0)
         launch_fatal_error(NULL, data, -12);
-    else
-        ft_printf("\nThere is an escape, there is hope for the ant colonie !\n");
+    /*else
+        ft_printf("\nThere is an escape, there is hope for the ant colonie !\n");*/
 }
