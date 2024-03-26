@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:33:57 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/15 15:14:08 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 16:27:47 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void AMI_setNumberOfAntsForStart(t_data *data, int number)
 	while (i < maxIte && i < data->total_ants + 1)
 	{
 		lastStep[i].actual = data->start;
+		i++;
 	}
 }
 
@@ -108,6 +109,7 @@ void AMI_setNumberOfAntsForEnd(t_data *data, int number)
 	while (i < maxIte && i < data->total_ants + 1)
 	{
 		lastStep[i].actual = data->end;
+		i++;
 	}	
 }
 

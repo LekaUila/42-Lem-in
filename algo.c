@@ -587,12 +587,13 @@ void    sendAntsInPath(t_data *data, t_room **pathToUse)
     }
 }
 
-int    mooveAnts(t_trueAnt *ant)
+int    mooveAnts(t_trueAnt *ant, t_data *data)
 {
     if (ant->path[ant->room]->isEnd == 1)
         return (-1);
     if (ant->path[ant->room + 1]->ants != 0 && ant->path[ant->room + 1]->isEnd != 1)
         return (-1);
+    AMI_addAntsMovement(data, ant->path[ant->room], ant->path[ant->room + 1]);
     ant->path[ant->room]->ants--;
     ant->room = ant->room + 1;
     ft_printf("L%d-%s", ant->number, ant->path[ant->room]->room);
@@ -603,7 +604,7 @@ int    mooveAnts(t_trueAnt *ant)
 void    finishAlgo(t_data *data, t_room ***pathToUse)
 {
     int i = 0;
-    int space;
+    int space = 42;
     
     if (!pathToUse)
         return ;
@@ -611,15 +612,24 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
     {
         i = 0;
 
+        if (space != 42)
+        {
+            AMI_addNewStep(data);
+            AMI_setNumberOfAntsForEnd(data, data->end->ants);
+        }
         while(data->ants[i].number != -1 && data->ants[i].path)
         {
-            space =mooveAnts(&data->ants[i]);
+            space = mooveAnts(&data->ants[i], data);
             if (space == 0 && data->ants[i + 1].path != NULL)
                 ft_printf(" ");
             i++;
             //if (!data->ants[i + 1].path)
         }
-
+        if (space != 42)
+        {  
+            AMI_setNumberOfAntsForStart(data, data->start->ants);
+        }
+        space = 43;
 
         i = 1;
         if (pathToUse[i] == NULL)
@@ -643,6 +653,7 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
         }
         i = 0;
         ft_printf("\n");
+
         //ft_printf("ants in final room = %d\n", data->end->ants);
         //ft_printf("ants in starting room = %d\n", data->start->ants);
         //ft_printf("ants total = %d\n", data->total_ants);
@@ -670,25 +681,32 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 
     //ft_printf("the shortest path is :\n");
     //printPath(pathToUse[0]);
-    while (k <= optimalMax)
+    if (pathToVictory[1])
     {
-		//ft_printf("check for %d different path\n", k);
-        findShortestAndUnique( pathToVictory, pathTest, pathUse, k, i, 0);
-		for (size_t i = 0; pathUse[i]; i++)
-		{
-			pathToUse[i + 1] = pathUse[i];
-		}
-		
-		for (int i = 0; i < optimalMax; i++)
-		{
-			pathTest[i] = NULL;
-			pathUse[i] = NULL;
+            while (k <= optimalMax)
+        {
+            //ft_printf("check for %d different path\n", k);
+            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, i, 0);
+            for (size_t i = 0; pathUse[i]; i++)
+            {
+                pathToUse[i + 1] = pathUse[i];
+            }
+            
+            for (int i = 0; i < optimalMax; i++)
+            {
+                pathTest[i] = NULL;
+                pathUse[i] = NULL;
 
-		}
-        if (!pathToUse[k])
-            break;
-        //ft_printf("path list find for %d different path\n", k);
-        k++;
+            }
+            if (!pathToUse[k])
+                break;
+            //ft_printf("path list find for %d different path\n", k);
+            k++;
+        }
+    }
+    else
+    {
+        pathToUse[1] = pathToUse[0];
     }
 
     //ft_printf("optimal number of path is %d\nPath are :\n", optimalMax);
