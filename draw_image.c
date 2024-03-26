@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 16:57:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:53:14 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,28 @@ static int	draw_squarre(t_data *data, int x, int y, int color, int len)
 	return (0);
 }
 
+static int	draw_rectangle(t_data *data, int x, int y, int color, int len_x, int len_y)
+{
+	int			pos_x = x;
+	int			pos_y = y;
+	// ft_printf("ENTER DRAW ROOM");
+
+	while (pos_x < x + len_x )
+	{
+		pos_y = y;
+
+		while (pos_y < y + len_y)
+		{
+			if (pos_x < WIDTH_W && pos_y < HEIGHT_W && pos_x >= 0 && pos_y >= 0)
+				img_pix_put(data->img, pos_x, pos_y, color);
+			pos_y++;
+		}
+		pos_x++;
+	}
+	// ft_printf("EXIT DRAW ROOM");
+	return (0);
+}
+
 static void	draw_rooms(t_data *data)
 {
 	int		i = 0;
@@ -188,21 +210,21 @@ static void	draw_paths(t_data *data)
 	while (data->roomList && data->roomList[i] != NULL)
 	{
 		room = data->roomList[i];
-		if (room->x * mult + BORDER >= data->cam_x - (WIDTH_W / 2) - (BORDER + LEN_OBJECT)
-			&& room->x  * mult + BORDER < data->cam_x + (WIDTH_W / 2) + (BORDER + LEN_OBJECT)
-			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
-			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
+		// if (room->x * mult + BORDER >= data->cam_x - (WIDTH_W / 2) - (BORDER + LEN_OBJECT)
+		// 	&& room->x  * mult + BORDER < data->cam_x + (WIDTH_W / 2) + (BORDER + LEN_OBJECT)
+		// 	&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
+		// 	&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
+		// {
+		j = 0;
+		while (room->pathway && room->pathway[j])
 		{
-			j = 0;
-			while (room->pathway && room->pathway[j])
-			{
-				draw_line(data, room->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
-								room->y * mult + add - (data->cam_y - (HEIGHT_W / 2)),
-								room->pathway[j]->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
-								room->pathway[j]->y * mult + add - (data->cam_y - (HEIGHT_W / 2)), PATH_COLOR);
-				j++;
-			}
+			draw_line(data, room->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
+							room->y * mult + add - (data->cam_y - (HEIGHT_W / 2)),
+							room->pathway[j]->x * mult + add - (data->cam_x - (WIDTH_W / 2)),
+							room->pathway[j]->y * mult + add - (data->cam_y - (HEIGHT_W / 2)), PATH_COLOR);
+			j++;
 		}
+		// }
 		i++;
 	}
 }
@@ -260,7 +282,8 @@ static void	draw_room_name(t_data *data)
 			&& room->y  * mult + BORDER >= data->cam_y - (HEIGHT_W / 2) - (BORDER + LEN_OBJECT)
 			&& room->y  * mult + BORDER < data->cam_y + (HEIGHT_W / 2) + (BORDER + LEN_OBJECT))
 		{
-			if (room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - PANNEL_LEN || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) < HEIGHT_W - PANNEL_LEN)
+			if ((room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - PANNEL_LEN || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) < HEIGHT_W - PANNEL_LEN) &&
+				(room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)) <  WIDTH_W - PANNEL_LEN || room->y * mult + BORDER - (data->cam_y - (HEIGHT_W / 2)) > 0 + PANNEL_LEN + 2))
 			{
 				mlx_string_put(data->id_mlx ,data->window,
 					room->x * mult + BORDER - (data->cam_x - (WIDTH_W / 2)),
@@ -313,6 +336,17 @@ static void draw_text_pannel_info(t_data *data)
 
 }
 
+static void draw_text_pannel_cam(t_data *data)
+{
+	const int startX = WIDTH_W - PANNEL_LEN;
+	const int startY = 0;
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 30, PANNEL_TEXT_COLOR, "Camera speed :");
+
+	mlx_string_put(data->id_mlx ,data->window, startX + BUTTON_PAUSED_X + 12, startY + BUTTON_PAUSED_Y + (BUTTON_PAUSED_LEN / 2) + 2, BUTTON_PAUSED_TEXT_COLOR, "DOWN");
+	
+	mlx_string_put(data->id_mlx ,data->window, startX + BUTTON_STEP_X + 18, startY + BUTTON_STEP_Y + (BUTTON_STEP_LEN / 2) + 2, BUTTON_STEP_TEXT_COLOR, "UP");
+}
+
 void	draw_box_pannel_info(t_data *data)
 {
 		const int startX = WIDTH_W - PANNEL_LEN;
@@ -330,9 +364,9 @@ void	draw_box_pannel_info(t_data *data)
 		else
 			draw_squarre(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, BUTTON_PAUSED_COLOR_ON, BUTTON_PAUSED_LEN);
 		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, PANNEL_BORDER_COLOR);
-		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, BUTTON_PAUSED_BORDER_COLOR);
 		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
-		draw_line(data, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, BUTTON_PAUSED_BORDER_COLOR);
 		
 		//next step button
 		if (data->isOnlyNext)
@@ -340,11 +374,39 @@ void	draw_box_pannel_info(t_data *data)
 		else
 			draw_squarre(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, BUTTON_STEP_COLOR_OFF, BUTTON_STEP_LEN);
 		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, PANNEL_BORDER_COLOR);
-		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, BUTTON_STEP_BORDER_COLOR);
 		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
-		draw_line(data, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, BUTTON_STEP_BORDER_COLOR);
+}
 
+void	draw_box_pannel_cam(t_data *data)
+{
+		const int startX = WIDTH_W - PANNEL_LEN;
+		const int startY = 0;
+		//PANNEL
+		draw_squarre(data, startX, startY, PANNEL_BACKGROUND_COLOR, PANNEL_LEN);
+		draw_line(data, startX, startY + PANNEL_LEN, WIDTH_W, startY + PANNEL_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX, startY - 1 + PANNEL_LEN, WIDTH_W, startY - 1  + PANNEL_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX, startY, startX, PANNEL_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + 1, startY, startX + 1, PANNEL_LEN, PANNEL_BORDER_COLOR);
 
+		//SPEED BAR
+		draw_rectangle(data, startX + 30, startY + 40, CAM_SPEED_BAR_BACKGROUND_COLOR, 130, 30);
+		draw_rectangle(data, startX + 31, startY + 41, CAM_SPEED_BAR_CENTER_COLOR, data->cam_speed * 128 / CAMERA_SPEED_MAX, 28);
+		
+		//camera speed down
+		draw_squarre(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, BUTTON_CAM_COLOR, BUTTON_PAUSED_LEN);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y  + BUTTON_PAUSED_LEN, BUTTON_CAM_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y, startX + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN, startY + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN, BUTTON_CAM_BORDER_COLOR);
+		
+		//camera speed up
+		draw_squarre(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, BUTTON_CAM_COLOR, BUTTON_STEP_LEN);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y  + BUTTON_STEP_LEN, BUTTON_CAM_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, PANNEL_BORDER_COLOR);
+		draw_line(data, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y, startX + BUTTON_STEP_X + BUTTON_STEP_LEN, startY + BUTTON_STEP_Y + BUTTON_STEP_LEN, BUTTON_CAM_BORDER_COLOR);
 }
 
 void	draw_ants_colony(t_data *data)
@@ -354,7 +416,9 @@ void	draw_ants_colony(t_data *data)
 	draw_rooms(data);
 	draw_ants(data);
 	draw_box_pannel_info(data);
+	draw_box_pannel_cam(data);
 	mlx_put_image_to_window(data->id_mlx, data->window, data->img, 0, 0);
 	draw_text_pannel_info(data);
+	draw_text_pannel_cam(data);
 	draw_room_name(data);
 }

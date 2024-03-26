@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 16:53:38 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:46:10 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@
 # define HEIGHT_W 900
 # define BORDER 0
 # define LEN_OBJECT  10
-# define CAMERA_SPEED  3
+# define CAMERA_SPEED_START  3
+# define CAMERA_SPEED_MODIFIER 3
+# define CAMERA_SPEED_MIN  3
+# define CAMERA_SPEED_MAX  45
 # define VIZU_SPEED 1
 # define LEN_ANT  ((LEN_OBJECT / 2) + (LEN_OBJECT % 2))
 # define PANNEL_LEN	190
@@ -48,23 +51,30 @@
 
 //VISU COLOR ASSIGNATION
 
-# define PATH_COLOR					BLACK
-# define START_ROOM_COLOR			GREEN
-# define EXIT_ROOM_COLOR			RED
-# define ROOM_COLOR					BLACK
-# define ANT_COLOR					YELLOW
-# define ROOM_NAME_COLOR			PURPLE
-# define PANNEL_BACKGROUND_COLOR	GREY
-# define PANNEL_BORDER_COLOR		BLACK
-# define PANNEL_TEXT_COLOR			BLACK
-# define BUTTON_PAUSED_COLOR_OFF	RED
-# define BUTTON_PAUSED_COLOR_ON		GREEN
-# define BUTTON_PAUSED_BORDER_COLOR	BLACK
-# define BUTTON_PAUSED_TEXT_COLOR	BLACK
-# define BUTTON_STEP_COLOR_OFF		RED
-# define BUTTON_STEP_COLOR_ON		GREEN
-# define BUTTON_STEP_BORDER_COLOR	BLACK
-# define BUTTON_STEP_TEXT_COLOR		BLACK
+# define PATH_COLOR						BLACK
+# define START_ROOM_COLOR				GREEN
+# define EXIT_ROOM_COLOR				RED
+# define ROOM_COLOR						BLACK
+# define ANT_COLOR						YELLOW
+# define ROOM_NAME_COLOR				PURPLE
+# define PANNEL_BACKGROUND_COLOR		GREY
+# define PANNEL_BORDER_COLOR			BLACK
+# define PANNEL_TEXT_COLOR				BLACK
+# define BUTTON_PAUSED_COLOR_OFF		RED
+# define BUTTON_PAUSED_COLOR_ON			GREEN
+# define BUTTON_PAUSED_BORDER_COLOR		BLACK
+# define BUTTON_PAUSED_TEXT_COLOR		BLACK
+# define BUTTON_STEP_COLOR_OFF			RED
+# define BUTTON_STEP_COLOR_ON			GREEN
+# define BUTTON_STEP_BORDER_COLOR		BLACK
+# define BUTTON_STEP_TEXT_COLOR			BLACK
+# define BUTTON_CAM_COLOR				PURPLE
+# define BUTTON_CAM_BORDER_COLOR		BLACK
+# define BUTTON_CAM_TEXT_COLOR			BLACK
+# define CAM_SPEED_BAR_BACKGROUND_COLOR	BLACK
+# define CAM_SPEED_BAR_CENTER_COLOR		PURPLE
+
+
 
 
 
@@ -117,6 +127,7 @@ typedef struct s_data
 	clock_t		last_time;
 	int			cam_x;
 	int			cam_y;
+	int			cam_speed;
 	int			stepAdvancement;
 	int			stepActual;
 	t_ant		**AMIset;

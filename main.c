@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 16:25:25 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:27:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int	main(void)
 	data.total_ants = 0;
 	data.cam_x = WIDTH_W / 2;
 	data.cam_y = HEIGHT_W / 2;
+	data.cam_speed = CAMERA_SPEED_START;
 	data.isPaused = 1;
 	data.isOnlyNext = 0;
 	data.stepAdvancement = 0;

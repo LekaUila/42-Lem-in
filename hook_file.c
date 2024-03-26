@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/22 17:04:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:44:25 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	ft_key_hook(int keycode, void *param)
 	if (keycode == 65307)
 		exitVisu(data, 0);
 	if (keycode == 65362)
-		data->cam_y-= CAMERA_SPEED;
+		data->cam_y-= data->cam_speed;
 	else if (keycode == 65364)
-		data->cam_y+= CAMERA_SPEED;
+		data->cam_y+= data->cam_speed;
 	else if (keycode == 65361)
-		data->cam_x-= CAMERA_SPEED;
+		data->cam_x-= data->cam_speed;
 	else if (keycode == 65363)
-		data->cam_x+= CAMERA_SPEED;
+		data->cam_x+= data->cam_speed;
 	else if (keycode == 32)
 	{	
 		data->isPaused = !data->isPaused;
@@ -70,7 +70,6 @@ int	ft_mouse_hook(int keycode, int x, int y, void *param)
 
 	if (keycode == 1)
 	{
-		// ft_printf("mouse at %d | %d \n", x, y);
 		// check button paused
 		if (x > WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X &&
 			x < WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN &&
@@ -79,12 +78,36 @@ int	ft_mouse_hook(int keycode, int x, int y, void *param)
 		{
 			data->isPaused = !data->isPaused;
 		}
+		// check button next step
 		else if (x > WIDTH_W - PANNEL_LEN + BUTTON_STEP_X &&
 			x < WIDTH_W - PANNEL_LEN + BUTTON_STEP_X + BUTTON_STEP_LEN &&
 			y > HEIGHT_W - PANNEL_LEN + BUTTON_STEP_Y &&
 			y < HEIGHT_W - PANNEL_LEN + BUTTON_STEP_Y + BUTTON_STEP_LEN)
 		{
 			data->isOnlyNext = !data->isOnlyNext;
+		}
+		// check button camera speed down
+		else if (x > WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X &&
+			x < WIDTH_W - PANNEL_LEN + BUTTON_PAUSED_X + BUTTON_PAUSED_LEN &&
+			y > 0 + BUTTON_PAUSED_Y &&
+			y < 0 + BUTTON_PAUSED_Y + BUTTON_PAUSED_LEN)
+		{
+			data->cam_speed -= CAMERA_SPEED_MODIFIER;
+			if (data->cam_speed < CAMERA_SPEED_MIN)
+				data->cam_speed = CAMERA_SPEED_MIN;
+			ft_printf("value : %d, len : %d\n",data->cam_speed, data->cam_speed * 128 / CAMERA_SPEED_MAX);
+		}
+		// check button camera speed up
+		else if (x > WIDTH_W - PANNEL_LEN + BUTTON_STEP_X &&
+			x < WIDTH_W - PANNEL_LEN + BUTTON_STEP_X + BUTTON_STEP_LEN &&
+			y > 0 + BUTTON_STEP_Y &&
+			y < 0 + BUTTON_STEP_Y + BUTTON_STEP_LEN)
+		{
+			data->cam_speed += CAMERA_SPEED_MODIFIER;
+			if (data->cam_speed > CAMERA_SPEED_MAX)
+				data->cam_speed = CAMERA_SPEED_MAX;
+			ft_printf("value : %d, len : %d\n",data->cam_speed, data->cam_speed * 128 / CAMERA_SPEED_MAX);
+
 		}
 	}
 	return (1);
