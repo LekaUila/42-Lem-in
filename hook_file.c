@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/26 14:44:25 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/26 14:59:07 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ int	ft_mouse_hook(int keycode, int x, int y, void *param)
 			data->cam_speed -= CAMERA_SPEED_MODIFIER;
 			if (data->cam_speed < CAMERA_SPEED_MIN)
 				data->cam_speed = CAMERA_SPEED_MIN;
-			ft_printf("value : %d, len : %d\n",data->cam_speed, data->cam_speed * 128 / CAMERA_SPEED_MAX);
 		}
 		// check button camera speed up
 		else if (x > WIDTH_W - PANNEL_LEN + BUTTON_STEP_X &&
@@ -106,8 +105,6 @@ int	ft_mouse_hook(int keycode, int x, int y, void *param)
 			data->cam_speed += CAMERA_SPEED_MODIFIER;
 			if (data->cam_speed > CAMERA_SPEED_MAX)
 				data->cam_speed = CAMERA_SPEED_MAX;
-			ft_printf("value : %d, len : %d\n",data->cam_speed, data->cam_speed * 128 / CAMERA_SPEED_MAX);
-
 		}
 	}
 	return (1);
