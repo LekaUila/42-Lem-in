@@ -84,6 +84,7 @@ typedef struct s_room
 	int					x;
 	int					y;
 	int					checkPath;
+	int					checkPath2;
     long long int		ants;
     char				isStart;
     char				isEnd;
@@ -103,7 +104,7 @@ typedef struct s_trueAnt
 {
 	int number;
 	t_room	**path;
-	t_room	*room;
+	int		room;
 }	t_trueAnt;
 
 typedef struct s_ant

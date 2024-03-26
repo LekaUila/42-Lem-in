@@ -268,7 +268,7 @@ void    printPath(t_room **path)
         ft_printf("room is %s\n", path[i]->room);
         i++;
     }
-    ft_printf("---------------------------------------------------\n");
+    //ft_printf("---------------------------------------------------\n");
 }
 
 int    culDeSac(t_room **pathToVictory)
@@ -303,12 +303,14 @@ void    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToV
         k = 0;
         while (pathToCreate[j]->pathway[k])
         {
-            if (nextRoom == NULL || nextRoom->checkPath < pathToCreate[j]->pathway[k]->checkPath)
+            if (nextRoom == NULL || nextRoom->checkPath > pathToCreate[j]->pathway[k]->checkPath)
                 nextRoom = pathToCreate[j]->pathway[k];
             k++;
         }
         j++;
         pathToCreate[j] = nextRoom;
+        //ft_printf("pathToCreate[j]->room = %s\n", pathToCreate[j]->room);
+        //ft_printf("checpath = %d\n", pathToCreate[j]->checkPath2);
         nextRoom = NULL;
     }
 }
@@ -331,17 +333,18 @@ void    addPathToVictoryReverse(t_room *start, t_room **pathToCreate, t_room ***
         k = 0;
         while (pathToCreate[j]->pathway[k])
         {
-            if (nextRoom == NULL || nextRoom->checkPath > pathToCreate[j]->pathway[k]->checkPath)
+            if (nextRoom == NULL || nextRoom->checkPath2 > pathToCreate[j]->pathway[k]->checkPath2)
                 nextRoom = pathToCreate[j]->pathway[k];
             k++;
         }
         j++;
         pathToCreate[j] = nextRoom;
+        //ft_printf("pathToCreate[j]->room = %s\n", pathToCreate[j]->room);
         nextRoom = NULL;
     }
 }
 
-int    allPossiblePath(t_data *data, t_room ***pathToVictory)
+int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVictoryReverse)
 {
     int i = 0;
     t_room *start;
@@ -349,40 +352,25 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory)
     while (data->start->pathway[i] != NULL)
     {
         start = data->start->pathway[i];
+        //ft_printf("starting direction = %s\n", start->room);
         //ft_printf("i = %d\n", i);
         addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
-        printPath(pathToVictory[i]);
+        //printPath(pathToVictory[i]);
         i++;
     }
     i--;
-    /*while (i > -1)
-    {
-        start = data->start->pathway[i];
-        //ft_printf("i = %d\n", i);
-        addPathToVictory(start, pathToVictory[i], pathToVictory, i, data);
-        printPath(pathToVictory[i]);
-        i--;
-    }*/
 
     i = 0;
     while (data->end->pathway[i] != NULL)
     {
         start = data->end->pathway[i];
+        //ft_printf("starting direction = %s\n", start->room);
         //ft_printf("i = %d\n", i);
-        addPathToVictoryReverse(start, pathToVictory[i], pathToVictory, i, data);
-        printPath(pathToVictory[i]);
+        addPathToVictoryReverse(start, pathToVictoryReverse[i], pathToVictoryReverse, i, data);
+        //printPath(pathToVictoryReverse[i]);
         i++;
     }
-   /* i--;
-    while (i > -1)
-    {
-        start = data->end->pathway[i];
-        //ft_printf("i = %d\n", i);
-        addPathToVictoryReverse(start, pathToVictory[i], pathToVictory, i, data);
-        printPath(pathToVictory[i]);
-        i--;
-    }*/
-    ft_printf("number of path : %d\n", i);
+    //ft_printf("number of path : %d\n", i);
     return (i);
 }
 
@@ -586,16 +574,80 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
     listPathTest[savelen] = NULL;
 }
 
+void    sendAntsInPath(t_data *data, t_room **pathToUse)
+{
+    int i = 0;
+    while (data->ants[i].room != -1 && data->ants[i].path != NULL)
+        i++;
+    if (data->ants[i].room != -1)
+    {
+        data->ants[i].path = pathToUse;
+        data->ants[i].room = 0;
+    }
+}
+
+void    mooveAnts(t_trueAnt *ant)
+{
+    if (ant->path[ant->room]->isEnd == 1)
+        return ;
+    ant->path[ant->room]->ants--;
+    ant->room = ant->room + 1;
+    ft_printf("L%d-%s", ant->number, ant->path[ant->room]->room);
+    ant->path[ant->room]->ants++;
+}
+
 void    finishAlgo(t_data *data, t_room ***pathToUse)
 {
-    (void)data;
-    (void)pathToUse;
+    int i = 0;
+    
+    if (!pathToUse)
+        return ;
+    while (data->end->ants != data->total_ants)
+    {
+        i = 0;
+
+        while(data->ants[i].path)
+        {
+            ft_printf("test1\n");
+            mooveAnts(&data->ants[i]);
+            i++;
+            //if (!data->ants[i + 1].path)
+            ft_printf(" ");
+        }
+
+
+        i = 1;
+        if (pathToUse[i] == NULL)
+        {
+            sendAntsInPath(data, pathToUse[0]);
+        }
+        else
+        {
+            while (pathToUse[i] != NULL)
+            {
+                if (data->start->ants == 0)
+                    break ;
+                if (pathSize(pathToUse[i]) < data->start->ants) // add else when path is aumacly longer sendAntsInShortestPath
+                    sendAntsInPath(data, pathToUse[i]);
+                else
+                {
+                    sendAntsInPath(data, pathToUse[0]);
+                }
+                i++;
+            }
+        }
+        i = 0;
+        //ft_printf("\n");
+        /*ft_printf("ants in final room = %d\n", data->end->ants);
+        ft_printf("ants in starting room = %d\n", data->start->ants);
+        ft_printf("ants total = %d\n", data->total_ants);*/
+    }
 }
 
 void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 {
     int optimalMax = 0;
-    int j = 1;
+    //int j = 1;
     int k = 2;
     // int maxPathPossible;
     t_room  ***pathToUse;
@@ -611,11 +663,11 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathToUse[0] = shortestPath(pathToVictory, i);
 
-    ft_printf("the shortest path is :\n");
-    printPath(pathToUse[0]);
+    //ft_printf("the shortest path is :\n");
+    //printPath(pathToUse[0]);
     while (k <= optimalMax)
     {
-		ft_printf("check for %d different path\n", k);
+		//ft_printf("check for %d different path\n", k);
         findShortestAndUnique( pathToVictory, pathTest, pathUse, k, i, 0);
 		for (size_t i = 0; pathUse[i]; i++)
 		{
@@ -630,16 +682,16 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 		}
         if (!pathToUse[k])
             break;
-        ft_printf("path list find for %d different path\n", k);
+        //ft_printf("path list find for %d different path\n", k);
         k++;
     }
 
-    ft_printf("optimal number of path is %d\nPath are :\n", optimalMax);
-    while (pathToUse[j])
+    //ft_printf("optimal number of path is %d\nPath are :\n", optimalMax);
+    /*while (pathToUse[j])
     {
         printPath(pathToUse[j]);
         j++;
-    }
+    }*/
     finishAlgo(data, pathToUse);
     //need to find the shortest nomber of optimalMax of path that do not share the same room
     free(pathTest);
@@ -647,21 +699,196 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     free(pathToUse);
 }
 
+int numberOfPath(t_room *room)
+{
+    int i = 0;
+
+    if (!room->pathway)
+        return (0);
+    while (room->pathway[i])
+        i++;
+    return (i);
+}
+
+void    putInOrder(t_room ***pathToVictoryReverse, int stop, int toMalloc)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    t_room **toReverse = NULL;
+    while (i != stop)
+    {
+        j = 0;
+        k = 0;
+        toReverse = ft_calloc(toMalloc, sizeof(t_room **));
+        //printPath(pathToVictoryReverse[i]);
+        while(pathToVictoryReverse[i][k])
+            k++;
+        k--;
+        while(k >= 0)
+        {
+            toReverse[j] = pathToVictoryReverse[i][k];
+            j++;
+            k--;
+        }
+        free(pathToVictoryReverse[i]);
+        pathToVictoryReverse[i] = toReverse;
+        //printPath(pathToVictoryReverse[i]);
+        i++;
+    }
+}
+
+int    checkDouble(t_room **path, t_room   ***lotOfPath)
+{
+    int i = 0;
+    int j = 0;
+
+    while (lotOfPath[i])
+    {
+        j = 0;
+        while(path[j] && lotOfPath[i][j])
+        {
+            if (path[j] != lotOfPath[i][j])
+                break ;
+            j++;
+        }
+        if (path[j] == NULL && lotOfPath[i][j]== NULL)
+        {
+            return (-1);
+        }
+        i++;
+    }
+    return (0);
+}
+
+int pathToBig(t_room **path, int ants)
+{
+    int i = 0;
+
+    while (path[i])
+        i++;
+    if (i > ants)
+        return (-1);
+    return (0);
+}
+
+void    addShortestToPath(t_room ***truePath, t_room ***pathToVictory, t_room ***pathToVictoryReverse)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    while(pathToVictory[i])
+    {
+        while (pathToVictory[i][j])
+            j++;
+        if (k == 0 || j < k)
+            k = j;
+        i++;
+    }
+
+    i = 0;
+    j = 0;
+    while(pathToVictoryReverse[i])
+    {
+        while (pathToVictoryReverse[i][j])
+            j++;
+        if (k == 0 || j < k)
+            k = j;
+        i++;
+    }
+
+    i = 0;
+    j = 0;
+    while(pathToVictory[i])
+    {
+        if (pathSize(pathToVictory[i]) == k && checkDouble(pathToVictoryReverse[i], pathToVictory) != -1)
+        {
+            truePath[j] = pathToVictory[i];
+            j++;
+        }
+        i++;
+    }
+
+    i = 0;
+    j++;
+    while(pathToVictoryReverse[i])
+    {
+        if (pathSize(pathToVictoryReverse[i]) == k)
+        {
+            truePath[j] = pathToVictoryReverse[i];
+            j++;
+        }
+        i++;
+    }
+}
+
+void    purgeByFire(t_room ***truePath, t_room ***pathToVictory, t_room ***pathToVictoryReverse, t_data *data)
+{
+    int i = 0;
+    int j = 0;
+    while(pathToVictory[i] != NULL)
+    {
+        while (pathToVictory[i] && (culDeSac(pathToVictory[i]) == -1 || pathToBig(pathToVictory[i], data->total_ants) == -1))
+            i++;
+        if (pathToVictory[i] == NULL)
+            break ;
+        truePath[j] = pathToVictory[i];
+        j++;
+        i++;
+    }
+
+    i = 0;
+    while(pathToVictoryReverse[i])
+    {
+        while (pathToVictoryReverse[i] && (culDeSac(pathToVictoryReverse[i]) == -1 || checkDouble(pathToVictoryReverse[i], pathToVictory) == -1 || pathToBig(pathToVictory[i], data->total_ants) == -1))
+            i++;
+        if (pathToVictoryReverse[i] == NULL)
+            break ;
+        truePath[j] = pathToVictoryReverse[i];
+        j++;
+        i++;
+    }
+    //need une fonction que les remplis des x plus courts
+    if (j == 0)
+        addShortestToPath(truePath, pathToVictory, pathToVictoryReverse);
+}
+
 void startAlgo(t_data *data)
 {
     t_room  ***pathToVictory;
+    t_room  ***pathToVictoryReverse;
+    t_room  ***truePath;
     int     i = 0;
     int     j = 0;
 
     while (data->roomList[i] != NULL)
         i++;
-    pathToVictory = ft_calloc(i * 100, sizeof(t_room ***));
-    while(j != i * 100)
+    pathToVictory = ft_calloc(numberOfPath(data->start) + 1, sizeof(t_room ***));
+    pathToVictoryReverse = ft_calloc(numberOfPath(data->end) + 1, sizeof(t_room ***));
+    truePath = ft_calloc(numberOfPath(data->end) + numberOfPath(data->start) + 1, sizeof(t_room ***));
+    while(j != numberOfPath(data->start))
     {
        pathToVictory[j] = ft_calloc(i + 1, sizeof(t_room **));
        j++;
     }
-    j = allPossiblePath(data, pathToVictory);
-    //chooseYourPath(data, pathToVictory, j);
-    freeVictory(pathToVictory, i * 100);
+    j = 0;
+    while(j != numberOfPath(data->end))
+    {
+       pathToVictoryReverse[j] = ft_calloc(i + 1, sizeof(t_room **));
+       j++;
+    }
+    j = allPossiblePath(data, pathToVictory, pathToVictoryReverse);
+    putInOrder(pathToVictoryReverse, numberOfPath(data->end), i + 1);
+    purgeByFire(truePath, pathToVictory, pathToVictoryReverse, data);
+    i = 0;
+    /*while (truePath[i] != NULL)
+    {
+        printPath(truePath[i]);
+        i++;
+    }*/
+    chooseYourPath(data, truePath, j);
+    free(truePath);
+    freeVictory(pathToVictory, numberOfPath(data->start) + 1);
+    freeVictory(pathToVictoryReverse, numberOfPath(data->end) + 1);
 }

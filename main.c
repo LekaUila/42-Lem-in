@@ -69,11 +69,15 @@ int	main(void)
 	data.AMIset = NULL;
 	data.stepActual = 0;
 	data.ants = NULL;
+	ft_printf("parsing start\n");
 	parse(&data);
+	//ft_printf("room = %d\n", data.ants->room);
 	ft_printf("Checking path\n");
 	checkPath(&data);
-	printRooms(&data);
+	ft_printf("algo start\n");
+	//printRooms(&data);
 	startAlgo(&data);
+	ft_printf("affichage start\n");
 	//freeForAll(&data);
 	//TEST
 	// AMI_addNewStep(&data);
