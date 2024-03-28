@@ -475,18 +475,18 @@ int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
     int len1 = 0;
     int len2 = 0;
     int i = 0;
-    ft_printf("try better for \n");
+    // ft_printf("try better for \n");
     while (listPathTest[i])
     {
-        printPath(listPathTest[i]);
+        // printPath(listPathTest[i]);
         len1+=pathSize(listPathTest[i]);
         i++;
     }
-    ft_printf("and success for \n");
+    // ft_printf("and success for \n");
 	i = 0;
     while (listPathSuccess[i])
     {
-        printPath(listPathSuccess[i]);
+        // printPath(listPathSuccess[i]);
         len2+=pathSize(listPathSuccess[i]);
         i++;
     }
@@ -799,6 +799,11 @@ int pathToBig(t_room **path, int ants)
 {
     int i = 0;
 
+    if (!path)
+        return (-1);
+    // ft_printf("try pathtobig for :\n");
+    // printPath(path);
+    // ft_printf("_____________________________________\n");
     while (path[i])
         i++;
     if (i > ants)
@@ -867,7 +872,9 @@ void    purgeByFire(t_room ***truePath, t_room ***pathToVictory, t_room ***pathT
     while(pathToVictory[i] != NULL)
     {
         while (pathToVictory[i] && (culDeSac(pathToVictory[i]) == -1 || pathToBig(pathToVictory[i], data->total_ants) == -1))
+        {
             i++;
+        }
         if (pathToVictory[i] == NULL)
             break ;
         truePath[j] = pathToVictory[i];
@@ -876,10 +883,13 @@ void    purgeByFire(t_room ***truePath, t_room ***pathToVictory, t_room ***pathT
     }
 
     i = 0;
+    ft_printf("\n\n\n");
     while(pathToVictoryReverse[i])
     {
-        while (pathToVictoryReverse[i] && (culDeSac(pathToVictoryReverse[i]) == -1 || checkDouble(pathToVictoryReverse[i], pathToVictory) == -1 || pathToBig(pathToVictory[i], data->total_ants) == -1))
+        while (pathToVictoryReverse[i] && (culDeSac(pathToVictoryReverse[i]) == -1 || checkDouble(pathToVictoryReverse[i], pathToVictory) == -1 || pathToBig(pathToVictoryReverse[i], data->total_ants) == -1))
+        {
             i++;
+        }
         if (pathToVictoryReverse[i] == NULL)
             break ;
         truePath[j] = pathToVictoryReverse[i];
@@ -904,6 +914,8 @@ void startAlgo(t_data *data)
         i++;
     pathToVictory = ft_calloc(numberOfPath(data->start) + 1, sizeof(t_room ***));
     pathToVictoryReverse = ft_calloc(numberOfPath(data->end) + 1, sizeof(t_room ***));
+    ft_printf("nb path data start : %d\n", numberOfPath(data->start));
+    ft_printf("nb path data end : %d\n", numberOfPath(data->end));
     truePath = ft_calloc(numberOfPath(data->end) + numberOfPath(data->start) + 1, sizeof(t_room ***));
     while(j != numberOfPath(data->start))
     {
