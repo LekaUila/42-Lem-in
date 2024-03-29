@@ -7,7 +7,8 @@ SRC		= main.c \
 		  hook_file.c \
 		  AMI_function.c \
 		  draw_image.c \
-		  algo.c
+		  algo.c \
+		  algo_recurcive.c
 
 
 
