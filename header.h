@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:07:08 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/29 16:22:58 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 # define WIDTH_W 1200
 # define HEIGHT_W 900
-# define BORDER 0
-# define LEN_OBJECT  10
+# define BORDER 1
+# define LEN_OBJECT  8
 # define CAMERA_SPEED_START  3
 # define CAMERA_SPEED_MODIFIER 3
 # define CAMERA_SPEED_MIN  3

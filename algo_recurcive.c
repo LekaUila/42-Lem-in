@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:10:52 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/29 16:23:09 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
 // void printPathLign(t_room **path)
 // {
 // 	  int i = 0;
-
+ 
 //     if (!path)
 // 		return ;
 //     if (path[0] == 0)
