@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/26 16:33:16 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/03/29 14:43:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,9 @@
 # define CAM_SPEED_BAR_BACKGROUND_COLOR	BLACK
 # define CAM_SPEED_BAR_CENTER_COLOR		PURPLE
 
+// OTHER DEFINE
 
-
-
+# define MAX_DEPTH 7
 
 typedef struct s_room
 {

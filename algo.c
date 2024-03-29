@@ -513,46 +513,94 @@ int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
 //     ft_printf(" |\n");
 // }
 
-int isCompatible(t_room ***listPathTest)
+// int isCompatible(t_room ***listPathTest)
+// {
+//     int i = 0;
+//     int j = 0;
+//     while (listPathTest[i])
+//     {
+//         j = i + 1;
+//         while (listPathTest[j])
+//         {
+//             if (j != i)
+//             {
+//                 if (crossPath(listPathTest[i], listPathTest[j]))
+//                     return (0);
+//             }
+//             j++;
+//         }
+//         i++;
+//     }
+//     return (2);
+// }
+
+void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int * intlist);
+
+void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int * intlist, int ind)
 {
+
+    int *newIntlist = ft_calloc(len_alloc, sizeof(t_room ***));
     int i = 0;
     int j = 0;
-    while (listPathTest[i])
+    while (i < len_alloc)
     {
-        j = i + 1;
-        while (listPathTest[j])
+        if (i == crossPathList[ind][j])
         {
-            if (j != i)
-            {
-                if (crossPath(listPathTest[i], listPathTest[j]))
-                    return (0);
-            }
+            // for (int k = 0; k < dec; k++)
+            // {
+            //     ft_putchar_fd(' ', 1);
+            // }
+            // ft_printf("for path %d : %d not allowed\n", ind, i);
+            newIntlist[i] = 1;
             j++;
+        }
+        else
+        {
+            newIntlist[i] = intlist[i];
         }
         i++;
     }
-    return (2);
+    // ft_printf("newIntlist : \n");
+    // for (int i = 0; i < len_alloc; i++)
+    // {
+    //     ft_printf("%d; ", newIntlist[i]);
+    // }
+    // ft_printf("\n");
+    findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec,crossPathList,   len_alloc,  newIntlist);
+    free(newIntlist);
+
 }
 
-void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec)
+void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int * intlist)
 {
     int savelen = listPathSize(listPathTest);
     int i = dec;
     int j = 0;
     while (pathToVictory[i])
     {
-
-        if (!culDeSac(pathToVictory[i]))
+        // for (int k = 0; k < dec; k++)
+        // {
+        //     ft_putchar_fd(' ', 1);
+        // }
+        // ft_printf("test path %d\n", i);
+        
+        if (!(intlist[i]))
         {
+            // for (int k = 0; k < dec; k++)
+            // {
+            //     ft_putchar_fd(' ', 1);
+            // }
+            
+            // ft_printf("tring path %d\n", i);
             listPathTest[savelen] = pathToVictory[i];
-            if (savelen + 1 < optimalMax && isCompatible(listPathTest))
+            if (savelen + 1 < optimalMax /*&& isCompatible(listPathTest)*/)
             {
-                findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec + 0);
+                findShortestAndUniqueDepth( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec + 1,crossPathList,   len_alloc,  intlist, i);
             }
             else
             {
 
-                if (listPathSuccess[0] == NULL && isCompatible(listPathTest))
+                if (listPathSuccess[0] == NULL /*&& isCompatible(listPathTest)*/)
                 {
                     j = 0;
                     while (listPathTest[j])
@@ -561,7 +609,7 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
                         j++;
                     }
                 }
-                else if (comboBetter(listPathTest, listPathSuccess) && isCompatible(listPathTest))
+                else if (comboBetter(listPathTest, listPathSuccess) /*&& isCompatible(listPathTest)*/)
                 {
                     j = 0;
                     while (listPathTest[j])
@@ -663,6 +711,45 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
     }
 }
 
+int **creatCrossPathList(t_room ***pathToVictory, int len_alloc)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int **crossPathList;
+
+    crossPathList = ft_calloc(len_alloc, sizeof(int *));
+    while (pathToVictory[i])
+    {
+        crossPathList[i] = ft_calloc(len_alloc + 1, sizeof(int));
+        j = 0;
+        k = 0;
+        // ft_printf("for path %d\n", i);
+        while (pathToVictory[j])
+        {
+            // ft_printf(" value : |i : %d| |j : %d| |k : %d|\n", i, j, k);
+            if (j == i)
+            {
+                // ft_printf("    identique with %d\n", j);
+                crossPathList[i][k] = j;
+                k++;
+            }
+            else if (crossPath(pathToVictory[i], pathToVictory[j]) == -1)
+            {
+                // ft_printf("    cross with %d\n", j);
+                crossPathList[i][k] = j;
+                k++;
+            }
+            // else
+                // ft_printf("    not cross with %d\n", j);
+            j++;
+        }
+        crossPathList[i][k] = -1;
+        i++;
+    }
+    return (crossPathList);
+}
+
 void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 {
     int optimalMax = 0;
@@ -672,30 +759,38 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     t_room  ***pathToUse;
     t_room  ***pathTest;
     t_room  ***pathUse;
+    int *intlist;
+    int **crossPathList;
 
+    int len_alloc = 0;
 
+    while (pathToVictory[len_alloc])
+        len_alloc++;
     optimalMax = findOptimalMAx(data);
     // maxPathPossible = optimalMax;
     // ft_printf("optimalMax = %d\n", optimalMax);
     pathToUse = ft_calloc(optimalMax + 2, sizeof(t_room ***));
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
+    intlist = ft_calloc(len_alloc, sizeof(t_room ***));
     pathToUse[0] = shortestPath(pathToVictory, i);
 
-    ft_printf("All print find\n");
-    j = 0;
-    while (pathToVictory[j])
-    {
-        printPath(pathToVictory[j]);
-        j++;
-    }
-    ft_printf("%d\n", optimalMax);
+    // ft_printf("All print find\n");
+    // j = 0;
+    // while (pathToVictory[j])
+    // {
+    //     printPath(pathToVictory[j]);
+    //     ft_printf("_____________________\n");
+    //     j++;
+    // }
+    // ft_printf("%d\n", optimalMax);
+    crossPathList = creatCrossPathList(pathToVictory, len_alloc);
     if (pathToVictory[1])
     {
         while (k <= optimalMax)
         {
-            //ft_printf("check for %d different path\n", k);
-            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0);
+            // ft_printf("check for %d different path\n", k);
+            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist);
             for (size_t i = 0; pathUse[i]; i++)
             {
                 pathToUse[i + 1] = pathUse[i];
@@ -709,25 +804,40 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
             }
             if (!pathToUse[k])
                 break;
-            //ft_printf("path list find for %d different path\n", k);
+            // ft_printf("path list find for %d different path\n", k);
             k++;
+            if ( k > MAX_DEPTH )
+            { 
+                // ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
+                break;
+            }
         }
     }
     else
     {
-        ft_printf("only one path existing\n");
+        // ft_printf("only one path existing\n");
         pathToUse[1] = pathToUse[0];
     }
 
-    ft_printf("optimal paths are :\n" );
-    j = 0;
-    while (pathToUse[j])
-    {
-        printPath(pathToUse[j]);
-        j++;
-    }
+    // ft_printf("optimal paths are :\n" );
+    // j = 1;
+    // while (pathToUse[j])
+    // {
+    //     printPath(pathToUse[j]);
+    //     ft_printf("_____________________\n");
+    //     j++;
+    // }
+
     finishAlgo(data, pathToUse);
     //need to find the shortest nomber of optimalMax of path that do not share the same room
+    j = 0;
+    while (pathToVictory[j])
+    {
+        free(crossPathList[j]);
+        j++;
+    }
+    free(crossPathList);
+    free(intlist);
     free(pathTest);
     free(pathUse);
     free(pathToUse);
