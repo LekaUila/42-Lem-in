@@ -560,7 +560,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     t_room  ***pathToUse;
     t_room  ***pathTest;
     t_room  ***pathUse;
-    int *intlist;
+    int **intlist;
     int **crossPathList;
 
     int len_alloc = 0;
@@ -573,7 +573,12 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     pathToUse = ft_calloc(optimalMax + 2, sizeof(t_room ***));
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
-    intlist = ft_calloc(len_alloc, sizeof(t_room ***));
+    intlist = ft_calloc(optimalMax + 1, sizeof(int *));
+    for (int i = 0; i < optimalMax + 1; i++)
+    {
+        intlist[i] = ft_calloc(len_alloc + 1, sizeof(int));
+    }
+    
     pathToUse[0] = shortestPath(pathToVictory, i);
 
     // ft_printf("All print find\n");
@@ -586,11 +591,17 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     // }
     // ft_printf("%d\n", optimalMax);
     crossPathList = creatCrossPathList(pathToVictory, len_alloc);
+
+    clock_t	timet1;
+    clock_t	timet2;
+	double	duration;
+
+	timet1 = clock();
     if (pathToVictory[1])
     {
-        while (k <= optimalMax)
+        while (k <= optimalMax && k < optimalMax - k + 2)
         {
-            // ft_printf("check for %d different path\n", k);
+            ft_printf("check for %d different path\n", k);
             findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist);
             for (size_t i = 0; pathUse[i]; i++)
             {
@@ -605,43 +616,64 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
             }
             if (!pathToUse[k])
                 break;
-            // ft_printf("path list find for %d different path\n", k);
+            ft_printf("path list find for %d different path\n", k);
+            // ft_printf("check for %d different path\n", optimalMax - k + 2);
+            // findShortestAndUnique( pathToVictory, pathTest, pathUse, optimalMax - k + 2, 0, crossPathList, len_alloc, intlist);
+            // if (pathToUse[optimalMax - k + 2])
+            // {
+            //     ft_printf("path list find for %d different path\n", optimalMax - k + 2);
+            //     for (size_t i = 0; pathUse[i]; i++)
+            //     {
+            //         pathToUse[i + 1] = pathUse[i];
+            //     }
+            //     break;
+            // }
+            // for (int i = 0; i < optimalMax; i++)
+            // {
+            //     pathTest[i] = NULL;
+            //     pathUse[i] = NULL;
+
+            // }
             k++;
             if ( k > MAX_DEPTH )
             { 
-                // ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
+                ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
                 break;
             }
         }
     }
     else
     {
-        // ft_printf("only one path existing\n");
+        ft_printf("only one path existing\n");
         pathToUse[1] = pathToUse[0];
     }
+    timet2 = clock();
+	duration = (double)(timet2 - timet1);
 
-    // ft_printf("optimal paths are :\n" );
-    // j = 1;
-    // while (pathToUse[j])
-    // {
-    //     printPath(pathToUse[j]);
-    //     ft_printf("_____________________\n");
-    //     j++;
-    // }
+    ft_printf("optimal paths are :\n" );
+    j = 1;
+    while (pathToUse[j])
+    {
+        printPath(pathToUse[j]);
+        ft_printf("_____________________\n");
+        j++;
+    }
 
     finishAlgo(data, pathToUse);
-    //need to find the shortest nomber of optimalMax of path that do not share the same room
     j = 0;
+    for (int i = 0; i < optimalMax + 1; i++)
+        free(intlist[i]);
+    free(intlist);
     while (pathToVictory[j])
     {
         free(crossPathList[j]);
         j++;
     }
     free(crossPathList);
-    free(intlist);
     free(pathTest);
     free(pathUse);
     free(pathToUse);
+    printf("time for programmed estimed to : %lf\n", duration);
 }
 
 int numberOfPath(t_room *room)

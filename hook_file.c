@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/09 10:37:15 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/26 14:59:07 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/02 17:10:21 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ int	ft_other_hook(void *param)
 	duration = (double)(timet - data->last_time);
 	if (duration >= 0.1)
 	{
-		//TODO : drawmap
 		if(!data->isPaused)
 		{
 			data->stepAdvancement += VIZU_SPEED;
