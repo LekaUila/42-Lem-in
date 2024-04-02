@@ -72,10 +72,11 @@ int	main(void)
 	ft_printf("parsing start\n");
 	parse(&data);
 	//ft_printf("room = %d\n", data.ants->room);
+	printRooms(&data);
 	ft_printf("Checking path\n");
 	checkPath(&data);
 	ft_printf("algo start\n");
-	//printRooms(&data);
+	printRooms(&data);
 	startAlgo(&data);
 	ft_printf("affichage start\n");
 	//freeForAll(&data);

@@ -406,19 +406,16 @@ int listPathSize(t_room ***path)
     return (i);
 }
 
-t_room  **shortestPath(t_room ***pathToVictory, int i)
+t_room  **shortestPath(t_room ***pathToVictory)
 {
     int j = 1;
     t_room  **shortest;
 
     shortest = pathToVictory[0];
-    while (j != i - 1)
+    while (pathToVictory[j])
     {
-        if (culDeSac(pathToVictory[j]) != -1)
-        {
-            if (pathSize(shortest) > pathSize(pathToVictory[j]))
-                shortest = pathToVictory[j];
-        }
+        if (pathSize(shortest) > pathSize(pathToVictory[j]))
+            shortest = pathToVictory[j];
         j++;
     }
     return (shortest);
@@ -663,7 +660,7 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
     }
 }
 
-void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
+void chooseYourPath(t_data *data, t_room ***pathToVictory)
 {
     int optimalMax = 0;
     int j = 1;
@@ -680,7 +677,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     pathToUse = ft_calloc(optimalMax + 2, sizeof(t_room ***));
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
-    pathToUse[0] = shortestPath(pathToVictory, i);
+    pathToUse[0] = shortestPath(pathToVictory);
 
     ft_printf("All print find\n");
     j = 0;
@@ -932,12 +929,12 @@ void startAlgo(t_data *data)
     putInOrder(pathToVictoryReverse, numberOfPath(data->end), i + 1);
     purgeByFire(truePath, pathToVictory, pathToVictoryReverse, data);
     i = 0;
-    /*while (truePath[i] != NULL)
+    while (truePath[i] != NULL)
     {
         printPath(truePath[i]);
         i++;
-    }*/
-    chooseYourPath(data, truePath, j);
+    }
+    chooseYourPath(data, truePath);
     free(truePath);
     freeVictory(pathToVictory, numberOfPath(data->start) + 1);
     freeVictory(pathToVictoryReverse, numberOfPath(data->end) + 1);
