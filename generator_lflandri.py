@@ -1,4 +1,4 @@
-import random
+import random, sys
 
 
 map_len_empl = 1
@@ -66,4 +66,4 @@ for i in range(random.randint(map_len_empl, map_len_empl * 15)):
 
 mapstr += strpath
 
-print(mapstr)
+print(mapstr, file=sys.stdout)

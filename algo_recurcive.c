@@ -6,20 +6,20 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/03 15:43:42 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:52:29 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-static int listPathSize(t_room ***path)
-{
-    int i = 0;
+// static int listPathSize(t_room ***path)
+// {
+//     int i = 0;
 
-    while (path[i])
-        i++;
-    return (i);
-}
+//     while (path[i])
+//         i++;
+//     return (i);
+// }
 
 int **creatCrossPathList(t_room ***pathToVictory, int len_alloc)
 {
@@ -126,15 +126,15 @@ static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listP
 
 void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest, t_room  **untract_path)
 {
-    static int lenPathToVictory = 0;
-    if (!lenPathToVictory)
-        lenPathToVictory = listPathSize(pathToVictory);
+    // static int lenPathToVictory = 0;
+    // if (!lenPathToVictory)
+    //     lenPathToVictory = listPathSize(pathToVictory);
     int i = dec;
     int j = 0;
     // ft_printf("enter first at %d\n", dec);
     while (pathToVictory[i])
     {
-        if (/*!dec &&*/ lenPathToVictory - i + dec < optimalMax)
+        if (/*!dec &&*/ len_alloc - i + dec < optimalMax)
         {   
             // ft_printf("abort rec at : %d path, %d depth\n", i, dec);
             break;
