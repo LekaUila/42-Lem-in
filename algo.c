@@ -642,7 +642,7 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
             {
                 if (data->start->ants == 0)
                     break ;
-                if (pathSize(pathToUse[i]) - 1 < data->start->ants) // add else when path is aumacly longer sendAntsInShortestPath
+                if (pathSize(pathToUse[i]) - 1 < data->start->ants + pathSize(pathToUse[0])) // is gabarge its data->start->ants + shortest path
                     sendAntsInPath(data, pathToUse[i]);
                 else
                 {

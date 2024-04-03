@@ -592,6 +592,8 @@ void	addToList(t_data *data, char *line, int command, int listSize)
 		i++;
 	}
 	//need to check title RULES here
+	if (line[0] == 'L')
+		launch_fatal_error(line, data, -4);
 	i++;
 	x = ft_atoi(&(line[i]));
 	while(line[i] != ' ')
