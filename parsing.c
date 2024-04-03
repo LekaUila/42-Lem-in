@@ -685,6 +685,7 @@ t_room	*RoomFinder(t_data *data, char *line)
 {
 	int i = 0;
 
+	ft_printf("\nline = %s", line);
 	while (data->roomList[i])
 	{
 		if (data->roomList[i] && !ft_strncmp(line, data->roomList[i]->room, ft_strlen( data->roomList[i]->room)))
@@ -707,7 +708,7 @@ void	addLink(t_data *data, char *line)
 		secondeRoom = NULL;
 		if (line[0] != '#')
 		{
-			if (ft_strlen(line) == 0)
+			if (ft_strlen(line) < 4)
 				break ;
 			while(*tiret && *tiret != '-')
 				++tiret;
