@@ -561,6 +561,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     t_room  ***pathTest;
     t_room  ***pathUse;
     int **intlist;
+    int *lenlist;
     int **crossPathList;
 
     int len_alloc = 0;
@@ -574,11 +575,16 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     intlist = ft_calloc(optimalMax + 1, sizeof(int *));
+    lenlist = ft_calloc(len_alloc + 1, sizeof(int));
     for (int i = 0; i < optimalMax + 1; i++)
     {
         intlist[i] = ft_calloc(len_alloc + 1, sizeof(int));
     }
-    
+    for (int i = 0; i < len_alloc; i++)
+    {
+        lenlist[i] = pathSize(pathToVictory[i]);
+    }
+     
     pathToUse[0] = shortestPath(pathToVictory, i);
 
     // ft_printf("All print find\n");
@@ -602,7 +608,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
         while (k <= optimalMax && k < optimalMax - k + 2)
         {
             ft_printf("check for %d different path\n", k);
-            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist);
+            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist, lenlist, 0);
             for (size_t i = 0; pathUse[i]; i++)
             {
                 pathToUse[i + 1] = pathUse[i];
@@ -650,14 +656,14 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     timet2 = clock();
 	duration = (double)(timet2 - timet1);
 
-    ft_printf("optimal paths are :\n" );
-    j = 1;
-    while (pathToUse[j])
-    {
-        printPath(pathToUse[j]);
-        ft_printf("_____________________\n");
-        j++;
-    }
+    // ft_printf("optimal paths are :\n" );
+    // j = 1;
+    // while (pathToUse[j])
+    // {
+    //     printPath(pathToUse[j]);
+    //     ft_printf("_____________________\n");
+    //     j++;
+    // }
 
     finishAlgo(data, pathToUse);
     j = 0;
@@ -673,6 +679,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     free(pathTest);
     free(pathUse);
     free(pathToUse);
+    free(lenlist);
     printf("time for programmed estimed to : %lf\n", duration);
 }
 

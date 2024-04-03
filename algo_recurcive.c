@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/02 18:18:28 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/03 12:23:47 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ int **creatCrossPathList(t_room ***pathToVictory, int len_alloc)
     return (crossPathList);
 }
 //TODO : try to precalcul thing to be faster
-static int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
+static int comboBetter(int lenPathTest, t_room ***listPathSuccess)
 {
     static int len2 = -1;
-    int len1 = 0;
+    // int len1 = 0;
     int i = 0;
     if (len2 == -1)
     {
@@ -69,15 +69,15 @@ static int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
             i++;
         }  
     }
-    i = 0;
-    while (listPathTest[i])
+    // i = 0;
+    // while (listPathTest[i])
+    // {
+    //     len1+=pathSize(listPathTest[i]);
+    //     i++;
+    // }
+    if (lenPathTest < len2)
     {
-        len1+=pathSize(listPathTest[i]);
-        i++;
-    }
-    if (len1 < len2)
-    {
-        len2 = len1;
+        len2 = lenPathTest;
         return (1);
     }
     return (0);
@@ -107,7 +107,7 @@ static int comboBetter(t_room ***listPathTest, t_room ***listPathSuccess)
 //     ft_printf(" |\n");
 // }
 
-static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist, int ind)
+static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist, int ind, int * lenlist, int lenPathtest)
 {
     //TODO : corectly implement that
     // int *newIntlist = ft_calloc(len_alloc, sizeof(t_room ***));
@@ -126,11 +126,11 @@ static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listP
         }
         i++;
     }
-    findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec,crossPathList,   len_alloc,  intlist);
+    findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec,crossPathList,   len_alloc,  intlist, lenlist, lenPathtest);
     // free(newIntlist);
 }
 
-void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist)
+void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest)
 {
     static int lenPathToVictory = 0;
     if (!lenPathToVictory)
@@ -151,10 +151,11 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
             listPathTest[dec] = pathToVictory[i];
             if (dec + 1 < optimalMax)
             {
-                findShortestAndUniqueDepth( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec + 1,crossPathList,   len_alloc,  intlist, i);
+                findShortestAndUniqueDepth( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec + 1,crossPathList,   len_alloc,  intlist, i, lenlist, lenPathtest + lenlist[i]);
             }
             else
             {
+                lenPathtest += lenlist[i];
                 if (listPathSuccess[0] == NULL)
                 {
                     j = 0;
@@ -164,7 +165,7 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
                         j++;
                     }
                 }
-                else if (comboBetter(listPathTest, listPathSuccess))
+                else if (comboBetter(lenPathtest, listPathSuccess))
                 {
                     j = 0;
                     while (listPathTest[j])
@@ -173,6 +174,7 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
                         j++;
                     }
                 }
+                lenPathtest -= lenlist[i];
             }
         }
         i++;
