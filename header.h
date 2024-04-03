@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/03 12:29:56 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/03 15:06:30 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@
 
 // OTHER DEFINE
 
-# define MAX_DEPTH 9
+# define MAX_DEPTH 999
 
 typedef struct s_room
 {
@@ -165,7 +165,7 @@ int		culDeSac(t_room **pathToVictory);
 int		crossPath(t_room **path1, t_room **path2);
 int		pathSize(t_room **path);
 int		**creatCrossPathList(t_room ***pathToVictory, int len_alloc);
-void	findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest);
+void	findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest, t_room  **untract_path);
 
 
 // AMI

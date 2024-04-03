@@ -549,28 +549,77 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
     }
 }
 
+int suppressingUselessPath(int nbPath, int nbTotalPath, int **crossPathList, t_room  ***newPathToVictory, t_room  **untract_path, int optimalMax)
+{
+    int j = 0;
+    int count = 0;
+    int counInfo = 0;
+    int countSoloPath = 0;
+    (void) optimalMax;
+    // ft_printf("total path : %d\n", nbTotalPath);
+    for (int i = 0; newPathToVictory[i]; i++)
+    {
+        if (newPathToVictory[i] != untract_path)
+        {
+            j = 0;
+            count = 0;
+            while (j < nbTotalPath)
+            {
+                if (j == crossPathList[i][count])
+                {
+                    count++;
+                    // ft_printf("        for path %d, %d is a  probleme\n", i, j);
 
+                }
+                j++;
+            }
+            if (nbTotalPath - (count - 1) < nbPath)
+            {
+                // ft_printf("   for path %d, %d probleme detected, removing\n", i, count);
+                newPathToVictory[i] = untract_path;
+                counInfo +=1;
+            }
+            else if (count - 1 == 0)
+                countSoloPath+=1;
+            // else
+                // ft_printf("   for path %d, %d probleme detected, continue\n", i, count);
+        }
+    }
+    ft_printf("Removing %d path to continue\n", counInfo);
+    if (countSoloPath < 2)
+        return (0);
+    return (countSoloPath - 2);
+}
 
 void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
 {
     int optimalMax = 0;
     int j = 1;
     int k = 2;
-    // int maxPathPossible;
     t_room  ***pathToUse;
     t_room  ***pathTest;
     t_room  ***pathUse;
+    t_room  ***newPathToVictory;
+    t_room  untract_room;
+    t_room  *untract_path = &untract_room;
+
     int **intlist;
     int *lenlist;
     int **crossPathList;
-
     int len_alloc = 0;
-
     while (pathToVictory[len_alloc])
+    {
+
         len_alloc++;
+    }
+    newPathToVictory = ft_calloc(len_alloc + 1, sizeof(t_room ***));
+    len_alloc = 0;
+    while (pathToVictory[len_alloc])
+    {
+        newPathToVictory[len_alloc] = pathToVictory[len_alloc];
+        len_alloc++;
+    }
     optimalMax = findOptimalMAx(data);
-    // maxPathPossible = optimalMax;
-    // ft_printf("optimalMax = %d\n", optimalMax);
     pathToUse = ft_calloc(optimalMax + 2, sizeof(t_room ***));
     pathTest = ft_calloc(optimalMax + 1, sizeof(t_room ***));
     pathUse = ft_calloc(optimalMax + 1, sizeof(t_room ***));
@@ -595,20 +644,22 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
     //     ft_printf("_____________________\n");
     //     j++;
     // }
-    // ft_printf("%d\n", optimalMax);
+    ft_printf("number max of path possible : %d\n", optimalMax);
+    ft_printf("total number path : %d\n", len_alloc);
     crossPathList = creatCrossPathList(pathToVictory, len_alloc);
-
     clock_t	timet1;
     clock_t	timet2;
 	double	duration;
 
 	timet1 = clock();
+    k += suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
     if (pathToVictory[1])
     {
-        while (k <= optimalMax && k < optimalMax - k + 2)
+        while (k <= optimalMax /*&& k < optimalMax - k + 2*/)
         {
             ft_printf("check for %d different path\n", k);
-            findShortestAndUnique( pathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist, lenlist, 0);
+            
+            findShortestAndUnique( newPathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist, lenlist, 0, &untract_path);
             for (size_t i = 0; pathUse[i]; i++)
             {
                 pathToUse[i + 1] = pathUse[i];
@@ -646,6 +697,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
                 ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
                 break;
             }
+            suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
         }
     }
     else
@@ -675,6 +727,7 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory, int i)
         free(crossPathList[j]);
         j++;
     }
+    free(newPathToVictory);
     free(crossPathList);
     free(pathTest);
     free(pathUse);
