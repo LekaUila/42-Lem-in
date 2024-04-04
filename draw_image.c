@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/26 14:53:14 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:26:34 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,25 +301,25 @@ static void draw_text_pannel_info(t_data *data)
 	char	*str = NULL;
 	const int startX = WIDTH_W - PANNEL_LEN;
 	const int startY = HEIGHT_W - PANNEL_LEN;
-	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 30, PANNEL_TEXT_COLOR, "number of ants for :");
-	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 50, PANNEL_TEXT_COLOR, "- start :");
-	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 70, PANNEL_TEXT_COLOR, "- end   :");
-	str = ft_itoa(data->start->ants);
+	mlx_string_put(data->id_mlx ,data->window, startX + 30, startY + 30, PANNEL_TEXT_COLOR, "SIMULATION INFORMATION");
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 50, PANNEL_TEXT_COLOR, "process time (ms):");
+	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 70, PANNEL_TEXT_COLOR, "number of turn   :");
+	str = ft_itoa(data->calculationTime * 1000 / CLOCKS_PER_SEC);
 	if (str)
 	{
-		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 50, PANNEL_TEXT_COLOR, str);
+		mlx_string_put(data->id_mlx ,data->window, startX + 130, startY + 50, PANNEL_TEXT_COLOR, str);
 		free(str);
 	}
 	else
-		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 50, PANNEL_TEXT_COLOR, " ??? ");
-	str = ft_itoa(data->end->ants);
+		mlx_string_put(data->id_mlx ,data->window, startX + 130, startY + 50, PANNEL_TEXT_COLOR, " ??? ");
+	str = ft_itoa(data->moveNB);
 	if (str)
 	{
-		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 70, PANNEL_TEXT_COLOR, str);
+		mlx_string_put(data->id_mlx ,data->window, startX + 130, startY + 70, PANNEL_TEXT_COLOR, str);
 		free(str);
 	}
 	else
-		mlx_string_put(data->id_mlx ,data->window, startX + 70, startY + 70, PANNEL_TEXT_COLOR, " ??? ");
+		mlx_string_put(data->id_mlx ,data->window, startX + 130, startY + 70, PANNEL_TEXT_COLOR, " ??? ");
 	mlx_string_put(data->id_mlx ,data->window, startX + 10, startY + 110, PANNEL_TEXT_COLOR, "number total of ants :");
 	str = ft_itoa(data->total_ants);
 	if (str)

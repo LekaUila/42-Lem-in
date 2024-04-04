@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 14:01:35 by lflandri          #+#    #+#             */
-/*   Updated: 2024/03/26 14:27:22 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:18:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,10 @@ void exitVisu(t_data *data, int er)
 int	main(void)
 {
 	t_data data;
+	clock_t	timet1;
+    clock_t	timet2;
+
+	timet1 = clock();
 	data.end = NULL;
 	data.roomList = NULL;
 	data.start = NULL;
@@ -69,6 +73,8 @@ int	main(void)
 	data.AMIset = NULL;
 	data.stepActual = 0;
 	data.ants = NULL;
+	data.moveNB = 0;
+
 	ft_printf("parsing start\n");
 	parse(&data);
 	//ft_printf("room = %d\n", data.ants->room);
@@ -78,6 +84,8 @@ int	main(void)
 	ft_printf("algo start\n");
 	printRooms(&data);
 	startAlgo(&data);
+    timet2 = clock();
+	data.calculationTime = (double)(timet2 - timet1);
 	ft_printf("affichage start\n");
 	//freeForAll(&data);
 	//TEST

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/03 15:06:30 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/04 16:16:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ typedef struct s_data
 	int			stepActual;
 	t_ant		**AMIset;
 	t_trueAnt	*ants;
+	double		calculationTime;
+	int			moveNB;
 }    	t_data;
 
 //FREE AND EXIT FUNCTION

@@ -501,6 +501,7 @@ void    finishAlgo(t_data *data, t_room ***pathToUse)
         if (space != 42)
         {
             AMI_addNewStep(data);
+            data->moveNB++;
             AMI_setNumberOfAntsForEnd(data, data->end->ants);
         }
         while(data->ants[i].number != -1 && data->ants[i].path)
@@ -668,11 +669,8 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
     ft_printf("number max of path possible : %d\n", optimalMax);
     ft_printf("total number path : %d\n", len_alloc);
     crossPathList = creatCrossPathList(pathToVictory, len_alloc);
-    clock_t	timet1;
-    clock_t	timet2;
-	double	duration;
 
-	timet1 = clock();
+
     orderPathToVictory(newPathToVictory, lenlist, len_alloc);
     k += suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
     if (pathToVictory[1])
@@ -711,17 +709,16 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
         ft_printf("only one path existing\n");
         pathToUse[1] = pathToUse[0];
     }
-    timet2 = clock();
-	duration = (double)(timet2 - timet1);
 
-    // ft_printf("optimal paths are :\n" );
-    // j = 1;
-    // while (pathToUse[j])
-    // {
-    //     printPath(pathToUse[j]);
-    //     ft_printf("_____________________\n");
-    //     j++;
-    // }
+    ft_printf("optimal paths are :\n" );
+    j = 1;
+    while (pathToUse[j])
+    {
+        ft_printf("path %d of size : %d\n", j, pathSize(pathToUse[j]));
+        // printPath(pathToUse[j]);
+        ft_printf("_____________________\n");
+        j++;
+    }
 
     finishAlgo(data, pathToUse);
     j = 0;
@@ -739,7 +736,6 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
     free(pathUse);
     free(pathToUse);
     free(lenlist);
-    printf("time for programmed estimed to : %lf\n", duration);
 }
 
 int numberOfPath(t_room *room)
