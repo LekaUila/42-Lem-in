@@ -1,11 +1,38 @@
 #include "header.h"
 
-void    freeVictory(t_room  ***pathToVictory, int i)
+int numberOfPath(t_room *room)
+{
+    int i = 0;
+
+    if (!room->pathway)
+        return (0);
+    while (room->pathway[i])
+        i++;
+    return (i);
+}
+
+t_room  **shortestPath(t_room ***pathToVictory)
+{
+    int j = 1;
+    t_room  **shortest;
+
+    shortest = pathToVictory[0];
+    while (pathToVictory[j])
+    {
+        if (pathSize(shortest) > pathSize(pathToVictory[j]))
+            shortest = pathToVictory[j];
+        j++;
+    }
+    return (shortest);
+}
+
+void    freeVictory(t_room  ***pathToVictory)
 {
     int  j = 0;
-    while(j != i)
+    while(pathToVictory[j])
     {
-       free(pathToVictory[j]);
+        if (pathToVictory[j])
+            free(pathToVictory[j]);
        j++;
     }
     free(pathToVictory);
@@ -291,12 +318,12 @@ void    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToV
     int k = 0;
     t_room *nextRoom = NULL;
 
-    (void)i;
     (void)pathToVictory;
+    (void)i;
     pathToCreate[0] = data->start;
     pathToCreate[1] = start;
 
-    while (pathToCreate[j]->isEnd != 1)
+    while (pathToCreate[j] && pathToCreate[j]->isEnd != 1)
     {
         if (!pathToCreate[j]->pathway)
             return ;
@@ -326,7 +353,7 @@ void    addPathToVictoryReverse(t_room *start, t_room **pathToCreate, t_room ***
     pathToCreate[0] = data->end;
     pathToCreate[1] = start;
 
-    while (pathToCreate[j]->isStart != 1)
+    while (pathToCreate[j] && pathToCreate[j]->isStart != 1)
     {
         if (!pathToCreate[j]->pathway)
             return ;
@@ -344,6 +371,140 @@ void    addPathToVictoryReverse(t_room *start, t_room **pathToCreate, t_room ***
     }
 }
 
+t_room **findShort(t_room ***path)
+{
+    int i = 0;
+    int j = 0;
+    int lastShort = 0;
+    t_room **shortest = NULL;
+
+    while (path[i])
+    {
+        j = 0;
+        while(path[i][j])
+            j++;
+        if (lastShort || lastShort > j)
+        {
+            lastShort = j;
+            shortest = path[i];
+        }
+        i++;
+    }
+    return (shortest);
+}
+
+t_room *checkEnd(t_room **path)
+{
+    int i = 0;
+
+    while (path[i])
+        i++;
+    if (i == 0)
+        return (path[i]);
+    return (path[i - 2]);
+}
+
+int    checkIfPurged(t_room **path, t_room *** newPath)
+{
+    int i = 0;
+
+    while (newPath[i])
+    {
+        if (checkEnd(path) == checkEnd(newPath[i]))
+            return (-1);
+        i++;
+    }
+    return (0);
+}
+
+t_room **purge(t_room *end, t_room ***pathToVictory, t_room **little)
+{
+    int i = 0;
+    int j = 0;
+    int shorterest = 0;
+    t_room **bestest;
+
+    while (pathToVictory[i])
+    {
+        if (checkEnd(pathToVictory[i]) == end)
+        {
+            j = pathSize(pathToVictory[i]);
+            if (shorterest == 0 || shorterest > j)
+            {
+                if (pathToVictory[i] != little)
+                {
+                    bestest = pathToVictory[i];
+                    shorterest = j;
+                }
+            }
+        }
+        i++;
+    }
+    //ft_printf("end is : %s\n", end->room);
+    //printPath(bestest);
+    return (bestest);
+}
+
+void    freeRandom(t_room ***newPath, t_room ***oldPath)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+
+    while (oldPath[i])
+    {
+        while (newPath[j])
+        {
+            if (oldPath[i] == newPath[j])
+            {
+                k = 1;
+                break ;
+            }
+            j++;
+        }
+        if (k != 1)
+        {
+            if (oldPath[i])
+                free (oldPath[i]);
+        }
+        k = 0;
+        j = 0;
+        oldPath[i] = NULL;
+        i++;
+    }
+}
+
+void    purgePath(t_data *data, t_room ***pathToVictory)
+{
+    t_room  ***newPathToVictory;
+    int j = 0;
+    int i = 1;
+
+    newPathToVictory = ft_calloc(numberOfPath(data->start) + 1, sizeof(t_room ***));
+    newPathToVictory[0] = shortestPath(pathToVictory);
+    printPath(newPathToVictory[0]);
+    while(pathToVictory[j])
+    {
+        while(pathToVictory[j] && pathToVictory[j] == newPathToVictory[0] && checkIfPurged(pathToVictory[j],  newPathToVictory) == -1)
+            j++;
+        if (!pathToVictory[j])
+            break ;
+        newPathToVictory[i] = purge(checkEnd(pathToVictory[j]), pathToVictory, newPathToVictory[0]);
+        i++;
+        j++;
+    }
+    freeRandom(newPathToVictory, pathToVictory);
+    j = 0;
+    while (newPathToVictory[j])
+    {
+        pathToVictory[j] = newPathToVictory[j];
+        j++;
+    }
+    pathToVictory[j] = NULL;
+    free(newPathToVictory);
+    //pathToVictory = newPathToVictory;
+}
+
 int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVictoryReverse)
 {
     int i = 0;
@@ -358,7 +519,8 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVi
         //printPath(pathToVictory[i]);
         i++;
     }
-    i--;
+
+    purgePath(data, pathToVictory);
 
     i = 0;
     while (data->end->pathway[i] != NULL)
@@ -370,7 +532,10 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVi
         //printPath(pathToVictoryReverse[i]);
         i++;
     }
+
     //ft_printf("number of path : %d\n", i);
+
+    //purgePath(data, pathToVictoryReverse);
     return (i);
 }
 
@@ -397,22 +562,6 @@ int pathSize(t_room **path)
     return (i);
 }
 
-
-
-t_room  **shortestPath(t_room ***pathToVictory)
-{
-    int j = 1;
-    t_room  **shortest;
-
-    shortest = pathToVictory[0];
-    while (pathToVictory[j])
-    {
-        if (pathSize(shortest) > pathSize(pathToVictory[j]))
-            shortest = pathToVictory[j];
-        j++;
-    }
-    return (shortest);
-}
 
 int crossPath(t_room **path1, t_room **path2)
 {
@@ -629,7 +778,6 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
     int len_alloc = 0;
     while (pathToVictory[len_alloc])
     {
-
         len_alloc++;
     }
     newPathToVictory = ft_calloc(len_alloc + 1, sizeof(t_room ***));
@@ -736,17 +884,6 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
     free(pathUse);
     free(pathToUse);
     free(lenlist);
-}
-
-int numberOfPath(t_room *room)
-{
-    int i = 0;
-
-    if (!room->pathway)
-        return (0);
-    while (room->pathway[i])
-        i++;
-    return (i);
 }
 
 void    putInOrder(t_room ***pathToVictoryReverse, int stop, int toMalloc)
@@ -944,6 +1081,6 @@ void startAlgo(t_data *data)
     }
     chooseYourPath(data, truePath);
     free(truePath);
-    freeVictory(pathToVictory, numberOfPath(data->start) + 1);
-    freeVictory(pathToVictoryReverse, numberOfPath(data->end) + 1);
+    freeVictory(pathToVictory);
+    freeVictory(pathToVictoryReverse);
 }
