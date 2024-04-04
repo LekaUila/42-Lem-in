@@ -649,7 +649,7 @@ void	addToList(t_data *data, char *line, int command, int listSize)
 
 char		*addRooms(t_data *data)
 {
-	char	*line;
+	char	*line = NULL;
 	int space = 0;
 	int command = 0;
 	int i = 0;
@@ -752,6 +752,7 @@ void	addLink(t_data *data, char *line)
 		//ft_printf("first room = %s\n", firstRoom->room);
 		line = get_next_line(0);
 	}
+	free(line);
 }
 
 void	parse(t_data *data)
