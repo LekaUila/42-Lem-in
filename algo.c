@@ -588,6 +588,28 @@ int suppressingUselessPath(int nbPath, int nbTotalPath, int **crossPathList, t_r
     return (countSoloPath - 2);
 }
 
+void orderPathToVictory(t_room ***pathToVictory, int *lenlist, int len)
+{
+    t_room **tempPath;
+    int tempInt;
+
+    for (int i = 0; i < len - 1; i++)
+    {
+        for (int j = 0; j < len - i - 1; j++)
+        {
+            if (lenlist[j] > lenlist[j + 1])
+            {
+                tempInt = lenlist[j];
+                tempPath = pathToVictory[j];
+                lenlist[j] = lenlist[j + 1];
+                pathToVictory[j] = pathToVictory[j + 1];
+                lenlist[j + 1] = tempInt;
+                pathToVictory[j + 1] = tempPath;
+            }
+        }
+    }
+}
+
 void chooseYourPath(t_data *data, t_room ***pathToVictory)
 {
     int optimalMax = 0;
@@ -633,6 +655,8 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
      
     pathToUse[0] = shortestPath(pathToVictory);
 
+
+
     // ft_printf("All print find\n");
     // j = 0;
     // while (pathToVictory[j])
@@ -649,12 +673,13 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
 	double	duration;
 
 	timet1 = clock();
+    orderPathToVictory(newPathToVictory, lenlist, len_alloc);
     k += suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
     if (pathToVictory[1])
     {
-        while (k <= optimalMax /*&& k < optimalMax - k + 2*/)
-        {
-            ft_printf("check for %d different path\n", k);
+        // while (k <= optimalMax /*&& k < optimalMax - k + 2*/)
+        // {
+            // ft_printf("check for %d different path\n", k);
             
             findShortestAndUnique( newPathToVictory, pathTest, pathUse, k, 0, crossPathList, len_alloc, intlist, lenlist, 0, &untract_path);
             for (size_t i = 0; pathUse[i]; i++)
@@ -662,40 +687,24 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
                 pathToUse[i + 1] = pathUse[i];
             }
             
-            for (int i = 0; i < optimalMax; i++)
-            {
-                pathTest[i] = NULL;
-                pathUse[i] = NULL;
-
-            }
-            if (!pathToUse[k])
-                break;
-            ft_printf("path list find for %d different path\n", k);
-            // ft_printf("check for %d different path\n", optimalMax - k + 2);
-            // findShortestAndUnique( pathToVictory, pathTest, pathUse, optimalMax - k + 2, 0, crossPathList, len_alloc, intlist);
-            // if (pathToUse[optimalMax - k + 2])
-            // {
-            //     ft_printf("path list find for %d different path\n", optimalMax - k + 2);
-            //     for (size_t i = 0; pathUse[i]; i++)
-            //     {
-            //         pathToUse[i + 1] = pathUse[i];
-            //     }
-            //     break;
-            // }
             // for (int i = 0; i < optimalMax; i++)
             // {
             //     pathTest[i] = NULL;
             //     pathUse[i] = NULL;
 
             // }
-            k++;
-            if ( k > MAX_DEPTH )
-            { 
-                ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
-                break;
-            }
-            suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
-        }
+            // if (!pathToUse[k])
+            //     break;
+            // ft_printf("path list find for %d different path\n", k);
+
+            // k++;
+            // if ( k > MAX_DEPTH )
+            // { 
+            //     ft_printf("WARNING : maximum depth reached\nStop research optimal list of path\n");
+            //     break;
+            // }
+            // suppressingUselessPath(k, len_alloc, crossPathList, newPathToVictory, &untract_path, optimalMax);
+        // }
     }
     else
     {

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/03 15:52:29 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/04 13:41:53 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ static int comboBetter(int lenPathTest, t_room ***listPathSuccess)
 {
     static int len2 = -1;
     int i = 0;
+    if (!listPathSuccess) //force set case
+    {
+        len2 = lenPathTest;
+        return (0);
+    }
     if (len2 == -1)
     {
         i = 0;
@@ -129,12 +134,16 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
     // static int lenPathToVictory = 0;
     // if (!lenPathToVictory)
     //     lenPathToVictory = listPathSize(pathToVictory);
+    static int tempcountwrite = 0;
+    static  int maxToReatch = -1;
+    if (maxToReatch == -1)
+        maxToReatch = optimalMax;
     int i = dec;
     int j = 0;
     // ft_printf("enter first at %d\n", dec);
     while (pathToVictory[i])
     {
-        if (/*!dec &&*/ len_alloc - i + dec < optimalMax)
+        if (/*!dec &&*/ len_alloc - i + dec < maxToReatch)
         {   
             // ft_printf("abort rec at : %d path, %d depth\n", i, dec);
             break;
@@ -142,15 +151,14 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
         else if ((!(intlist[dec][i])) && pathToVictory[i] != untract_path)
         {
             listPathTest[dec] = pathToVictory[i];
-            if (dec + 1 < optimalMax)
-            {
-                findShortestAndUniqueDepth( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec + 1,crossPathList,   len_alloc,  intlist, i, lenlist, lenPathtest + lenlist[i], untract_path);
-            }
-            else
+                findShortestAndUniqueDepth( pathToVictory, listPathTest, listPathSuccess, maxToReatch,  dec + 1,crossPathList,   len_alloc,  intlist, i, lenlist, lenPathtest + lenlist[i], untract_path);
+            if (dec + 1 == maxToReatch)
             {
                 lenPathtest += lenlist[i];
                 if (listPathSuccess[0] == NULL || comboBetter(lenPathtest, listPathSuccess))
                 {
+                    tempcountwrite++;
+                    ft_printf("write on : %d\n", tempcountwrite);
                     j = 0;
                     while (listPathTest[j])
                     {
@@ -159,6 +167,20 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
                     }
                 }
                 lenPathtest -= lenlist[i];
+            }
+            else if (dec + 1 > maxToReatch)
+            {
+                ft_printf("new max to reach : %d to %d \n", maxToReatch, dec + 1);
+                tempcountwrite++;
+                ft_printf("write on : %d\n", tempcountwrite);
+                maxToReatch = dec + 1;
+                comboBetter(lenPathtest + lenlist[i], NULL);
+                j = 0;
+                while (listPathTest[j])
+                {
+                    listPathSuccess[j] = listPathTest[j];
+                    j++;
+                } 
             }
         }
         i++;
