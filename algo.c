@@ -358,7 +358,7 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVi
         //printPath(pathToVictory[i]);
         i++;
     }
-    i--;
+
 
     i = 0;
     while (data->end->pathway[i] != NULL)
@@ -370,6 +370,7 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVi
         //printPath(pathToVictoryReverse[i]);
         i++;
     }
+    
     //ft_printf("number of path : %d\n", i);
     return (i);
 }
@@ -606,7 +607,6 @@ void chooseYourPath(t_data *data, t_room ***pathToVictory)
     int len_alloc = 0;
     while (pathToVictory[len_alloc])
     {
-
         len_alloc++;
     }
     newPathToVictory = ft_calloc(len_alloc + 1, sizeof(t_room ***));

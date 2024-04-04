@@ -681,14 +681,38 @@ char		*addRooms(t_data *data)
 	return (NULL);
 }
 
+int	ft_strcmp(char *str1, char *str2)
+{
+	int i = 0;
+	//ft_printf("str1 = %sstr2 = %s\n", str1, str2);
+	while(str1[i] && str1[i] != '\n' && str1[i] != '-')
+	{
+		if (!str2[i])
+			return (-1);
+		if (str1[i] != str2[i])
+		{
+			//ft_printf("c1 = %c\nc2 = %c\n", str1[i], str2[i]);
+			//ft_printf("1\n");
+			return (-1);
+		}
+		i++;
+	}
+	if ((!str1[i] && str1[i + 1] == '-' )|| str2[i + 1])
+	{
+		//ft_printf("2\n");
+		return (-1);
+	}
+	return (0);
+}
+
 t_room	*RoomFinder(t_data *data, char *line)
 {
 	int i = 0;
 
-	ft_printf("\nline = %s", line);
+	//ft_printf("\nline = %s", line);
 	while (data->roomList[i])
 	{
-		if (data->roomList[i] && !ft_strncmp(line, data->roomList[i]->room, ft_strlen( data->roomList[i]->room)))
+		if (data->roomList[i] && ft_strcmp(line, data->roomList[i]->room) == 0)
 			return (data->roomList[i]);
 		i++;
 	}
@@ -723,7 +747,9 @@ void	addLink(t_data *data, char *line)
 			if (addRoomToRoomPathways(secondeRoom, firstRoom))
 				launch_fatal_error(NULL, data, -666);
 		}
+		//ft_printf("line = %s\n", line);
 		free(line);
+		//ft_printf("first room = %s\n", firstRoom->room);
 		line = get_next_line(0);
 	}
 }
