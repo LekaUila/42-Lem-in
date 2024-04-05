@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/04 16:16:22 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 04:00:55 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,9 @@
 // OTHER DEFINE
 
 # define MAX_DEPTH 999
+# define SHORTEST_PATH 1
+# define LIST_PATH 0
+
 
 typedef struct s_room
 {
@@ -163,6 +166,7 @@ void	checkPath(t_data *data);
 void    printPath(t_room **path);
 
 //ALGO
+void	AntsSwitcher(t_data *data, t_room ***pathToUse);
 int		culDeSac(t_room **pathToVictory);
 int		crossPath(t_room **path1, t_room **path2);
 int		pathSize(t_room **path);

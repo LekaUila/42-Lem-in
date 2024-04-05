@@ -8,6 +8,7 @@ SRC		= main.c \
 		  AMI_function.c \
 		  draw_image.c \
 		  algo.c \
+		  antsSwitcher.c \
 		  algo_recurcive.c
 
 
