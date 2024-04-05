@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:38:55 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 05:07:13 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:32:53 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	SwitchingCalculator(t_room ***pathToUse, int antsNB, int *listNBAntFo
 
 	for (int i = 0; pathToUse[i]; i++)
 		listNBAntForPath[i] = pathSize(pathToUse[i]);
-	while (antNBtoassign)
+	while (pathToUse[1] && antNBtoassign)
 	{
 		if ((i != 1 && listNBAntForPath[i - 1] <= listNBAntForPath[i]) || (!pathToUse[i]))
 			i = 1;
@@ -40,7 +40,7 @@ static int	SwitchingCalculator(t_room ***pathToUse, int antsNB, int *listNBAntFo
 		}
 	}
 	ft_printf("shortest can done in %d and list can done in %d\n", listNBAntForPath[0] + antsNB, listNBAntForPath[1]);
-	if (listNBAntForPath[0] + antsNB < listNBAntForPath[1])
+	if (listNBAntForPath[0] + antsNB < listNBAntForPath[1] || !pathToUse[1])
 		return (SHORTEST_PATH);
 	for (int i = 0; pathToUse[i]; i++)
 		listNBAntForPath[i] -= pathSize(pathToUse[i]);

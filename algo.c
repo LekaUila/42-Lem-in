@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:39:22 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 05:43:45 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 14:39:42 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1096,12 +1096,12 @@ void startAlgo(t_data *data)
     j = allPossiblePath(data, pathToVictory, pathToVictoryReverse);
     putInOrder(pathToVictoryReverse, numberOfPath(data->end), i + 1);
     purgeByFire(truePath, pathToVictory, pathToVictoryReverse, data);
-    // i = 0;
-    // while (truePath[i] != NULL)
-    // {
-    //     printPath(truePath[i]);
-    //     i++;
-    // }
+    i = 0;
+    while (truePath[i] != NULL)
+    {
+        printPath(truePath[i]);
+        i++;
+    }
     chooseYourPath(data, truePath);
     free(truePath);
     freeVictory(pathToVictory);
