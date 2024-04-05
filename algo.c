@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:39:22 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 14:39:42 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:28:45 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,6 +350,8 @@ void    addPathToVictory(t_room *start, t_room **pathToCreate, t_room ***pathToV
             k++;
         }
         j++;
+        if (nextRoom == pathToCreate[j - 2])
+            break ;
         pathToCreate[j] = nextRoom;
         //ft_printf("pathToCreate[j]->room = %s\n", pathToCreate[j]->room);
         //ft_printf("checpath = %d\n", pathToCreate[j]->checkPath2);
@@ -380,6 +382,8 @@ void    addPathToVictoryReverse(t_room *start, t_room **pathToCreate, t_room ***
             k++;
         }
         j++;
+        if (nextRoom == pathToCreate[j - 2])
+            break ;
         pathToCreate[j] = nextRoom;
         //ft_printf("pathToCreate[j]->room = %s\n", pathToCreate[j]->room);
         nextRoom = NULL;
@@ -557,7 +561,7 @@ int    allPossiblePath(t_data *data, t_room ***pathToVictory, t_room ***pathToVi
 
     //ft_printf("number of path : %d\n", i);
 
-    //purgePath(data, pathToVictoryReverse);
+    purgePath(data, pathToVictoryReverse);
     return (i);
 }
 
@@ -921,8 +925,13 @@ void    putInOrder(t_room ***pathToVictoryReverse, int stop, int toMalloc)
         k = 0;
         toReverse = ft_calloc(toMalloc, sizeof(t_room **));
         //printPath(pathToVictoryReverse[i]);
-        while(pathToVictoryReverse[i][k])
+        while(pathToVictoryReverse[i] && pathToVictoryReverse[i][k])
             k++;
+        if (!pathToVictoryReverse[i])
+        {
+            free(toReverse);
+            break;
+        }
         k--;
         while(k >= 0)
         {
@@ -1096,12 +1105,12 @@ void startAlgo(t_data *data)
     j = allPossiblePath(data, pathToVictory, pathToVictoryReverse);
     putInOrder(pathToVictoryReverse, numberOfPath(data->end), i + 1);
     purgeByFire(truePath, pathToVictory, pathToVictoryReverse, data);
-    i = 0;
-    while (truePath[i] != NULL)
-    {
-        printPath(truePath[i]);
-        i++;
-    }
+    // i = 0;
+    // while (truePath[i] != NULL)
+    // {
+    //     printPath(truePath[i]);
+    //     i++;
+    // }
     chooseYourPath(data, truePath);
     free(truePath);
     freeVictory(pathToVictory);

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:38:55 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 14:32:53 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 15:55:41 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,19 @@ static int	SwitchingCalculator(t_room ***pathToUse, int antsNB, int *listNBAntFo
 	return (LIST_PATH);
 }
 
-static int    mooveAnts(t_trueAnt *ant, t_data *data)
+static int    mooveAnts(t_trueAnt *ant, t_data *data, int *canStartToEnd)
 {
     if (ant->path[ant->room]->isEnd == 1)
         return (-1);
     if (ant->path[ant->room + 1]->ants != 0 && ant->path[ant->room + 1]->isEnd != 1)
-	{
 		return (-1);
+    if (ant->path[ant->room] == data->start && ant->path[ant->room + 1] == data->end)
+	{
+		if (!(*canStartToEnd))
+		{
+			return (-1);
+		}
+		*canStartToEnd = 0;
 	}
     AMI_addAntsMovement(data, ant->path[ant->room], ant->path[ant->room + 1]);
     ant->path[ant->room]->ants--;
@@ -69,6 +75,7 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 	int antsAdded = 0;
     int space = 0;
 	int ind = 0;
+	int canStartToEnd = 1;
 
 	// ft_printf("vérification de compatibilité des chemin : \n");
 	// for (int i = 1; pathToUse[i]; i++)
@@ -87,7 +94,6 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 			data->ants[i].path = pathToUse[0];
 			data->ants[i].room = 0;
 		}
-		
 	}
 	else
 	{
@@ -112,15 +118,15 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
         {
 			if (data->ants[ind].path)
 			{
-				space = mooveAnts(&data->ants[ind], data);
+				space = mooveAnts(&data->ants[ind], data, &canStartToEnd);
 				if (space == 0 && data->ants[ind + 1].path != NULL)
 					ft_printf(" ");
 			}
             ind++;
         }
+		canStartToEnd = 1;
 		AMI_setNumberOfAntsForStart(data, data->start->ants);
 		ft_printf("\n");
 	}
-	
 	free(listNBAntForPath);
 }
