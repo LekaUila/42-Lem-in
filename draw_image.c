@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/04 16:26:34 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 05:45:50 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static void	draw_line(t_data *data, int start_x, int start_y, int end_x, int end
 	{
 		if (save_x < WIDTH_W && save_y < HEIGHT_W  && save_x >= 0 && save_y >= 0)
 			img_pix_put(data->img, save_x, save_y, color);
+		else
+			break;
 		draw_line_bis(line, &save_x, &save_y);
 	}
 	// ft_printf("EXIT DRAW LINE");
