@@ -6,20 +6,11 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/04 13:41:53 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:43:17 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
-
-// static int listPathSize(t_room ***path)
-// {
-//     int i = 0;
-
-//     while (path[i])
-//         i++;
-//     return (i);
-// }
 
 int **creatCrossPathList(t_room ***pathToVictory, int len_alloc)
 {
@@ -28,30 +19,36 @@ int **creatCrossPathList(t_room ***pathToVictory, int len_alloc)
     int k = 0;
     int **crossPathList;
 
-    crossPathList = ft_calloc(len_alloc, sizeof(int *));
+    crossPathList = ft_calloc(len_alloc + 1, sizeof(int *));
+    if (!crossPathList)
+        return (NULL);
     while (pathToVictory[i])
     {
         crossPathList[i] = ft_calloc(len_alloc + 1, sizeof(int));
+        if (!crossPathList[i])
+        {
+            for (int h = 0; crossPathList[h]; h++)
+            {
+                free(crossPathList[h]);
+            }         
+            free(crossPathList);
+            return (NULL);
+        }
         j = 0;
         k = 0;
-        // ft_printf("for path %d : \n", i);
         while (pathToVictory[j])
         {
             if (j == i)
             {
                 crossPathList[i][k] = j;
                 k++;
-                // ft_printf("   path %d is same \n", j);
             }
             else if (crossPath(pathToVictory[i], pathToVictory[j]) == -1)
             {
                 crossPathList[i][k] = j;
                 k++;
-                // ft_printf("   path %d is incompatible \n", j);
 
             }
-            // else
-            //     ft_printf("   path %d is compatible \n", j);
             j++;
         }
         crossPathList[i][k] = -1;
@@ -87,31 +84,10 @@ static int comboBetter(int lenPathTest, t_room ***listPathSuccess)
     return (0);
 }
 
-// void printPathLign(t_room **path)
-// {
-// 	  int i = 0;
- 
-//     if (!path)
-// 		return ;
-//     if (path[0] == 0)
-// 		return ;
-// 	ft_printf("| ", path[i]->room);
-//     while (path[i])
-//     {
-// 		if (!(path[i + 1]))
-//         	ft_printf("%s", path[i]->room);
-// 		else
-// 			ft_printf("%s -> ", path[i]->room);
-//         i++;
-//     }
-//     ft_printf(" |\n");
-// }
-
 static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist, int ind, int * lenlist, int lenPathtest, t_room  **untract_path)
 {
     int i = 0;
     int j = 0;
-    // ft_printf("enter second at %d\n", dec);
     while (i < len_alloc)
     {
         if (i == crossPathList[ind][j])
@@ -126,26 +102,20 @@ static void findShortestAndUniqueDepth( t_room ***pathToVictory, t_room ***listP
         i++;
     }
     findShortestAndUnique( pathToVictory, listPathTest, listPathSuccess, optimalMax,  dec,crossPathList,   len_alloc,  intlist, lenlist, lenPathtest, untract_path);
-    // ft_printf("exit second at %d\n", dec);
 }
 
 void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest, t_room  **untract_path)
 {
-    // static int lenPathToVictory = 0;
-    // if (!lenPathToVictory)
-    //     lenPathToVictory = listPathSize(pathToVictory);
     static int tempcountwrite = 0;
     static  int maxToReatch = -1;
     if (maxToReatch == -1)
         maxToReatch = optimalMax;
     int i = dec;
     int j = 0;
-    // ft_printf("enter first at %d\n", dec);
     while (pathToVictory[i])
     {
-        if (/*!dec &&*/ len_alloc - i + dec < maxToReatch)
+        if (len_alloc - i + dec < maxToReatch)
         {   
-            // ft_printf("abort rec at : %d path, %d depth\n", i, dec);
             break;
         }
         else if ((!(intlist[dec][i])) && pathToVictory[i] != untract_path)
@@ -158,7 +128,8 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
                 if (listPathSuccess[0] == NULL || comboBetter(lenPathtest, listPathSuccess))
                 {
                     tempcountwrite++;
-                    ft_printf("write on : %d\n", tempcountwrite);
+                    if (DEBUG_PRINT)
+                        ft_printf("write on : %d\n", tempcountwrite);
                     j = 0;
                     while (listPathTest[j])
                     {
@@ -186,5 +157,4 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
         i++;
     }
     listPathTest[dec] = NULL;
-    // ft_printf("exit first at %d\n", dec);
 }

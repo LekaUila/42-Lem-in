@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/12 17:26:25 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 16:03:42 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:57:19 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ static void	draw_ants(t_data *data)
 	const int add = (BORDER + (LEN_OBJECT / 4));
 	
 	// ft_printf("iteration with i = %d\n", i);
+	// ft_printf("cond : %p and %p\n", data->AMIset[data->stepActual][i].actual, data->AMIset[data->stepActual][i].toGo);
 	while (data->AMIset && data->AMIset[data->stepActual] && (data->AMIset[data->stepActual][i].actual))
 	{
 		actuAnt = &data->AMIset[data->stepActual][i];

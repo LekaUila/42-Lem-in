@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:33:57 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 15:54:03 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:22:10 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void AMI_setNumberOfAntsForStart(t_data *data, int number)
 	t_ant	*lastStep = AMI_getLastStep(data);
 	int	i = AMI_getNextAntsToUse(lastStep, data->total_ants);
 	int	maxIte = number + i;
-	
+
 	while (i < maxIte && i < data->total_ants + 1)
 	{
 		lastStep[i].actual = data->start;
@@ -105,7 +105,7 @@ void AMI_setNumberOfAntsForEnd(t_data *data, int number)
 	t_ant	*lastStep = AMI_getLastStep(data);
 	int	i = AMI_getNextAntsToUse(lastStep, data->total_ants);
 	int	maxIte = number + i;
-	
+
 	while (i < maxIte && i < data->total_ants + 1)
 	{
 		lastStep[i].actual = data->end;

@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:38:55 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 15:55:41 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/05 17:22:17 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	SwitchingCalculator(t_room ***pathToUse, int antsNB, int *listNBAntFo
 			antNBtoassign--;
 		}
 	}
-	ft_printf("shortest can done in %d and list can done in %d\n", listNBAntForPath[0] + antsNB, listNBAntForPath[1]);
+    if (DEBUG_PRINT)
+		ft_printf("shortest can done in %d and list can done in %d\n", listNBAntForPath[0] + antsNB, listNBAntForPath[1]);
 	if (listNBAntForPath[0] + antsNB < listNBAntForPath[1] || !pathToUse[1])
 		return (SHORTEST_PATH);
 	for (int i = 0; pathToUse[i]; i++)
@@ -69,7 +70,7 @@ static int    mooveAnts(t_trueAnt *ant, t_data *data, int *canStartToEnd)
     return (0);
 }
 
-void	AntsSwitcher(t_data *data, t_room ***pathToUse)
+int	AntsSwitcher(t_data *data, t_room ***pathToUse)
 {
 	int	*listNBAntForPath = ft_calloc(listPathSize(pathToUse) + 1, sizeof(int));
 	int antsAdded = 0;
@@ -77,16 +78,6 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 	int ind = 0;
 	int canStartToEnd = 1;
 
-	// ft_printf("vérification de compatibilité des chemin : \n");
-	// for (int i = 1; pathToUse[i]; i++)
-	// {
-	// 	for (int j = 1; pathToUse[j]; j++)
-	// 	{
-	// 		if (j != i)
-	// 			ft_printf("%d and %d result of path : %d\n", i, j,crossPath(pathToUse[i], pathToUse[j]));
-	// 	}
-	// }
-	// ft_printf("fin vérification de compatibilité des chemin : \n");
 	if (SwitchingCalculator(pathToUse, data->total_ants, listNBAntForPath) == SHORTEST_PATH)
 	{
 		for (int i = 0; i < data->total_ants; i++)
@@ -99,7 +90,8 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 	{
 		for (int i = 1; pathToUse[i]; i++)
 		{
-			ft_printf("path %d need %d ants\n", i, listNBAntForPath[i]);
+    		if (DEBUG_PRINT)
+				ft_printf("path %d need %d ants\n", i, listNBAntForPath[i]);
 			for (int j = 0; j < listNBAntForPath[i]; j++)
 			{
 				data->ants[antsAdded].path = pathToUse[i];
@@ -110,18 +102,16 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 	}
 	while (data->end->ants != data->total_ants)
 	{
-		AMI_addNewStep(data);
+		if (AMI_addNewStep(data) == -1)
+			return (-1);
 		data->moveNB++;
 		AMI_setNumberOfAntsForEnd(data, data->end->ants);
 		ind = 0;
         while(data->ants[ind].number != -1)
         {
-			if (data->ants[ind].path)
-			{
-				space = mooveAnts(&data->ants[ind], data, &canStartToEnd);
-				if (space == 0 && data->ants[ind + 1].path != NULL)
-					ft_printf(" ");
-			}
+			space = mooveAnts(&data->ants[ind], data, &canStartToEnd);
+			if (space == 0 && data->ants[ind + 1].path != NULL)
+				ft_printf(" ");
             ind++;
         }
 		canStartToEnd = 1;
@@ -129,4 +119,5 @@ void	AntsSwitcher(t_data *data, t_room ***pathToUse)
 		ft_printf("\n");
 	}
 	free(listNBAntForPath);
+	return (0);
 }
