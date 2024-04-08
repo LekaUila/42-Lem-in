@@ -645,6 +645,10 @@ char		*addRooms(t_data *data)
 		if (line)
 			free(line);
 		line = get_next_line(0);
+		if (line == NULL)
+			ft_printf("\n");
+		else
+			ft_printf("%s", line);
 		space = manySpaces(line);
 		if (space == -33)
 			command = checkCommandLine(line);
@@ -727,6 +731,10 @@ void	addLink(t_data *data, char *line)
 		}
 		free(line);
 		line = get_next_line(0);
+		if (line == NULL)
+			ft_printf("\n");
+		else
+			ft_printf("%s", line);
 	}
 	free(line);
 }
@@ -736,6 +744,10 @@ void	parse(t_data *data)
 	char	*line;
 
 	line = get_next_line(0);
+	if (line == NULL)
+			ft_printf("\n");
+		else
+			ft_printf("%s", line);
 	if (isAllNum(line) == -1)
 		fatal_error(line, NULL, "ANTS IS NOT A NUMBER");
 	else

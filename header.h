@@ -48,6 +48,7 @@
 # define GREY 0xa7a7a7
 # define YELLOW 0xffd500
 # define PURPLE 0xff00ff
+# define BLUE 0x0384fc
 
 //VISU COLOR ASSIGNATION
 
@@ -55,7 +56,7 @@
 # define START_ROOM_COLOR				GREEN
 # define EXIT_ROOM_COLOR				RED
 # define ROOM_COLOR						BLACK
-# define ANT_COLOR						YELLOW
+# define ANT_COLOR						BLUE
 # define ROOM_NAME_COLOR				PURPLE
 # define PANNEL_BACKGROUND_COLOR		GREY
 # define PANNEL_BORDER_COLOR			BLACK
