@@ -1,16 +1,37 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/04/08 15:13:59 by lflandri          #+#    #+#              #
+#    Updated: 2024/04/08 15:18:03 by lflandri         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 
 
-SRC		= main.c \
-		  parsing.c \
-		  checkPath.c \
-		  hook_file.c \
-		  AMI_function.c \
-		  draw_image.c \
-		  algo.c \
-		  antsSwitcher.c \
-		  algo_recurcive.c
+ifndef BONUS
+SRC		= Mandatory/main.c \
+		  Mandatory/parsing.c \
+		  Mandatory/checkPath.c \
+		  Mandatory/algo.c \
+		  Mandatory/antsSwitcher.c \
+		  Mandatory/algo_recurcive.c
+endif
 
+ifdef BONUS
+SRC		= Bonus/main.c \
+		  Bonus/parsing.c \
+		  Bonus/checkPath.c \
+		  Bonus/hook_file.c \
+		  Bonus/AMI_function.c \
+		  Bonus/draw_image.c \
+		  Bonus/algo.c \
+		  Bonus/antsSwitcher.c \
+		  Bonus/algo_recurcive.c
+endif
 
 
 NAME 		= lem-in
@@ -50,10 +71,20 @@ all :		${NAME}
 ${NAMEL}:
 			@cd libft && make
 
+ifdef BONUS
+
 ${NAME}: ${NAMEL} ${NAMEMLX} ${SRC}
-			@echo "${BLACKPURPLE}=============== CRÉATION CLIENT ==============${WHITE}" 
+			@echo "${BLACKPURPLE}=============== CRÉATION LEM-IN ==============${WHITE}" 
 			gcc -g -Wall -Wextra -Werror ${SRC} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAME}
-			@echo "${BLACKPURPLE}============= FIN CRÉATION CLIENT ============${NEUTRE}" 
+			@echo "${BLACKPURPLE}============= FIN CRÉATION LEM-IN ============${NEUTRE}" 
+endif
+
+ifndef BONUS
+${NAME}: ${NAMEL} ${SRC}
+			@echo "${BLACKPURPLE}=============== CRÉATION LEM-IN ==============${WHITE}" 
+			gcc -g -Wall -Wextra -Werror ${SRC}  ${NAMEL} -o ${NAME}
+			@echo "${BLACKPURPLE}============= FIN CRÉATION LEM-IN ============${NEUTRE}"
+endif
 
 ${NAMEMLX}:
 			@echo "${BLACKPURPLE}=============== CRÉATION MINILIBX ============${WHITE}" 
@@ -61,10 +92,8 @@ ${NAMEMLX}:
 			@echo "${BLACKPURPLE}============= FIN CRÉATION MINILIBX ==========${NEUTRE}" 
 			@echo "${WHITEGREEN}Bibliotheque \"${BLINK}libmlx_Linux.a${RESET}\" PRET À L'EMPLOIE !${NEUTRE}"
 
-# ${NAMEV} :  ${SRCBONUS} ${NAMEMLX} ${NAMEL}
-# 			@echo "${BLACKPURPLE}============== CRÉATION VISUALISER ===========${WHITE}" 
-#			gcc  -Wall -Wextra -Werror -g ${SRCBONUS} -Lminilibx-linux -lmlx -L/usr/lib -Imlx -lXext -lX11 -lm -lz ${NAMEL} ${NAMEMLX} -o ${NAMEV}
-# 			@echo "${BLACKPURPLE}============ FIN CRÉATION VISUALISER =========${NEUTRE}"
+bonus :
+			@make BONUS=42
 
 clean :
 			@echo -n "${BLACKRED}"

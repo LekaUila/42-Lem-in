@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 14:59:39 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 16:43:17 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:06:45 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,11 @@ void findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_r
             }
             else if (dec + 1 > maxToReatch)
             {
-                ft_printf("new max to reach : %d to %d \n", maxToReatch, dec + 1);
+                if (DEBUG_PRINT)
+                    ft_printf("new max to reach : %d to %d \n", maxToReatch, dec + 1);
                 tempcountwrite++;
-                ft_printf("write on : %d\n", tempcountwrite);
+                if (DEBUG_PRINT)
+                    ft_printf("write on : %d\n", tempcountwrite);
                 maxToReatch = dec + 1;
                 comboBetter(lenPathtest + lenlist[i], NULL);
                 j = 0;

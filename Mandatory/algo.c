@@ -6,7 +6,7 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 03:39:22 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 17:26:44 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:31:48 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -624,19 +624,6 @@ int    checkDouble(t_room **path, t_room   ***lotOfPath)
     return (0);
 }
 
-int pathToBig(t_room **path, int ants)
-{
-    int i = 0;
-
-    if (!path)
-        return (-1);
-    while (path[i])
-        i++;
-    if (i > ants)
-        return (-1);
-    return (0);
-}
-
 void    addShortestToPath(t_room ***truePath, t_room ***pathToVictory, t_room ***pathToVictoryReverse)
 {
     int i = 0;
@@ -697,7 +684,7 @@ void    purgeByFire(t_room ***truePath, t_room ***pathToVictory, t_room ***pathT
     int j = 0;
     while(pathToVictory[i] != NULL)
     {
-        while (pathToVictory[i] && (culDeSac(pathToVictory[i]) == -1 || pathToBig(pathToVictory[i], data->total_ants) == -1  || data->start != pathToVictory[i][0]))
+        while (pathToVictory[i] && (culDeSac(pathToVictory[i]) == -1  || data->start != pathToVictory[i][0]))
         {
             i++;
         }
@@ -711,7 +698,7 @@ void    purgeByFire(t_room ***truePath, t_room ***pathToVictory, t_room ***pathT
     i = 0;
     while(pathToVictoryReverse[i])
     {
-        while (pathToVictoryReverse[i] && (culDeSac(pathToVictoryReverse[i]) == -1 || checkDouble(pathToVictoryReverse[i], pathToVictory) == -1 || pathToBig(pathToVictoryReverse[i], data->total_ants) == -1 || data->start != pathToVictoryReverse[i][0]))
+        while (pathToVictoryReverse[i] && (culDeSac(pathToVictoryReverse[i]) == -1 || checkDouble(pathToVictoryReverse[i], pathToVictory) == -1 || data->start != pathToVictoryReverse[i][0]))
         {
             i++;
         }

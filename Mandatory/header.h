@@ -6,17 +6,14 @@
 /*   By: lflandri <liam.flandrinck.58@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/24 15:51:19 by lflandri          #+#    #+#             */
-/*   Updated: 2024/04/05 16:34:56 by lflandri         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:32:28 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef HEADER_H
 # define HEADER_H
 
-# include "./libft/libft.h"
-# include <time.h>
-# include "./minilibx-linux/mlx.h"
-# include "./minilibx-linux/mlx_int.h"
+# include "../libft/libft.h"
 
 //VIZU UTILS DEFINE
 
@@ -98,27 +95,12 @@ typedef struct s_room
     struct s_room		 **pathway;
 }    	t_room;
 
-typedef struct s_mlx_img
-{
-	void	*mlx_img;
-	char	*addr;
-	int		bpp;
-	int		line_len;
-	int		endian;
-}	t_mlx_img;
-
 typedef struct s_trueAnt
 {
 	int number;
 	t_room	**path;
 	int		room;
 }	t_trueAnt;
-
-typedef struct s_ant
-{
-	t_room	*actual;
-	t_room	*toGo;
-}	t_ant;
 
 typedef struct s_data
 {
@@ -127,20 +109,7 @@ typedef struct s_data
 	t_room		*start;
 	t_room		*end;
 	t_room		**roomList;
-	void		*id_mlx;
-	void		*window;
-	void		*img;
-	char		isPaused;
-	char		isOnlyNext;
-	clock_t		last_time;
-	int			cam_x;
-	int			cam_y;
-	int			cam_speed;
-	int			stepAdvancement;
-	int			stepActual;
-	t_ant		**AMIset;
 	t_trueAnt	*ants;
-	double		calculationTime;
 	int			moveNB;
 }    	t_data;
 
@@ -177,39 +146,6 @@ int		pathSize(t_room **path);
 int		**creatCrossPathList(t_room ***pathToVictory, int len_alloc);
 void	findShortestAndUnique( t_room ***pathToVictory, t_room ***listPathTest, t_room ***listPathSuccess, int optimalMax,  int dec, int **crossPathList, int len_alloc, int ** intlist,int * lenlist, int lenPathtest, t_room  **untract_path);
 
-
-// AMI
-
-/*
-Return the len of an AMIset
-If the AMIset is NULL, return 0;
-*/
-int AMI_getStepNumber(t_ant **AMIset);
-
-/*
-Add a new step to the AMIset of data.
-The new step is of len data->total_ants + 1.
-
-return -1 if an error occured, 0 else.
-*/
-int AMI_addNewStep(t_data *data);
-
-/*
-Add number ants to the start in the last step of the AMIset of data.
-*/
-void AMI_setNumberOfAntsForStart(t_data *data, int number);
-
-/*
-Add number ants to the end in the last step of the AMIset of data.
-*/
-void AMI_setNumberOfAntsForEnd(t_data *data, int number);
-
-/*
-Add a ants in AMIset of data.
-
-This end will of the t_room *actual to the t_room *toGo.
-*/
-void AMI_addAntsMovement(t_data *data, t_room *actual, t_room *toGo);
 
 
 #endif
