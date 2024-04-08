@@ -75,37 +75,17 @@ int	main(void)
 	data.ants = NULL;
 	data.moveNB = 0;
 
-	ft_printf("parsing start\n");
+	//ft_printf("parsing start\n");
 	parse(&data);
-	//ft_printf("room = %d\n", data.ants->room);
-	printRooms(&data);
-	ft_printf("Checking path\n");
+	//printRooms(&data);
+	//ft_printf("Checking path\n");
 	checkPath(&data);
-	ft_printf("algo start\n");
-	printRooms(&data);
+	//ft_printf("algo start\n");
+	//printRooms(&data);
 	startAlgo(&data);
     timet2 = clock();
 	data.calculationTime = (double)(timet2 - timet1);
-	ft_printf("affichage start\n");
-	//freeForAll(&data);
-	//TEST
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0], data.roomList[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-	// AMI_addNewStep(&data);
-	// AMI_addAntsMovement(&data, data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0], data.roomList[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]->pathway[0]);
-
-	//ENDTEST
-
+	//ft_printf("affichage start\n");
 
 	data.last_time = clock();
 	data.id_mlx = mlx_init();
